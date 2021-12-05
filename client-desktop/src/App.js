@@ -6,6 +6,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { getDatabase, ref, set, get } from "firebase/database";
 import { Home } from "./components/Home";
 import { Login } from './components/Login';
+import { NoPartner } from './components/NoPartner';
 import io from "socket.io-client";
 const socketurl = "http://localhost:3500";
 const socket = io(socketurl);
@@ -27,14 +28,12 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const db = getDatabase(app);
-console.log(app);
-
-
-
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
+  const [isPartner, setPartner] = useState(false);
   const [userName, setUserName] = useState(null);
+  const [email, setEmail] = useState("");
 
 
   /////////////////////
@@ -49,9 +48,9 @@ function App() {
       const snapshot = await get(userRef);
 
       const data = snapshot.val();
+      console.log(data);
 
       if (data) {
-        console.log(data);
       } else {
         await set(ref(db, "users/" + user.uid), {
           username: user.displayName,
@@ -60,41 +59,54 @@ function App() {
       }
       setLoggedIn(true);
       setUserName(user.displayName);
+      setEmail(user.email);
+      console.log("LO HACE en el desktop");
+      socket.emit("registerDesktop", user.email);
 
     } catch (err) {
       console.error(err);
-      alert(err.message);
     }
   };
+
 
   ////////////////
   //  USE EFFECT
   ////////////////
   useEffect(() => {
-    console.log(isLoggedIn);
-    if (isLoggedIn) {
 
-      //////////////////
-      //  REGISTER USER
-      //////////////////
-      socket.emit("register", "Desktop");
+    ////////////////
+    //  REGISTER
+    ////////////////
+    socket.on("newUser", function () {
+      console.log("Se ha añadido el dispositivo movil");
+      setPartner(true);
+    });
 
-      //////////////////
-      //  NEW USER
-      //////////////////
-      socket.on("newUser", function () {
-        console.log("Se ha añadido el dispositivo movil");
-      });
+    ////////////////
+    //  GET PARTNER
+    ////////////////
+    socket.on("oldUser", function () {
+      console.log("ya existe el dispositivo movil");
+      setPartner(true);
+    });
+    socket.on("mensaje2", function (data) {
+      alert(data);
+      setPartner(true);
+    });
 
-    } else {
+    ///////////////////////////////
+    //  GET DISCONNECTED PARTNER
+    //////////////////////////////
+    socket.on("disconnectPartner", function () {
+      console.log("se ha desconectado el movil");
+      setPartner(false);
+    });
 
-    }
+
+  }, []);
 
 
-  }, [isLoggedIn]);
 
-
-  
   /////////////////
   //  SEND MESSAGE
   /////////////////
@@ -102,16 +114,35 @@ function App() {
     socket.emit("mensaje", "hola");
   }
 
+  /////////////////
+  //  SIGN OUT
+  /////////////////
+  function disconnect() {
+    auth.signOut().then(() =>{
+      console.log("desconectado correctamente");
+      setLoggedIn(false);
+      socket.disconnect();
+      window.location.reload();
+    })
+    .catch((error) => {
+      console.log("[ERROR] "+error);
+    })
+  }
+
 
   return (
     <div className="App">
 
-      {!isLoggedIn && (
+      {!isLoggedIn &&
         <Login signIn={signInWithGoogle} />
-      )}
+      }
 
-      {isLoggedIn &&
-        <Home sendMessage={sendMessage} userName={userName}/>
+      {isLoggedIn && !isPartner &&
+        <NoPartner userName={userName} />
+      }
+
+      {isLoggedIn && isPartner &&
+        <Home sendMessage={sendMessage} userName={userName} disconnect={disconnect} />
       }
 
     </div>
