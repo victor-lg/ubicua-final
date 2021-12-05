@@ -38,8 +38,88 @@
 }
 
 
+
 /* ----------------------HOME---------------------------- */
 
 
 
 /* --------------------DESCUBRE-------------------------- */
+
+.descubre {
+  font-family: "Open Sans", sans-serif;
+  color: white;
+  background: black;
+  font-size: 25px;
+}
+
+.descubre h1 {
+  text-align: center;
+  margin-bottom: 100px;
+  color: white;
+}
+
+.descubre-contenedor{
+  display: flex;
+  margin-left: 15%;
+  margin-right: 15%;
+  align-items: center;
+  justify-content: center;
+}
+
+.descubre-flecha-izq {
+  padding: 0 10px;
+  text-align: center;
+  color: white;
+  font-size: 50px;
+}
+
+.descubre-poster-izq {
+  text-align: center;
+  margin: 0 0 0 50px;
+}
+
+.descubre-poster-izq img{
+  min-width: 300px;
+  min-height: 450px;
+  max-width: 600px;
+  max-height: 900px;
+  opacity: 0.4;
+  box-shadow: 0 0 10px 10px #505050;
+}
+
+.descubre-poster-central {
+  text-align: center;
+  margin: 0 45px;
+}
+
+.descubre-poster-central img{
+  min-width: 400px;
+  min-height: 600px;
+  max-width: 700px;
+  max-height: 1050px;
+  box-shadow: 0 0 10px 10px #505050;
+
+}
+
+.descubre-poster-der {
+  padding: 0;
+  margin: 0 50px 0 0;
+  border: 0;
+  text-align: center;
+}
+
+.descubre-poster-der img{
+  min-width: 300px;
+  min-height: 450px;
+  max-width: 600px;
+  max-height: 900px;
+  opacity: 0.4;
+  box-shadow: 0 0 10px 10px #505050;
+}
+
+.descubre-flecha-der {
+  padding: 0 10px;
+  text-align: center;
+  color: white;
+  font-size: 50px;
+}
