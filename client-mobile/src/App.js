@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
 import { getDatabase, ref, set, get } from "firebase/database";
-import { Home } from "./components/Home";
-import { Login } from './components/Login';
-import { NoPartner } from './components/NoPartner';
+import { Home } from "./components/HomeM";
+import { Login } from './components/LoginM';
+import { NoPartner } from './components/NoPartnerM';
 import io from "socket.io-client";
 const socketurl = "http://localhost:3500";
 const socket = io(socketurl);
@@ -34,7 +34,7 @@ function App() {
   const [isPartner, setPartner] = useState(false);
   const [userName, setUserName] = useState(null);
   const [email, setEmail] = useState("");
-
+  const [screen, setScreen] = useState("Home");
 
   /////////////////////
   //    LOG IN
@@ -47,7 +47,6 @@ function App() {
       const snapshot = await get(userRef);
 
       const data = snapshot.val();
-      console.log(data);
       if (data) {
 
       } else {
@@ -59,7 +58,6 @@ function App() {
       setLoggedIn(true);
       setUserName(user.displayName);
       setEmail(user.email);
-      console.log("LO HACE EN EL MÓVIL");
       socket.emit("registerMobile", user.email);
 
     } catch (err) {
@@ -74,7 +72,7 @@ function App() {
     //  REGISTER
     ////////////////
     socket.on("newUser", function () {
-      console.log("Se ha añadido el dispositivo web");
+      
       setPartner(true);
     });
 
@@ -82,7 +80,7 @@ function App() {
     //  GET PARTNER
     ////////////////
     socket.on("oldUser", function () {
-      console.log("ya existe el dispositivo web");
+      
       setPartner(true);
     });
     socket.on("mensaje2", function (data) {
@@ -94,17 +92,24 @@ function App() {
     //  GET DISCONNECTED PARTNER
     //////////////////////////////
     socket.on("disconnectPartner", function () {
-      console.log("se ha desconectado el web");
+     
       setPartner(false);
     });
 
   }, []);
 
-  /////////////////
-  //  SEND MESSAGE
-  /////////////////
-  function sendMessage() {
-    socket.emit("mensaje", "hola");
+  //////////////////
+  //  SEND ACTION
+  //////////////////
+  function sendAction(data) {
+    if(data !== "Home"){
+      var act = {
+        gesture: "touch",
+        action: data
+      }
+      socket.emit("action", act);
+    }
+    setScreen(data);
   }
 
   /////////////////
@@ -112,7 +117,6 @@ function App() {
   /////////////////
   function disconnect() {
     auth.signOut().then(() =>{
-      console.log(" desconectado correctamente");
       setLoggedIn(false);
       socket.disconnect();
       window.location.reload();
@@ -122,12 +126,11 @@ function App() {
     })
   }
 
-
   return (
     <div className="App">
 
       {!isLoggedIn && 
-        <Login signIn={signInWithGoogle} />
+        <Login signIn={signInWithGoogle}/>
       }
 
       {isLoggedIn && !isPartner &&
@@ -135,7 +138,7 @@ function App() {
       }
 
       {isLoggedIn && isPartner &&
-        <Home sendMessage={sendMessage} userName={userName} disconnect={disconnect} />
+        <Home sendAction={sendAction} screen={screen} userName={userName} disconnect={disconnect}/>
       }
 
     </div>

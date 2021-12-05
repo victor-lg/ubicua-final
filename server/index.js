@@ -79,15 +79,15 @@ io.on("connection", function (socket) {
   });
 
 
-  socket.on("mensaje", function (data) {
+  socket.on("action", function (data) {
     for (var i = 0; i < connections.length; i++) {
       if (role === "Mobile") {
         if (connections[i].email === email) {
-          io.to(connections[i].DesktopId).emit("mensaje2", data);
+          io.to(connections[i].DesktopId).emit("doAction", data);
         }
       } else if (role === "Desktop") {
         if (connections[i].email === email) {
-          io.to(connections[i].MobileId).emit("mensaje2", data);
+          io.to(connections[i].MobileId).emit("doAction", data);
         }
       }
     }

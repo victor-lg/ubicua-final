@@ -1,0 +1,205 @@
+src="https://www.youtube.com/embed/jaJuwKCmJbY"
+
+
+ACTION
+
+The Fast and the Furious 
+https://www.youtube.com/watch?v=2TAOizOnNPo
+
+Iron Man
+https://www.youtube.com/watch?v=PmAqcdk4d48
+
+John Wick
+https://www.youtube.com/watch?v=C0BMx-qxsP4
+
+Die Hard
+https://www.youtube.com/watch?v=jaJuwKCmJbY
+
+Star Wars: Episode I - The Phantom Menace
+https://www.youtube.com/watch?v=uMoSnrd7i5c
+
+Gladiator
+https://www.youtube.com/watch?v=uvbavW31adA
+
+300
+https://www.youtube.com/watch?v=UrIbxk7idYA
+
+American Sniper
+https://www.youtube.com/watch?v=99k3u9ay1gs
+
+The Transporter
+https://www.youtube.com/watch?v=7FnbLyv2oio
+
+
+ROMANTIC
+    
+Titanic
+https://www.youtube.com/watch?v=kVrqfYjkTdQ
+
+The Notebook
+https://www.youtube.com/watch?v=yDJIcYE32NU
+
+The Fault In Our Stars
+https://www.youtube.com/watch?v=9ItBvH5J6ss
+
+Eternal Sunshine of the Spotless Mind
+https://www.youtube.com/watch?v=07-QBnEkgXU
+
+Pretty Woman
+https://www.youtube.com/watch?v=2EBAVoN8L_U
+
+10 Things I Hate About You
+https://www.youtube.com/watch?v=uE7qjQlfoRs
+
+Love Actually
+https://www.youtube.com/watch?v=H9Z3_ifFheQ
+
+
+ANIMATION
+
+    Spirited Away
+    https://www.youtube.com/watch?v=ByXuk9QqQkk
+
+    SpiderMan: Into the Spider-Verse
+    https://www.youtube.com/watch?v=g4Hbz2jLxvQ
+
+    Coco
+    https://www.youtube.com/watch?v=Ga6RYejo6Hk
+
+    Sinbad: Legend of the Seven Seas
+    https://www.youtube.com/watch?v=rwjVhtQRnwk
+
+    Your Name
+    https://www.youtube.com/watch?v=qz0TDMd_cB0
+
+    Shrek
+    https://www.youtube.com/watch?v=CwXOrWvPBPk
+
+    Big Hero 6 
+    https://www.youtube.com/watch?v=boO2nQ3RJFs
+
+    Tangled
+    https://www.youtube.com/watch?v=2f516ZLyC6U
+
+    How to Train Your Dragon
+    https://www.youtube.com/watch?v=oKiYuIsPxYk
+
+
+TERROR
+
+    IT
+    https://www.youtube.com/watch?v=FnCdOQsX5kc
+
+    The Ring
+    https://www.youtube.com/watch?v=yzR2GY-ew8I
+
+    Us
+    https://www.youtube.com/watch?v=hNCmb-4oXJA
+
+    Get Out
+    https://www.youtube.com/watch?v=DzfpyUB60YY
+
+    The Shining
+    https://www.youtube.com/watch?v=5Cb3ik6zP2I
+
+    The Exorcist
+    https://www.youtube.com/watch?v=0iS59iV2Ffs
+
+    A nightmare on Elm Street
+    https://www.youtube.com/watch?v=dCVh4lBfW-c
+
+    The Nun
+    https://www.youtube.com/watch?v=AKpPeLAMY9I
+
+    REC
+    https://www.youtube.com/watch?v=4vOO6FnND9w
+
+    
+
+MUSICAL
+
+    Grease
+    https://www.youtube.com/watch?v=qDKo8DNpwOw
+
+    High School Musical
+    https://www.youtube.com/watch?v=zL4ZEWYsmuw
+
+    Camp Rock
+    https://www.youtube.com/watch?v=X_oj3K_DUgE
+
+    La La Land
+    https://www.youtube.com/watch?v=0pdqf4P9MB8
+
+    Pitch Perfect
+    https://www.youtube.com/watch?v=8dItOM6eYXY
+
+    Mary Poppins
+    https://www.youtube.com/watch?v=YfkEQDPlb8g
+
+    A Star is Born
+    https://www.youtube.com/watch?v=nSbzyEJ8X9E
+
+    The Greatest Showman
+    https://www.youtube.com/watch?v=AXCTMGYUg9A
+
+    Mamma Mia!
+    https://www.youtube.com/watch?v=8RBNHdG35WY
+
+
+
+
+    {
+        "films" : {
+          "1GU7CfPDB5UH1Ch6UPne1PnB8TD2" : {
+            "title" : "The Fast and the Furious",
+            "link" : "https://www.youtube.com/watch?v=2TAOizOnNPo",
+            "genre" : "action"
+          },
+          "rhxaBY3acdfGAoj486fJ3GVmczL2" : {
+            "title" : "Iron Man",
+            "link" : "https://www.youtube.com/watch?v=PmAqcdk4d48",
+            "genre" : "action"
+          },
+          "rhxaBY3acdfGAoj486fJ3GVmczL2" : {
+            "title" : "John Wick",
+            "link" : "https://www.youtube.com/watch?v=C0BMx-qxsP4",
+            "genre" : "action"
+          },
+          "rhxaBY3acdfGAoj486fJ3GVmczL2" : {
+            "title" : "Die Hard",
+            "link" : "https://www.youtube.com/watch?v=jaJuwKCmJbY",
+            "genre" : "action"
+          },
+          "rhxaBY3acdfGAoj486fJ3GVmczL2" : {
+            "title" : "Star Wars: Episode I - The Phantom Menace",
+            "link" : "https://www.youtube.com/watch?v=uMoSnrd7i5c",
+            "genre" : "action"
+          },
+          "rhxaBY3acdfGAoj486fJ3GVmczL2" : {
+            "title" : "Gladiator",
+            "link" : "https://www.youtube.com/watch?v=uvbavW31adA",
+            "genre" : "action"
+          },
+          "rhxaBY3acdfGAoj486fJ3GVmczL2" : {
+            "title" : "300",
+            "link" : "https://www.youtube.com/watch?v=UrIbxk7idYA",
+            "genre" : "action"
+          },
+          "rhxaBY3acdfGAoj486fJ3GVmczL2" : {
+            "title" : "American Sniper",
+            "link" : "https://www.youtube.com/watch?v=99k3u9ay1gs",
+            "genre" : "action"
+          },
+          "rhxaBY3acdfGAoj486fJ3GVmczL2" : {
+            "title" : "The Transporter",
+            "link" : "https://www.youtube.com/watch?v=7FnbLyv2oio",
+            "genre" : "action"
+          },
+          "rhxaBY3acdfGAoj486fJ3GVmczL2" : {
+            "title" : "The Transporter",
+            "link" : "https://www.youtube.com/watch?v=7FnbLyv2oio",
+            "genre" : "Romantic"
+          },
+        }
+      }
+      

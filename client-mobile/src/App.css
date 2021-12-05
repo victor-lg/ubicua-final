@@ -32,7 +32,48 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
+}
+
+
+@media screen and (max-width: 600px) {
+  h1 {
+    text-align: center;
+    margin-bottom: 200px;
+  }
+
+  /* --------------------DESCUBRE-------------------------- */
+
+
+
+  /* --------------------RECOMENDADO-------------------------- */
+
+  .recomendados-contenedor {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .recomendados-anterior {
+    padding: 0 10px;
+    background: red;
+    text-align: center;
+  }
+
+  .recomendados-info {
+    padding: 0 10px;
+    background: green;
+    text-align: center;
+  }
+
+  .recomendados-siguiente {
+    padding: 0 10px;
+    background: blue;
+    text-align: center;
+  }
+
+
+
 }
