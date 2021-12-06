@@ -37,7 +37,57 @@
   }
 }
 
+ /* -------------------------LOG IN------------------------------ */
 
+#mainLogIn{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#logoLogIn>img {
+  width: 600px;
+  height: auto;
+  /* border: 1px solid white; */
+  align-self: flex-start;
+}
+
+.google-btn {
+  width: 220px;
+  height: 42px;
+  background-color: #4285f4;
+  border-radius: 2px;
+  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .25);
+}
+
+.google-icon-wrapper {
+  position: absolute;
+  margin-top: 1px;
+  margin-left: 1px;
+  width: 40px;
+  height: 40px;
+  border-radius: 2px;
+  background-color: #fff;
+}
+
+.google-icon {
+  position: absolute;
+  margin-top: 10px;
+  margin-left: -10px;
+  width: 22px;
+  height: 22px;
+}
+
+.btn-text {
+  float: right;
+  margin: 11px 11px 0 0;
+  color: #fff;
+  font-size: 17px;
+  letter-spacing: 0.5px;
+  font-family: "Roboto";
+}
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:500);
 
 /* ----------------------HOME---------------------------- */
 

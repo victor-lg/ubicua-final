@@ -35,6 +35,7 @@ function App() {
   const [userName, setUserName] = useState(null);
   const [email, setEmail] = useState("");
   const [screen, setScreen] = useState("Home");
+  const [titleVideo, setTitleVideo] = useState("titulo de la peli");
 
   /////////////////////
   //    LOG IN
@@ -56,7 +57,7 @@ function App() {
         });
       }
       setLoggedIn(true);
-      setUserName(user.displayName);
+      setUserName(user.displayName.replace(/ .*/,''));
       setEmail(user.email);
       socket.emit("registerMobile", user.email);
 
@@ -138,7 +139,7 @@ function App() {
       }
 
       {isLoggedIn && isPartner &&
-        <Home sendAction={sendAction} screen={screen} userName={userName} disconnect={disconnect}/>
+        <Home sendAction={sendAction} screen={screen} userName={userName} titleVideo={titleVideo} disconnect={disconnect}/>
       }
 
     </div>

@@ -2,7 +2,7 @@ import React from "react";
 import "../App.css";
 import logo from './images/logo.png';
 
-export function DescubreM(props) {
+export function VideoM(props) {
     return (
         <div id="main">
             <div id="homeMain">
@@ -15,9 +15,9 @@ export function DescubreM(props) {
                         <input type="button" id="signOut_button" onClick={props.disconnect} value="disconnect" />
                     </div>
                 </div>
-                <div id="descubreContainer">
-                    <div id="categoria">
-                        <h1>Películas descubre</h1>
+                <div id="VideoContainer">
+                    <div id="titleVideo">
+                        <h2 id="title">{props.titleVideo}</h2>
                     </div>
                     <div id="gestos">
                         <div className="descubreGesto">
@@ -25,7 +25,7 @@ export function DescubreM(props) {
                             <p>↺</p>
                         </div>
                         <div className="descubrePlay">
-                        <p onClick={() => props.sendAction("Video")}>Reproducir</p>
+                            <p>videito</p>
                         </div>
                         <div className="descubreGesto">
                             <p>Película siguiente</p>
@@ -38,7 +38,5 @@ export function DescubreM(props) {
                 </div>
             </div>
         </div>
-
-
     );
 }

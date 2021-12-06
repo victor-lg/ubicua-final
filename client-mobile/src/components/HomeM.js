@@ -2,32 +2,45 @@ import React from "react";
 import { RecomendadasM } from "./RecomendadasM";
 import { FavoritasM } from './FavoritasM';
 import { DescubreM } from './DescubreM';
+import { VideoM } from './VideoM';
+import logo from './images/logo.png';
 
 export function Home(props) {
   return (
-    <div>
+    <div id="main">
       {props.screen === "Home" &&
-        <div>
-          <h1>Welcome, {props.userName}</h1>
-          <input type="button" id="signOut_button" onClick={props.disconnect} value="disconnect"/>
-          <div id="container">
-            <input type="button" value="Descubre" className="msg_button" onClick={() => props.sendAction("Descubre")}></input>
-            <input type="button" value="Favoritas" className="msg_button" onClick={() => props.sendAction("Favoritas")}></input>
-            <input type="button" value="Recomendadas" className="" onClick={() => props.sendAction("Recomendadas")}></input>
+        <div id="homeMain">
+          <div id="homeHeader">
+            <div id="logoHeader">
+              <img src={logo} alt="logo"></img>
+            </div>
+            <div id="userHeader">
+              <h2>{props.userName}</h2>
+              <input type="button" id="signOut_button" onClick={props.disconnect} value="disconnect" />
+            </div>
+          </div>
+          <div id="homeContainer">
+            <input type="button" value="Descubre" className="screen_button" onClick={() => props.sendAction("Descubre")}></input>
+            <input type="button" value="Favoritas" className="screen_button" onClick={() => props.sendAction("Favoritas")}></input>
+            <input type="button" value="Recomendadas" className="screen_button" onClick={() => props.sendAction("Recomendadas")}></input>
           </div>
         </div>
       }
 
       {props.screen === "Recomendadas" &&
-        <RecomendadasM sendAction={props.sendAction}/>
+        <RecomendadasM sendAction={props.sendAction} userName={props.userName} />
       }
 
       {props.screen === "Favoritas" &&
-        <FavoritasM sendAction={props.sendAction}/>
+        <FavoritasM sendAction={props.sendAction} userName={props.userName} />
       }
 
       {props.screen === "Descubre" &&
-        <DescubreM sendAction={props.sendAction}/>
+        <DescubreM sendAction={props.sendAction} userName={props.userName} />
+      }
+
+      {props.screen === "Video" &&
+        <VideoM sendAction={props.sendAction} userName={props.userName} titleVideo={props.titleVideo}  />
       }
     </div>
   );

@@ -59,7 +59,7 @@ function App() {
         });
       }
       setLoggedIn(true);
-      setUserName(user.displayName);
+      setUserName(user.displayName.replace(/ .*/,''));
       setEmail(user.email);
       socket.emit("registerDesktop", user.email);
 

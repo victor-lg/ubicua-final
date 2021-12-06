@@ -1,3 +1,10 @@
+body {
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.705);
+}
+
 .App {
   text-align: center;
 }
@@ -42,38 +49,240 @@
 @media screen and (max-width: 600px) {
   h1 {
     text-align: center;
-    margin-bottom: 200px;
+    color: #ccd0da;
+    text-decoration: underline;
   }
+
+  #main {
+    width: 100%;
+  }
+
+
+  /* -------------------------LOG IN------------------------------ */
+
+  #mainLogIn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #logoLogIn>img {
+    width: 300px;
+    height: auto;
+    /* border: 1px solid white; */
+    align-self: flex-start;
+  }
+
+  .google-btn {
+    width: 220px;
+    height: 42px;
+    background-color: #4285f4;
+    border-radius: 2px;
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .25);
+  }
+
+  .google-icon-wrapper {
+    position: absolute;
+    margin-top: 1px;
+    margin-left: 1px;
+    width: 40px;
+    height: 40px;
+    border-radius: 2px;
+    background-color: #fff;
+  }
+
+  .google-icon {
+    position: absolute;
+    margin-top: 10px;
+    margin-left: -10px;
+    width: 22px;
+    height: 22px;
+  }
+
+  .btn-text {
+    float: right;
+    margin: 11px 11px 0 0;
+    color: #fff;
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    font-family: "Roboto";
+  }
+
+  @import url(https://fonts.googleapis.com/css?family=Roboto:500);
+
+
+
+
+
+
+
+
+  /* -------------------------HOME------------------------------ */
+
+  #homeHeader {
+    /* border: 1px solid red; */
+    display: flex;
+    flex-direction: row;
+    background-color: black;
+    width: 100%;
+    height: 85px;
+    border-radius: 0px 0px 6px 6px;
+  }
+
+  #logoHeader {
+    /* border: 1px solid green; */
+    flex: 0 0 65%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  #logoHeader>img {
+    width: 200px;
+    height: auto;
+    /* border: 1px solid white; */
+    align-self: flex-start;
+  }
+
+  #userHeader {
+    border: 1px solid white;
+    border-radius: 6px;
+    flex: 0 0 35%;
+  }
+
+  h2 {
+    font-size: 0.9em;
+    color: white;
+  }
+
+  #signOut_button {
+    padding: 3px;
+    border: 1px solid white;
+    border-radius: 8px;
+  }
+
+
+  #homeContainer {
+    /* border: 1px solid red; */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 88vh;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .screen_button {
+    padding: 30px 15px 30px 15px;
+    background-color: #ccd0da;
+    width: 80%;
+    border-radius: 10px;
+    font-size: 1.3em;
+    border: 5px solid black;
+    margin-bottom: 10%;
+  }
+
+  .screen_button:hover {
+    background-color: #47bada;
+  }
+
+
+
+
+
+
+
+
+
 
   /* --------------------DESCUBRE-------------------------- */
 
-
-
-  /* --------------------RECOMENDADO-------------------------- */
-
-  .recomendados-contenedor {
+  #descubreContainer {
+    /* border: 1px solid red; */
+    width: 100%;
     display: flex;
-    justify-content: space-around;
+    flex-direction: row;
+    height: 85vh;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
   }
 
-  .recomendados-anterior {
-    padding: 0 10px;
-    background: red;
+  #categoria {
+    height: 80px;
+  }
+
+  #gestos {
+    width: 100%;
+    display: flex;
+    border: 1px solid white;
+    height: 65vh;
+    justify-content: center;
+    align-items: center;
+    color: white
+  }
+
+  .descubrePlay {
+    flex: 1 0 30%;
+    padding: 3px;
+    border: 1px solid purple;
+    border-radius: 20px;
     text-align: center;
   }
 
-  .recomendados-info {
+  .descubreGesto {
+    flex: 1 0 20%;
     padding: 0 10px;
-    background: green;
-    text-align: center;
-  }
-
-  .recomendados-siguiente {
-    padding: 0 10px;
-    background: blue;
+    border: 1px solid red;
     text-align: center;
   }
 
 
+
+  .screen_button {
+    padding: 30px 15px 30px 15px;
+    background-color: #ccd0da;
+    width: 80%;
+    border-radius: 10px;
+    font-size: 1.3em;
+    border: 1px solid black;
+  }
+
+  #toHome {
+    flex: 1 0 100%;
+    margin-top: 4%;
+  }
+
+
+  #HomeButton {
+    padding: 8px;
+  }
+
+
+
+  /* --------------------VIDEO-------------------------- */
+
+  #videoContainer {
+    /* border: 1px solid red; */
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    height: 85vh;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+  }
+
+
+  #titleVideo {
+    display: flex;
+    height: 81px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #title {
+    font-size: 1.4em;
+  }
 
 }
