@@ -28,15 +28,15 @@ export function Home(props) {
       }
 
       {props.screen === "Recomendadas" &&
-        <RecomendadasM sendAction={props.sendAction} userName={props.userName} />
+        <RecomendadasM sendAction={props.sendAction} userName={props.userName} disconnect={props.disconnect}/>
       }
 
       {props.screen === "Favoritas" &&
-        <FavoritasM sendAction={props.sendAction} userName={props.userName} />
+        <FavoritasM sendAction={props.sendAction} userName={props.userName} disconnect={props.disconnect}/>
       }
 
       {props.screen === "Descubre" &&
-        <DescubreM sendAction={props.sendAction} userName={props.userName} />
+        <DescubreM sendAction={props.sendAction} userName={props.userName} disconnect={props.disconnect}/>
       }
 
       {props.screen === "Video" &&

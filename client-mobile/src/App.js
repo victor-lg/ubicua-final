@@ -28,6 +28,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const db = getDatabase(app);
+const options = { frequency: 60, ReferenceFrame: 'screen' };
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -68,6 +69,26 @@ function App() {
 
 
   useEffect(() => {
+    if ('RelativeOrientationSensor' in window) {
+      try {
+        const sensor = new window.RelativeOrientationSensor(options);
+
+        sensor.addEventListener('reading', () => {
+          // model is a Three.js object instantiated elsewhere.
+          //console.log(sensor.quaternion);
+          if (sensor.quaternion[1] > 0.45) {
+            console.log("giro a la derecha");
+          } else if (sensor.quaternion[1] < 0.15) {
+            console.log("giro a la izquierda");
+          }
+        });
+
+        sensor.start();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
 
     ////////////////
     //  REGISTER
