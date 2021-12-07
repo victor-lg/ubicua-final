@@ -7,7 +7,7 @@ export function NoPartner(props) {
       <div id="homeMain">
         <div id="homeHeader">
           <div id="logoHeader">
-            <img src={logo} alt="logo"></img>
+            <img src={logo} alt="logo"/>
           </div>
           <div id="userHeader">
             <h2>{props.userName}</h2>

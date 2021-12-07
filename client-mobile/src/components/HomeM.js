@@ -12,7 +12,7 @@ export function Home(props) {
         <div id="homeMain">
           <div id="homeHeader">
             <div id="logoHeader">
-              <img src={logo} alt="logo"></img>
+              <img src={logo} alt="logo"/>
             </div>
             <div id="userHeader">
               <h2>{props.userName}</h2>
@@ -20,9 +20,9 @@ export function Home(props) {
             </div>
           </div>
           <div id="homeContainer">
-            <input type="button" value="Descubre" className="screen_button" onClick={() => props.sendAction("Descubre")}></input>
-            <input type="button" value="Favoritas" className="screen_button" onClick={() => props.sendAction("Favoritas")}></input>
-            <input type="button" value="Recomendadas" className="screen_button" onClick={() => props.sendAction("Recomendadas")}></input>
+            <input type="button" value="Descubre" className="screen_button" onClick={() => props.sendAction("Descubre")}/>
+            <input type="button" value="Favoritas" className="screen_button" onClick={() => props.sendAction("Favoritas")}/>
+            <input type="button" value="Recomendadas" className="screen_button" onClick={() => props.sendAction("Recomendadas")}/>
           </div>
         </div>
       }

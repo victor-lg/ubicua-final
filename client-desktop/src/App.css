@@ -1,175 +1,204 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:500);
+
 .App {
-  text-align: center;
+    text-align: center;
+}
+
+body {
+    width: 1920px;
+    height: 1080px;
+    margin: auto;
+    font-family: "Open Sans", sans-serif;
+    background-color: #000;
+    color: #fff;
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+    height: 40vmin;
+    pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
 }
 
 .App-link {
-  color: #61dafb;
+    color: #61dafb;
 }
 
 @keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
- /* -------------------------LOG IN------------------------------ */
+/* -------------------------LOG IN------------------------------ */
 
-#mainLogIn{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+#mainLogIn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-#logoLogIn>img {
-  width: 600px;
-  height: auto;
-  /* border: 1px solid white; */
-  align-self: flex-start;
+#logoLogIn > img {
+    width: 600px;
+    height: auto;
+    /* border: 1px solid white; */
+    align-self: flex-start;
 }
 
 .google-btn {
-  width: 220px;
-  height: 42px;
-  background-color: #4285f4;
-  border-radius: 2px;
-  box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .25);
+    width: 220px;
+    height: 42px;
+    background-color: #4285f4;
+    border-radius: 2px;
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .25);
+    cursor: pointer;
 }
 
 .google-icon-wrapper {
-  position: absolute;
-  margin-top: 1px;
-  margin-left: 1px;
-  width: 40px;
-  height: 40px;
-  border-radius: 2px;
-  background-color: #fff;
+    position: absolute;
+    margin-top: 1px;
+    margin-left: 1px;
+    width: 40px;
+    height: 40px;
+    border-radius: 2px;
+    background-color: #fff;
 }
 
 .google-icon {
-  position: absolute;
-  margin-top: 10px;
-  margin-left: -10px;
-  width: 22px;
-  height: 22px;
+    position: absolute;
+    margin-top: 10px;
+    margin-left: -10px;
+    width: 22px;
+    height: 22px;
 }
 
 .btn-text {
-  float: right;
-  margin: 11px 11px 0 0;
-  color: #fff;
-  font-size: 17px;
-  letter-spacing: 0.5px;
-  font-family: "Roboto";
+    float: right;
+    margin: 11px 11px 0 0;
+    color: #fff;
+    font-size: 17px;
+    letter-spacing: 0.5px;
+    font-family: "Roboto";
 }
 
-@import url(https://fonts.googleapis.com/css?family=Roboto:500);
-
 /* ----------------------HOME---------------------------- */
-
 
 
 /* --------------------DESCUBRE-------------------------- */
 
 .descubre {
-  font-family: "Open Sans", sans-serif;
-  color: white;
-  background: black;
-  font-size: 25px;
+    font-family: "Open Sans", sans-serif;
+    color: white;
+    background: black;
+    font-size: 25px;
 }
 
 .descubre h1 {
-  text-align: center;
-  margin-bottom: 100px;
-  color: white;
+    text-align: center;
+    margin-bottom: 100px;
+    color: white;
 }
 
-.descubre-contenedor{
-  display: flex;
-  margin-left: 15%;
-  margin-right: 15%;
-  align-items: center;
-  justify-content: center;
+.descubre-contenedor {
+
+    display: flex;
+    margin-left: 15%;
+    margin-right: 15%;
+    align-items: center;
+    justify-content: center;
 }
 
 .descubre-flecha-izq {
-  padding: 0 10px;
-  text-align: center;
-  color: white;
-  font-size: 50px;
+    padding: 0 10px;
+    text-align: center;
+    color: white;
+    font-size: 50px;
+}
+
+.descubre-flecha-izq:hover {
+    cursor: pointer;
 }
 
 .descubre-poster-izq {
-  text-align: center;
-  margin: 0 0 0 50px;
+    text-align: center;
+    margin: 0 0 0 50px;
 }
 
-.descubre-poster-izq img{
-  min-width: 300px;
-  min-height: 450px;
-  max-width: 600px;
-  max-height: 900px;
-  opacity: 0.4;
-  box-shadow: 0 0 10px 10px #505050;
+.descubre-poster-izq img {
+    min-width: 200px;
+    min-height: 300px;
+    max-width: 500px;
+    max-height: 750px;
+    opacity: 0.4;
+    box-shadow: 0 0 10px 10px #505050;
+}
+
+.descubre-poster-izq:hover {
+    cursor: pointer;
 }
 
 .descubre-poster-central {
-  text-align: center;
-  margin: 0 45px;
+    text-align: center;
+    margin: 0 45px;
 }
 
-.descubre-poster-central img{
-  min-width: 400px;
-  min-height: 600px;
-  max-width: 700px;
-  max-height: 1050px;
-  box-shadow: 0 0 10px 10px #505050;
+.descubre-poster-central img {
+    min-width: 300px;
+    min-height: 450px;
+    max-width: 600px;
+    max-height: 900px;
+    box-shadow: 0 0 10px 10px #505050;
+}
 
+.descubre-poster-central:hover {
+    cursor: pointer;
 }
 
 .descubre-poster-der {
-  padding: 0;
-  margin: 0 50px 0 0;
-  border: 0;
-  text-align: center;
+    padding: 0;
+    margin: 0 50px 0 0;
+    border: 0;
+    text-align: center;
 }
 
-.descubre-poster-der img{
-  min-width: 300px;
-  min-height: 450px;
-  max-width: 600px;
-  max-height: 900px;
-  opacity: 0.4;
-  box-shadow: 0 0 10px 10px #505050;
+.descubre-poster-der img {
+    min-width: 200px;
+    min-height: 300px;
+    max-width: 500px;
+    max-height: 750px;
+    opacity: 0.4;
+    box-shadow: 0 0 10px 10px #505050;
+}
+
+.descubre-poster-der:hover {
+    cursor: pointer;
 }
 
 .descubre-flecha-der {
-  padding: 0 10px;
-  text-align: center;
-  color: white;
-  font-size: 50px;
+    padding: 0 10px;
+    text-align: center;
+    color: white;
+    font-size: 50px;
+}
+
+.descubre-flecha-der:hover {
+    cursor: pointer;
 }

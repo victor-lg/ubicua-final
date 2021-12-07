@@ -5,15 +5,17 @@ export function Login(props) {
     return (
         <div id="mainLogIn">
             <div id="logoLogIn">
-                <img src={logo} alt="logo"></img>
+                <img src={logo} alt="logo"/>
             </div>
             <h1>ESTAS EN DESKTOP</h1>
 
-            <div class="google-btn">
-                <div class="google-icon-wrapper">
-                    <img class="google-icon" onClick={props.signIn} src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
+            <div className="google-btn">
+                <div className="google-icon-wrapper">
+                    <img className="google-icon" onClick={props.signIn}
+                         src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+                         alt="google-logo"/>
                 </div>
-                <p class="btn-text" onClick={props.signIn}><b>Sign in with google</b></p>
+                <p className="btn-text" onClick={props.signIn}><b>Sign in with google</b></p>
             </div>
         </div>
     );

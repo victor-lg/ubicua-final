@@ -1,22 +1,24 @@
 import React from "react";
-import iron1 from "./images/IronMan(2008).jpeg"
-import iron2 from "./images/IronMan2(2010).jpeg"
-import iron3 from "./images/IronMan3(2013).jpeg"
-import { MdArrowBackIosNew } from "react-icons/md";
-import { MdArrowForwardIos } from "react-icons/md";
+import {MdArrowBackIosNew, MdArrowForwardIos} from "react-icons/md";
+import iron1 from "./images/IronMan(2008).jpeg";
+import iron2 from "./images/IronMan2(2010).jpeg";
+import iron3 from "./images/IronMan3(2013).jpeg";
 
+function doSomething() {
+    console.log("test");
+}
 
 export function DescubreD(props) {
-  return (
-    <div className="descubre">
-      <h1>Descubre nuevas películas</h1>
-      <div class="descubre-contenedor">
-        <div class="descubre-flecha-izq"><MdArrowBackIosNew/></div>
-        <div class="descubre-poster-izq"><img src={iron1} alt=""></img></div>
-        <div class="descubre-poster-central"><img src={iron2} alt=""></img></div>
-        <div class="descubre-poster-der"><img src={iron3} alt=""></img></div>
-        <div class="descubre-flecha-der"><MdArrowForwardIos/></div>
-      </div>
-    </div>
-  );
+    return (
+        <div className="descubre">
+            <h1>Películas recomendadas</h1>
+            <div className="descubre-contenedor">
+                <div className="descubre-flecha-izq" onClick={doSomething}><MdArrowBackIosNew/></div>
+                <div className="descubre-poster-izq" onClick={doSomething}><img src={iron1} alt=""/></div>
+                <div className="descubre-poster-central" onClick={doSomething}><img src={iron2} alt=""/></div>
+                <div className="descubre-poster-der" onClick={doSomething}><img src={iron3} alt=""/></div>
+                <div className="descubre-flecha-der" onClick={doSomething}><MdArrowForwardIos/></div>
+            </div>
+        </div>
+    );
 }
