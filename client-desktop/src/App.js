@@ -108,23 +108,24 @@ function App() {
     // DO ACTION
     //////////////////////////////
     socket.on("doAction", function (data) {
-      console.log(data);
+
       if(data.gesture === "touch"){
         console.log(data.action);
         setScreen(data.action);
       } else if (data.gesture === "tilt"){
-
+        console.log("Inclinacion hacia la", data.action);
         if(data.action === "right"){
-          //me gusta
+
         }else{
-          //no me gusta
+
         }
         
       } else if (data.gesture === "voice"){
-        alert(data.action);
+        console.log("has dicho",data.action);
 
       } else if (data.gesture === "swipe"){
       }
+
     });
     
 

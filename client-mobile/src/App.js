@@ -1,9 +1,9 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, set, get, onValue } from "firebase/database";
 import { Home } from "./components/HomeM";
 import { Login } from './components/LoginM';
 import { NoPartner } from './components/NoPartnerM';
@@ -32,6 +32,10 @@ const googleProvider = new GoogleAuthProvider();
 const db = getDatabase(app);
 const options = { frequency: 60, ReferenceFrame: 'screen' };
 
+
+const sensor = new window.RelativeOrientationSensor(options);
+const absolute = new window.AbsoluteOrientationSensor(options);
+
 function App() {
 
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -40,6 +44,12 @@ function App() {
   const [email, setEmail] = useState("");
   const [screen, setScreen] = useState("Home");
   const [titleVideo, setTitleVideo] = useState("titulo de la peli");
+  const counter = useRef(-1);
+
+
+  const [timeRunning, setTimeRunning] = useState(false);
+  const timerRef = useRef();
+
 
   /////////////////////
   //    LOG IN
@@ -71,27 +81,9 @@ function App() {
   };
 
 
+
+
   useEffect(() => {
-    if ('RelativeOrientationSensor' in window) {
-      try {
-        const sensor = new window.RelativeOrientationSensor(options);
-
-        sensor.addEventListener('reading', () => {
-          // model is a Three.js object instantiated elsewhere.
-          //console.log(sensor.quaternion);
-          if (sensor.quaternion[1] > 0.45) {
-            console.log("giro a la derecha");
-          } else if (sensor.quaternion[1] < 0.15) {
-            console.log("giro a la izquierda");
-          }
-        });
-
-        sensor.start();
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
 
     ////////////////
     //  REGISTER
@@ -123,13 +115,6 @@ function App() {
 
   }, []);
 
-  //////////////////
-  //  SEND ACTION
-  //////////////////
-  function sendAction(data) {
-    socket.emit("action", data);
-  }
-
   ///////////////////
   //  CHANGE SCREEN
   ///////////////////
@@ -139,9 +124,121 @@ function App() {
         gesture: "touch",
         action: data
       }
-      sendAction(act);
+      socket.emit("action", act);
+    }
+
+    if (data === "Descubre") {
+      absolute.stop();
+      tilt();
+    } else if (data === "Video") {
+      sensor.stop();
+      faceDown();
+    }
+    else {
+      sensor.stop();
     }
     setScreen(data);
+  }
+
+  /////////////////////
+  //    TILT
+  /////////////////////
+  function tilt() {
+    if ('RelativeOrientationSensor' in window) {
+      try {
+        sensor.addEventListener('reading', () => {
+          console.log(counter.current);
+          
+          if (sensor.quaternion[0] != null && sensor.quaternion[0] < -0.08) {
+
+            if (counter.current < 42) {
+              counter.current += 1;
+            } else {
+              counter.current = 0;
+            }
+
+            const filmsRef = ref(db, "/films/" + counter.current);
+            onValue(filmsRef, (snapshot) => {
+              let data = snapshot.val();
+              console.log(counter.current, data.title);
+            })
+            var act = {
+              gesture: "tilt",
+              action: "right"
+            }
+            socket.emit("action", act);
+            startTiltTimer();
+
+          } else if (sensor.quaternion[0] > 0.38) {
+
+            if (counter.current > 0) {
+              counter.current -= 1;
+            } else {
+              counter.current = 42;
+            }
+            const filmsRef = ref(db, "/films/" + counter.current);
+            onValue(filmsRef, (snapshot) => {
+              let data = snapshot.val();
+              console.log(counter.current, data.title);
+            })
+            var act = {
+              gesture: "tilt",
+              action: "left"
+            }
+            socket.emit("action", act);
+            startTiltTimer();
+          }
+        });
+        sensor.start();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
+
+  function startTiltTimer() {
+    // console.log("SENSOR PARADO");
+    sensor.stop();
+    setTimeRunning(true);
+    timerRef.current = setTimeout(() => {
+      setTimeRunning(false);
+      timerRef.current = null;
+      sensor.start();
+      // console.log("SENSOR ACTIVADO");
+    }, 3000);
+  }
+
+  /////////////////////
+  //    FACEDOWN
+  /////////////////////
+
+  function faceDown() {
+    if ('RelativeOrientationSensor' in window) {
+      try {
+        absolute.addEventListener('reading', () => {
+          if(absolute.quaternion[2] > 0){
+            console.log("El teléfono esta boca abajo")
+            startfaceDownTimer();
+          }
+        });
+        absolute.start();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }
+
+  function startfaceDownTimer() {
+    console.log("SENSOR PARADO");
+    absolute.stop();
+    setTimeRunning(true);
+    timerRef.current = setTimeout(() => {
+      setTimeRunning(false);
+      timerRef.current = null;
+      absolute.start();
+      console.log("SENSOR ACTIVADO");
+    }, 4000);
   }
 
   ///////////////////
@@ -173,14 +270,13 @@ function App() {
       gesture: "voice",
       action: event.results[0][0].transcript
     }
-    sendAction(act);
-    console.log('number: ' + event.results[0][0].transcript);
+    socket.emit("action", act);
+    console.log('Has dicho: ' + event.results[0][0].transcript);
     recognition.stop();
   }
 
-
   recognition.onnomatch = function (event) {
-    console.log("Estado de ánimo no reconocido.");
+    console.log("Palabra no reconocida");
     recognition.stop();
   }
 
@@ -203,7 +299,6 @@ function App() {
   return (
     <div className="App">
 
-      <p onClick={voice}>HABLAR</p>
       {!isLoggedIn &&
         <Login signIn={signInWithGoogle} />
       }

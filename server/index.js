@@ -78,9 +78,9 @@ io.on("connection", function (socket) {
     }
   });
 
-
+ //Actions
   socket.on("action", function (data) {
-    console.log("Accion:",data);
+    // console.log("Accion:",data);
     for (var i = 0; i < connections.length; i++) {
       if (role === "Mobile") {
         if (connections[i].email === email) {
