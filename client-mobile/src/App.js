@@ -11,6 +11,8 @@ import io from "socket.io-client";
 const socketurl = "http://localhost:3500";
 const socket = io(socketurl);
 
+
+
 /////////////////////
 //    FIREBASE
 /////////////////////
@@ -31,6 +33,7 @@ const db = getDatabase(app);
 const options = { frequency: 60, ReferenceFrame: 'screen' };
 
 function App() {
+
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isPartner, setPartner] = useState(false);
   const [userName, setUserName] = useState(null);
@@ -58,7 +61,7 @@ function App() {
         });
       }
       setLoggedIn(true);
-      setUserName(user.displayName.replace(/ .*/,''));
+      setUserName(user.displayName.replace(/ .*/, ''));
       setEmail(user.email);
       socket.emit("registerMobile", user.email);
 
@@ -94,7 +97,7 @@ function App() {
     //  REGISTER
     ////////////////
     socket.on("newUser", function () {
-      
+
       setPartner(true);
     });
 
@@ -102,7 +105,7 @@ function App() {
     //  GET PARTNER
     ////////////////
     socket.on("oldUser", function () {
-      
+
       setPartner(true);
     });
     socket.on("mensaje2", function (data) {
@@ -114,7 +117,7 @@ function App() {
     //  GET DISCONNECTED PARTNER
     //////////////////////////////
     socket.on("disconnectPartner", function () {
-     
+
       setPartner(false);
     });
 
@@ -124,43 +127,93 @@ function App() {
   //  SEND ACTION
   //////////////////
   function sendAction(data) {
-    if(data !== "Home"){
+    socket.emit("action", data);
+  }
+
+  ///////////////////
+  //  CHANGE SCREEN
+  ///////////////////
+  function changeScreen(data) {
+    if (data !== "Home") {
       var act = {
         gesture: "touch",
         action: data
       }
-      socket.emit("action", act);
+      sendAction(act);
     }
     setScreen(data);
   }
+
+  ///////////////////
+  //  SPEECH API
+  ///////////////////
+  let SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+  let SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
+  let recognition = new SpeechRecognition();
+  let recognitionList = new SpeechGrammarList();
+
+  let moods = ["uno", "dos", "tres"];
+  let grammar = '#JSGF V1.0; grammar moods; public <moods> = ' + Object.keys(moods).join(' | ') + ';';
+
+  recognitionList.addFromString(grammar, 1);
+  recognition.grammars = recognitionList;
+  recognition.continuous = false;
+  recognition.lang = 'es-ES';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+
+  function voice() {
+    recognition.start();
+    console.log("habla");
+  }
+
+  recognition.onresult = function (event) {
+    var act = {
+      gesture: "voice",
+      action: event.results[0][0].transcript
+    }
+    sendAction(act);
+    console.log('number: ' + event.results[0][0].transcript);
+    recognition.stop();
+  }
+
+
+  recognition.onnomatch = function (event) {
+    console.log("Estado de ánimo no reconocido.");
+    recognition.stop();
+  }
+
 
   /////////////////
   //  SIGN OUT
   /////////////////
   function disconnect() {
-    auth.signOut().then(() =>{
+    auth.signOut().then(() => {
       setLoggedIn(false);
       socket.disconnect();
       window.location.reload();
     })
-    .catch((error) => {
-      console.log("[ERROR] "+error);
-    })
+      .catch((error) => {
+        console.log("[ERROR] " + error);
+      })
   }
+
 
   return (
     <div className="App">
 
-      {!isLoggedIn && 
-        <Login signIn={signInWithGoogle}/>
+      <p onClick={voice}>HABLAR</p>
+      {!isLoggedIn &&
+        <Login signIn={signInWithGoogle} />
       }
 
       {isLoggedIn && !isPartner &&
-        <NoPartner userName={userName} disconnect={disconnect}/>
+        <NoPartner userName={userName} disconnect={disconnect} />
       }
 
       {isLoggedIn && isPartner &&
-        <Home sendAction={sendAction} screen={screen} userName={userName} titleVideo={titleVideo} disconnect={disconnect}/>
+        <Home changeScreen={changeScreen} screen={screen} userName={userName} titleVideo={titleVideo} voice={voice} disconnect={disconnect} />
       }
 
     </div>

@@ -11,7 +11,7 @@ function doSomething() {
 export function FavoritasD(props) {
     return (
         <div className="descubre">
-            <h1>Películas recomendadas</h1>
+            <h1>Películas favoritas</h1>
             <div className="descubre-contenedor">
                 <div className="descubre-flecha-izq" onClick={doSomething}><MdArrowBackIosNew/></div>
                 <div className="descubre-poster-izq" onClick={doSomething}><img src={iron1} alt=""/></div>

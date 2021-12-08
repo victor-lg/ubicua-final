@@ -33,7 +33,7 @@ export function VideoM(props) {
                         </div>
                     </div>
                     <div id="toHome">
-                        <input type="button" value="Home" id="HomeButton" onClick={() => props.sendAction("Home")} />
+                        <input type="button" value="Home" id="HomeButton" onClick={() => props.changeScreen("Home")} />
                     </div>
                 </div>
             </div>

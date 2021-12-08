@@ -20,27 +20,27 @@ export function Home(props) {
             </div>
           </div>
           <div id="homeContainer">
-            <input type="button" value="Descubre" className="screen_button" onClick={() => props.sendAction("Descubre")}/>
-            <input type="button" value="Favoritas" className="screen_button" onClick={() => props.sendAction("Favoritas")}/>
-            <input type="button" value="Recomendadas" className="screen_button" onClick={() => props.sendAction("Recomendadas")}/>
+            <input type="button" value="Descubre" className="screen_button" onClick={() => props.changeScreen("Descubre")}/>
+            <input type="button" value="Favoritas" className="screen_button" onClick={() => props.changeScreen("Favoritas")}/>
+            <input type="button" value="Recomendadas" className="screen_button" onClick={() => props.changeScreen("Recomendadas")}/>
           </div>
         </div>
       }
 
       {props.screen === "Recomendadas" &&
-        <RecomendadasM sendAction={props.sendAction} userName={props.userName} disconnect={props.disconnect}/>
+        <RecomendadasM changeScreen={props.changeScreen} userName={props.userName} disconnect={props.disconnect}/>
       }
 
       {props.screen === "Favoritas" &&
-        <FavoritasM sendAction={props.sendAction} userName={props.userName} disconnect={props.disconnect}/>
+        <FavoritasM changeScreen={props.changeScreen} userName={props.userName} voice={props.voice} disconnect={props.disconnect}/>
       }
 
       {props.screen === "Descubre" &&
-        <DescubreM sendAction={props.sendAction} userName={props.userName} disconnect={props.disconnect}/>
+        <DescubreM changeScreen={props.changeScreen} userName={props.userName} disconnect={props.disconnect}/>
       }
 
       {props.screen === "Video" &&
-        <VideoM sendAction={props.sendAction} userName={props.userName} titleVideo={props.titleVideo}  />
+        <VideoM changeScreen={props.changeScreen} userName={props.userName} titleVideo={props.titleVideo}  />
       }
     </div>
   );

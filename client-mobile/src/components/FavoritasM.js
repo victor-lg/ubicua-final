@@ -25,7 +25,7 @@ export function FavoritasM(props) {
                         <p>↺</p>
                     </div>
                     <div className="descubrePlay">
-                        <p>HABLAR</p>
+                        <p onClick={props.voice}>HABLAR</p>
                     </div>
                     <div className="descubreGesto">
                         <p>Película siguiente</p>
@@ -33,7 +33,7 @@ export function FavoritasM(props) {
                     </div>
                 </div>
                 <div id="toHome">
-                    <input type="button" value="Home" id="HomeButton" onClick={() => props.sendAction("Home")} />
+                    <input type="button" value="Home" id="HomeButton" onClick={() => props.changeScreen("Home")} />
                 </div>
             </div>
         </div>

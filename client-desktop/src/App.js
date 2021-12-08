@@ -108,7 +108,9 @@ function App() {
     // DO ACTION
     //////////////////////////////
     socket.on("doAction", function (data) {
+      console.log(data);
       if(data.gesture === "touch"){
+        console.log(data.action);
         setScreen(data.action);
       } else if (data.gesture === "tilt"){
 
@@ -119,6 +121,7 @@ function App() {
         }
         
       } else if (data.gesture === "voice"){
+        alert(data.action);
 
       } else if (data.gesture === "swipe"){
       }
