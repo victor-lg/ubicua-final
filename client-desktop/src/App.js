@@ -70,6 +70,9 @@ function App() {
     }
   };
 
+  /////////////////////
+  //    OBTAIN FILM
+  /////////////////////
   function obtainFilm(data) {
     if (data === "right") {
       if (counter.current < 41) {
@@ -82,6 +85,11 @@ function App() {
         let data = snapshot.val();
         console.log(counter.current, data.title);
         setTitleVideo(data.title);
+        var act = {
+          gesture: "titlefilm",
+          action: data.title
+        }
+        socket.emit("action",act);
 
         //Sacar info de pelis
 
@@ -111,6 +119,7 @@ function App() {
   //   console.log(data);
   // }
 
+
   ////////////////
   //  USE EFFECT
   ////////////////
@@ -123,6 +132,7 @@ function App() {
       setPartner(true);
     });
 
+
     ////////////////
     //  GET PARTNER
     ////////////////
@@ -134,12 +144,14 @@ function App() {
       setPartner(true);
     });
 
+
     ///////////////////////////////
     //  GET DISCONNECTED PARTNER
     //////////////////////////////
     socket.on("disconnectPartner", function () {
       setPartner(false);
     });
+
 
     ///////////////////////////////
     // DO ACTION
@@ -152,13 +164,15 @@ function App() {
       } else if (data.gesture === "tilt") {
         console.log("Inclinacion hacia la", data.action);
         obtainFilm(data.action);
-
       } else if (data.gesture === "voice") {
         console.log("has dicho", data.action);
 
       } else if (data.gesture === "swipe") {
-      }
+        console.log("Swipe:", data.action);
 
+      } else if (data.gesture === "turn") {
+        console.log("MÓVIL BOCA ABAJO");
+      }
     });
 
 
