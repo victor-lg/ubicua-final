@@ -67,7 +67,7 @@ body {
         align-items: center;
     }
 
-    #logoLogIn > img {
+    #logoLogIn>img {
         width: 300px;
         height: auto;
         /* border: 1px solid white; */
@@ -130,7 +130,7 @@ body {
         justify-content: center;
     }
 
-    #logoHeader > img {
+    #logoHeader>img {
         width: 200px;
         height: auto;
         /* border: 1px solid white; */
@@ -236,14 +236,26 @@ body {
         border: 1px solid black;
     }
 
-    #toHome {
-        flex: 1 0 100%;
-        margin-top: 4%;
+    #footer {
+        width: 101%;
+        height: 8vh;
+        margin-top: 10%;
+        display: flex;
+        justify-content: space-around;
+        background-color: black;
+        align-items: center;
+        position: absolute;
+        bottom: -3px;
     }
 
 
-    #HomeButton {
-        padding: 8px;
+    .menubutton {
+        padding: 0px 28px;
+        width: fit-content;
+        font-size: 2.6em;
+        color: white;
+        background-color: transparent;
+        border: 0;
     }
 
 

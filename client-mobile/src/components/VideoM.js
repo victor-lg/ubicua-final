@@ -8,7 +8,7 @@ export function VideoM(props) {
             <div id="homeMain">
                 <div id="homeHeader">
                     <div id="logoHeader">
-                        <img src={logo} alt="logo"/>
+                        <img src={logo} alt="logo" />
                     </div>
                     <div id="userHeader">
                         <h2>{props.userName}</h2>
@@ -32,8 +32,9 @@ export function VideoM(props) {
                             <p>↻</p>
                         </div>
                     </div>
-                    <div id="toHome">
-                        <input type="button" value="Home" id="HomeButton" onClick={() => props.changeScreen("Home")} />
+                    <div id="footer">
+                        <input type="button" value="&#8617;" class="menubutton" id="returnbutton" onClick={() => props.changeScreen("Recomendadas", props.lastScreen)} />
+                        <input type="button" value="&#8962;" class="menubutton" id="homeButton" onClick={() => props.changeScreen("Recomendadas", "Home")} />
                     </div>
                 </div>
             </div>

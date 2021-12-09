@@ -25,16 +25,17 @@ export function RecomendadasM(props) {
                         <p>↺</p>
                     </div>
                     <div className="descubrePlay">
-                        <p onClick={() => props.changeScreen("Video")}>Reproducir</p>
+                        <p onClick={() => props.changeScreen("Recomendadas","Video")}>Reproducir</p>
                     </div>
                     <div className="descubreGesto">
                         <p>Película siguiente</p>
                         <p>↻</p>
                     </div>
                 </div>
-                <div id="toHome">
-                    <input type="button" value="Home" id="HomeButton" onClick={() => props.changeScreen("Home")} />
-                </div>
+                <div id="footer">
+                        <input type="button" value="&#8617;" class="menubutton" id="returnbutton" onClick={() => props.changeScreen("Recomendadas","Home")} />
+                        <input type="button" value="&#8962;" class="menubutton" id="homeButton" onClick={() => props.changeScreen("Recomendadas","Home")} />
+                    </div>
             </div>
         </div>
     </div>

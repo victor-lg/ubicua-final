@@ -32,8 +32,10 @@ io.on("connection", function (socket) {
       for (var i = 0; i < connections.length; i++) {
         if (connections[i].email === data) {
           connections[i].DesktopId = socket.id;
-          io.to(connections[i].MobileId).emit("newUser");
-          io.to(connections[i].DesktopId).emit("oldUser");
+          if (connections[i].MobileId != null) {
+            io.to(connections[i].MobileId).emit("newUser");
+            io.to(connections[i].DesktopId).emit("oldUser");
+          }
           find = true;
         }
       }
@@ -61,8 +63,10 @@ io.on("connection", function (socket) {
       for (var i = 0; i < connections.length; i++) {
         if (connections[i].email === data) {
           connections[i].MobileId = socket.id;
-          io.to(connections[i].DesktopId).emit("newUser");
-          io.to(connections[i].MobileId).emit("oldUser");
+          if (connections[i].DesktopId != null) {
+            io.to(connections[i].DesktopId).emit("newUser");
+            io.to(connections[i].MobileId).emit("oldUser");
+          }
           find = true;
         }
       }
@@ -78,7 +82,7 @@ io.on("connection", function (socket) {
     }
   });
 
- //Actions
+  //Actions
   socket.on("action", function (data) {
     // console.log("Accion:",data);
     for (var i = 0; i < connections.length; i++) {

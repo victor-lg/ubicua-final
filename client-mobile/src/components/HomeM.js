@@ -20,27 +20,27 @@ export function Home(props) {
             </div>
           </div>
           <div id="homeContainer">
-            <input type="button" value="Descubre" className="screen_button" onClick={() => props.changeScreen("Descubre")}/>
-            <input type="button" value="Favoritas" className="screen_button" onClick={() => props.changeScreen("Favoritas")}/>
-            <input type="button" value="Recomendadas" className="screen_button" onClick={() => props.changeScreen("Recomendadas")}/>
+            <input type="button" value="Descubre" className="screen_button" onClick={() => props.changeScreen("Home","Descubre")}/>
+            <input type="button" value="Favoritas" className="screen_button" onClick={() => props.changeScreen("Home","Favoritas")}/>
+            <input type="button" value="Recomendadas" className="screen_button" onClick={() => props.changeScreen("Home","Recomendadas")}/>
           </div>
         </div>
       }
 
       {props.screen === "Recomendadas" &&
-        <RecomendadasM changeScreen={props.changeScreen} userName={props.userName} disconnect={props.disconnect}/>
+        <RecomendadasM changeScreen={props.changeScreen} lastScreen={props.lastScreen} userName={props.userName} disconnect={props.disconnect}/>
       }
 
       {props.screen === "Favoritas" &&
-        <FavoritasM changeScreen={props.changeScreen} userName={props.userName} voice={props.voice} disconnect={props.disconnect}/>
+        <FavoritasM changeScreen={props.changeScreen} lastScreen={props.lastScreen} userName={props.userName} voice={props.voice} disconnect={props.disconnect}/>
       }
 
       {props.screen === "Descubre" &&
-        <DescubreM changeScreen={props.changeScreen} userName={props.userName} disconnect={props.disconnect}/>
+        <DescubreM changeScreen={props.changeScreen} lastScreen={props.lastScreen} userName={props.userName} disconnect={props.disconnect}/>
       }
 
       {props.screen === "Video" &&
-        <VideoM changeScreen={props.changeScreen} userName={props.userName} titleVideo={props.titleVideo}  />
+        <VideoM changeScreen={props.changeScreen} lastScreen={props.lastScreen} userName={props.userName} titleVideo={props.titleVideo}  />
       }
     </div>
   );

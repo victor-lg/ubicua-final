@@ -30,9 +30,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const db = getDatabase(app);
+//rotation
 const options = { frequency: 60, ReferenceFrame: 'screen' };
-
-
 const sensor = new window.RelativeOrientationSensor(options);
 const absolute = new window.AbsoluteOrientationSensor(options);
 
@@ -41,8 +40,8 @@ function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isPartner, setPartner] = useState(false);
   const [userName, setUserName] = useState(null);
-  const [email, setEmail] = useState("");
   const [screen, setScreen] = useState("Home");
+  const [lastScreen, setLastScreen] = useState("Home");
   const [titleVideo, setTitleVideo] = useState("titulo de la peli");
   const counter = useRef(-1);
 
@@ -72,7 +71,7 @@ function App() {
       }
       setLoggedIn(true);
       setUserName(user.displayName.replace(/ .*/, ''));
-      setEmail(user.email);
+      //Register
       socket.emit("registerMobile", user.email);
 
     } catch (err) {
@@ -86,10 +85,9 @@ function App() {
   useEffect(() => {
 
     ////////////////
-    //  REGISTER
+    //  GET PARTNER
     ////////////////
     socket.on("newUser", function () {
-
       setPartner(true);
     });
 
@@ -97,11 +95,6 @@ function App() {
     //  GET PARTNER
     ////////////////
     socket.on("oldUser", function () {
-
-      setPartner(true);
-    });
-    socket.on("mensaje2", function (data) {
-      alert(data);
       setPartner(true);
     });
 
@@ -109,7 +102,6 @@ function App() {
     //  GET DISCONNECTED PARTNER
     //////////////////////////////
     socket.on("disconnectPartner", function () {
-
       setPartner(false);
     });
 
@@ -118,26 +110,28 @@ function App() {
   ///////////////////
   //  CHANGE SCREEN
   ///////////////////
-  function changeScreen(data) {
-    if (data !== "Home") {
+  function changeScreen(last, next) {
+    if (next !== "Home") {
       var act = {
         gesture: "touch",
-        action: data
+        action: next
       }
       socket.emit("action", act);
     }
 
-    if (data === "Descubre") {
+    if (next === "Descubre") {
       absolute.stop();
       tilt();
-    } else if (data === "Video") {
+    } else if (next === "Video") {
       sensor.stop();
       faceDown();
     }
     else {
+      absolute.stop();
       sensor.stop();
     }
-    setScreen(data);
+    setLastScreen(last);
+    setScreen(next);
   }
 
   /////////////////////
@@ -151,7 +145,7 @@ function App() {
           
           if (sensor.quaternion[0] != null && sensor.quaternion[0] < -0.08) {
 
-            if (counter.current < 42) {
+            if (counter.current < 41) {
               counter.current += 1;
             } else {
               counter.current = 0;
@@ -161,6 +155,10 @@ function App() {
             onValue(filmsRef, (snapshot) => {
               let data = snapshot.val();
               console.log(counter.current, data.title);
+              setTitleVideo(data.title);
+
+              //Sacar info de pelis
+
             })
             var act = {
               gesture: "tilt",
@@ -174,12 +172,16 @@ function App() {
             if (counter.current > 0) {
               counter.current -= 1;
             } else {
-              counter.current = 42;
+              counter.current = 41;
             }
             const filmsRef = ref(db, "/films/" + counter.current);
             onValue(filmsRef, (snapshot) => {
               let data = snapshot.val();
               console.log(counter.current, data.title);
+              setTitleVideo(data.title);
+
+                //Sacar info de pelis
+
             })
             var act = {
               gesture: "tilt",
@@ -308,7 +310,7 @@ function App() {
       }
 
       {isLoggedIn && isPartner &&
-        <Home changeScreen={changeScreen} screen={screen} userName={userName} titleVideo={titleVideo} voice={voice} disconnect={disconnect} />
+        <Home changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} titleVideo={titleVideo} voice={voice} disconnect={disconnect} />
       }
 
     </div>
