@@ -1,6 +1,5 @@
 import './App.css';
 import { useState, useEffect, useRef } from 'react';
-
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { getDatabase, ref, set, get } from "firebase/database";
@@ -10,8 +9,6 @@ import { NoPartner } from './components/NoPartnerM';
 import io from "socket.io-client";
 const socketurl = "http://localhost:3500";
 const socket = io(socketurl);
-
-
 
 /////////////////////
 //    FIREBASE
@@ -35,6 +32,9 @@ const options = { frequency: 60, ReferenceFrame: 'screen' };
 const sensor = new window.RelativeOrientationSensor(options);
 const absolute = new window.AbsoluteOrientationSensor(options);
 
+/////////////////////
+//    MAIN FUNCTION
+/////////////////////
 function App() {
 
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -42,10 +42,17 @@ function App() {
   const [userName, setUserName] = useState(null);
   const [screen, setScreen] = useState("Home");
   const [lastScreen, setLastScreen] = useState("Home");
-  //const [titleVideo, setTitleVideo] = useState("titulo de la peli");
-
+  const [titleVideo, setTitleVideo] = useState("titulo de la peli");
   const [timeRunning, setTimeRunning] = useState(false);
   const timerRef = useRef();
+
+  /*Variables para el control táctil*/
+  let start_x = useRef(0);
+  let end_x = useRef(0);
+  let start_time = useRef(0);
+  const SPACE_THRESHOLD = useRef(100);
+  const TIME_THRESHOLD = useRef(200);
+
 
 
   /////////////////////
@@ -79,7 +86,9 @@ function App() {
 
 
 
-
+  /////////////////////
+  //    USE EFFECT
+  /////////////////////
   useEffect(() => {
 
     ////////////////
@@ -88,10 +97,6 @@ function App() {
     socket.on("newUser", function () {
       setPartner(true);
     });
-
-    ////////////////
-    //  GET PARTNER
-    ////////////////
     socket.on("oldUser", function () {
       setPartner(true);
     });
@@ -101,6 +106,15 @@ function App() {
     //////////////////////////////
     socket.on("disconnectPartner", function () {
       setPartner(false);
+    });
+
+    ///////////////////////////////
+    // DO ACTION
+    //////////////////////////////
+    socket.on("doAction", function (data) {
+      if (data.gesture === "titlefilm") {
+        setTitleVideo(data.action);
+      }
     });
 
   }, []);
@@ -123,6 +137,7 @@ function App() {
     } else if (next === "Video") {
       sensor.stop();
       faceDown();
+      startup();
     }
     else {
       absolute.stop();
@@ -140,11 +155,10 @@ function App() {
     if ('RelativeOrientationSensor' in window) {
       // console.log(sensor.quaternion);
       sensor.addEventListener('reading', (coordX) => {
-        if(sensor.quaternion !== null){
-          console.log("entra");
+        if (sensor.quaternion !== null) {
           coordX = sensor.quaternion[0];
         }
-        
+
         if (coordX < -0.08) {
           var act = {
             gesture: "tilt",
@@ -164,34 +178,29 @@ function App() {
       });
 
       sensor.addEventListener("error", () => {
-        console.log("ESTO EXPLOTA");
       })
       sensor.start();
-
-
-
     }
   }
 
-
   function startTiltTimer() {
-    // console.log("SENSOR PARADO");
+    console.log("SENSOR TILT PARADO");
     sensor.stop();
     setTimeRunning(true);
     timerRef.current = setTimeout(() => {
       setTimeRunning(false);
       timerRef.current = null;
       sensor.start();
-      // console.log("SENSOR ACTIVADO");
+      console.log("SENSOR TILT ACTIVADO");
     }, 3000);
   }
 
-  function stoptTiltTimer() {
-    clearTimeout(timerRef.current);
-    setTimeRunning(false);
-    timerRef.current = null;
-    sensor.stop();
-  }
+  // function stoptTiltTimer() {
+  //   clearTimeout(timerRef.current);
+  //   setTimeRunning(false);
+  //   timerRef.current = null;
+  //   sensor.stop();
+  // }
 
   /////////////////////
   //    FACEDOWN
@@ -201,11 +210,11 @@ function App() {
     if ('RelativeOrientationSensor' in window) {
       try {
         absolute.addEventListener('reading', (coordZ) => {
-          if(absolute.quaternion !== null){
+          if (absolute.quaternion !== null) {
             coordZ = absolute.quaternion[2];
           }
           if (coordZ > 0) {
-            console.log("El teléfono esta boca abajo");
+
             var act = {
               gesture: "turn",
               action: "down"
@@ -223,22 +232,76 @@ function App() {
   }
 
   function startfaceDownTimer() {
-    console.log("SENSOR PARADO");
+    console.log("SENSOR FACEDOWN PARADO");
     absolute.stop();
     setTimeRunning(true);
     timerRef.current = setTimeout(() => {
       setTimeRunning(false);
       timerRef.current = null;
       absolute.start();
-      console.log("SENSOR ACTIVADO");
+      console.log("SENSOR FACEDOWN ACTIVADO");
     }, 4000);
   }
 
-  function stopFaceDownTimer() {
-    clearTimeout(timerRef.current);
-    setTimeRunning(false);
-    timerRef.current = null;
-    absolute.stop();
+  // function stopFaceDownTimer() {
+  //   clearTimeout(timerRef.current);
+  //   setTimeRunning(false);
+  //   timerRef.current = null;
+  //   absolute.stop();
+  // }
+
+  /////////////////////
+  //    SWIPE
+  /////////////////////
+
+  //Gestos
+  let startx = 0;
+  let endx = 0;
+  let starttime = 0;
+  const TIMETHRESHOLD = 200;
+  const SPAECTHRESHOLD = 100;
+  const SPAECNOTMOVE = 50;
+
+  function startup() {
+    var gesture = document.getElementsByClassName('gestosVideo')[0];
+
+
+    if (gesture) {
+      gesture.addEventListener("touchstart", function (e) {
+        e.preventDefault();
+        startx = e.targetTouches[0].screenX;
+        starttime = e.timeStamp;
+        console.log("TOCA CON EL DEDO");
+      }, { passive: false });
+
+      gesture.addEventListener("touchmove", function (e) {
+        e.preventDefault();
+        endx = e.changedTouches[0].screenX;
+      }, { passive: false });
+
+      gesture.addEventListener("touchend", function (e) {
+        e.preventDefault();
+        endx = e.timeStamp;
+
+        if (((endx - starttime) < TIME_THRESHOLD) && ((endx - startx) > SPAECTHRESHOLD)) {
+          var touchobj = e.changedTouches[0];
+          if (touchobj.target.className === 'gestosVideo') {
+            console.log("derecha");
+          }
+        }
+        if (((endx - starttime) > TIME_THRESHOLD && ((endx - startx) < SPAECNOTMOVE))) {
+          var touchobj = e.changedTouches[0];
+          if (touchobj.target.className === 'gestosVideo') {
+            console.log("mantener");
+          }
+        }
+      });
+    }
+
+
+
+
+
   }
 
   ///////////////////
@@ -296,6 +359,10 @@ function App() {
   }
 
 
+
+  /////////////////////
+  //    RETURN
+  /////////////////////
   return (
     <div className="App">
 
@@ -308,11 +375,13 @@ function App() {
       }
 
       {isLoggedIn && isPartner &&
-        <Home changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} disconnect={disconnect} />
+        <Home changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} titleVideo={titleVideo} disconnect={disconnect} />
       }
 
     </div>
   );
 }
+
+
 
 export default App;

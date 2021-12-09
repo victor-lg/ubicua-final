@@ -283,4 +283,35 @@ body {
         font-size: 1.4em;
     }
 
+    .gestosVideo {
+        width: 100%;
+        display: flex;
+        border: 1px solid red;
+        height: 65vh;
+        color: white;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #upVideo {
+        flex: 1 0 100%;
+    }
+
+    #leftVideo {
+        flex: 0 0 33%;
+    }
+
+    #centerVideo {
+        flex: 0 0 33%;
+    }
+
+    #rightVideo {
+        flex: 0 0 33%;
+    }
+
+    #downVideo {
+        flex: 1 0 100%;
+    }
+
 }

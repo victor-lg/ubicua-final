@@ -17,19 +17,27 @@ export function VideoM(props) {
                 </div>
                 <div id="VideoContainer">
                     <div id="titleVideo">
-                        {/* <h2 id="title">{props.titleVideo}</h2> */}
+                        <h2 id="title">{props.titleVideo}</h2>
                     </div>
-                    <div id="gestos">
-                        <div className="descubreGesto">
-                            <p>Película anterior</p>
-                            <p>↺</p>
+                    <div className="gestosVideo">
+                        <div className="videoGesto" id="upVideo">
+                            <p>ARRIBA</p>
+                            <p>&#8593;</p>
                         </div>
-                        <div className="descubrePlay">
+                        <div className="videoGesto" id="leftVideo">
+                            <p>IZQUIERDA</p>
+                            <p>&#8592;</p>
+                        </div>
+                        <div className="videoGesto" id="centerVideo">
                             <p>videito</p>
                         </div>
-                        <div className="descubreGesto">
-                            <p>Película siguiente</p>
-                            <p>↻</p>
+                        <div className="videoGesto" id="rightVideo">
+                            <p>DERECHA</p>
+                            <p>&#8594;</p>
+                        </div>
+                        <div className="videoGesto" id="downVideo">
+                            <p>ABAJO</p>
+                            <p>&#8595;</p>
                         </div>
                     </div>
                     <div id="footer">
