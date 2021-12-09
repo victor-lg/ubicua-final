@@ -139,12 +139,13 @@ function App() {
   function tilt() {
     if ('RelativeOrientationSensor' in window) {
       // console.log(sensor.quaternion);
-      sensor.addEventListener('reading', () => {
-        
-        if (sensor.quaternion === null) {
-          sensor.stop();
+      sensor.addEventListener('reading', (coordX) => {
+        if(sensor.quaternion !== null){
+          console.log("entra");
+          coordX = sensor.quaternion[0];
         }
-        if (sensor.quaternion[0] < -0.08) {
+        
+        if (coordX < -0.08) {
           var act = {
             gesture: "tilt",
             action: "right"
@@ -152,7 +153,7 @@ function App() {
           socket.emit("action", act);
           startTiltTimer();
         }
-        if (sensor.quaternion[0] > 0.38) {
+        if (coordX > 0.38) {
           var act = {
             gesture: "tilt",
             action: "left"
@@ -199,8 +200,11 @@ function App() {
   function faceDown() {
     if ('RelativeOrientationSensor' in window) {
       try {
-        absolute.addEventListener('reading', () => {
-          if (absolute.quaternion[2] > 0) {
+        absolute.addEventListener('reading', (coordZ) => {
+          if(absolute.quaternion !== null){
+            coordZ = absolute.quaternion[2];
+          }
+          if (coordZ > 0) {
             console.log("El teléfono esta boca abajo");
             var act = {
               gesture: "turn",
