@@ -1,9 +1,9 @@
 import './App.css';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { getDatabase, ref, set, get } from "firebase/database";
+import { getDatabase, ref, set, get, onValue } from "firebase/database";
 import { Home } from "./components/HomeD";
 import { Login } from './components/LoginD';
 import { NoPartner } from './components/NoPartnerD';
@@ -35,6 +35,8 @@ function App() {
   const [userName, setUserName] = useState(null);
   const [email, setEmail] = useState("");
   const [screen, setScreen] = useState("Descubre");
+  const [titleVideo, setTitleVideo] = useState("titulo de la peli");
+  const counter = useRef(-1);
 
 
   /////////////////////
@@ -59,7 +61,7 @@ function App() {
         });
       }
       setLoggedIn(true);
-      setUserName(user.displayName.replace(/ .*/,''));
+      setUserName(user.displayName.replace(/ .*/, ''));
       setEmail(user.email);
       socket.emit("registerDesktop", user.email);
 
@@ -67,6 +69,41 @@ function App() {
       console.error(err);
     }
   };
+
+  function obtainFilm(data) {
+    if (data === "right") {
+      if (counter.current < 41) {
+        counter.current += 1;
+      } else {
+        counter.current = 0;
+      }
+      const filmsRef = ref(db, "/films/" + counter.current);
+      onValue(filmsRef, (snapshot) => {
+        let data = snapshot.val();
+        console.log(counter.current, data.title);
+        setTitleVideo(data.title);
+
+        //Sacar info de pelis
+
+      });
+
+    } else {
+      if (counter.current > 0) {
+        counter.current -= 1;
+      } else {
+        counter.current = 41;
+      }
+      const filmsRef = ref(db, "/films/" + counter.current);
+      onValue(filmsRef, (snapshot) => {
+        let data = snapshot.val();
+        console.log(counter.current, data.title);
+        setTitleVideo(data.title);
+
+        //Sacar info de pelis
+
+      });
+    }
+  }
 
   // function prueba(){
   //   const userRef = ref(db, "/users/rhxaBY3acdfGAoj486fJ3GVmczL2");
@@ -109,25 +146,21 @@ function App() {
     //////////////////////////////
     socket.on("doAction", function (data) {
 
-      if(data.gesture === "touch"){
+      if (data.gesture === "touch") {
         console.log(data.action);
         setScreen(data.action);
-      } else if (data.gesture === "tilt"){
+      } else if (data.gesture === "tilt") {
         console.log("Inclinacion hacia la", data.action);
-        if(data.action === "right"){
+        obtainFilm(data.action);
 
-        }else{
+      } else if (data.gesture === "voice") {
+        console.log("has dicho", data.action);
 
-        }
-        
-      } else if (data.gesture === "voice"){
-        console.log("has dicho",data.action);
-
-      } else if (data.gesture === "swipe"){
+      } else if (data.gesture === "swipe") {
       }
 
     });
-    
+
 
   }, []);
 

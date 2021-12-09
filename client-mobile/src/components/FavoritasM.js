@@ -33,8 +33,8 @@ export function FavoritasM(props) {
                         </div>
                     </div>
                     <div id="footer">
-                        <input type="button" value="&#8617;" class="menubutton" id="returnbutton" onClick={() => props.changeScreen("Favoritas","Home")} />
-                        <input type="button" value="&#8962;" class="menubutton" id="homeButton" onClick={() => props.changeScreen("Favoritas","Home")} />
+                        <input type="button" value="&#8617;" className="menubutton" id="returnbutton" onClick={() => props.changeScreen("Favoritas","Home")} />
+                        <input type="button" value="&#8962;" className="menubutton" id="homeButton" onClick={() => props.changeScreen("Favoritas","Home")} />
                     </div>
                 </div>
             </div>

@@ -2,8 +2,8 @@ import './App.css';
 import { useState, useEffect, useRef } from 'react';
 
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
-import { getDatabase, ref, set, get, onValue } from "firebase/database";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { getDatabase, ref, set, get } from "firebase/database";
 import { Home } from "./components/HomeM";
 import { Login } from './components/LoginM';
 import { NoPartner } from './components/NoPartnerM';
@@ -42,9 +42,7 @@ function App() {
   const [userName, setUserName] = useState(null);
   const [screen, setScreen] = useState("Home");
   const [lastScreen, setLastScreen] = useState("Home");
-  const [titleVideo, setTitleVideo] = useState("titulo de la peli");
-  const counter = useRef(-1);
-
+  //const [titleVideo, setTitleVideo] = useState("titulo de la peli");
 
   const [timeRunning, setTimeRunning] = useState(false);
   const timerRef = useRef();
@@ -129,6 +127,7 @@ function App() {
     else {
       absolute.stop();
       sensor.stop();
+
     }
     setLastScreen(last);
     setScreen(next);
@@ -139,62 +138,37 @@ function App() {
   /////////////////////
   function tilt() {
     if ('RelativeOrientationSensor' in window) {
-      try {
-        sensor.addEventListener('reading', () => {
-          console.log(counter.current);
-          
-          if (sensor.quaternion[0] != null && sensor.quaternion[0] < -0.08) {
-
-            if (counter.current < 41) {
-              counter.current += 1;
-            } else {
-              counter.current = 0;
-            }
-
-            const filmsRef = ref(db, "/films/" + counter.current);
-            onValue(filmsRef, (snapshot) => {
-              let data = snapshot.val();
-              console.log(counter.current, data.title);
-              setTitleVideo(data.title);
-
-              //Sacar info de pelis
-
-            })
-            var act = {
-              gesture: "tilt",
-              action: "right"
-            }
-            socket.emit("action", act);
-            startTiltTimer();
-
-          } else if (sensor.quaternion[0] > 0.38) {
-
-            if (counter.current > 0) {
-              counter.current -= 1;
-            } else {
-              counter.current = 41;
-            }
-            const filmsRef = ref(db, "/films/" + counter.current);
-            onValue(filmsRef, (snapshot) => {
-              let data = snapshot.val();
-              console.log(counter.current, data.title);
-              setTitleVideo(data.title);
-
-                //Sacar info de pelis
-
-            })
-            var act = {
-              gesture: "tilt",
-              action: "left"
-            }
-            socket.emit("action", act);
-            startTiltTimer();
+      // console.log(sensor.quaternion);
+      sensor.addEventListener('reading', () => {
+        
+        if (sensor.quaternion === null) {
+          sensor.stop();
+        }
+        if (sensor.quaternion[0] < -0.08) {
+          var act = {
+            gesture: "tilt",
+            action: "right"
           }
-        });
-        sensor.start();
-      } catch (err) {
-        console.log(err);
-      }
+          socket.emit("action", act);
+          startTiltTimer();
+        }
+        if (sensor.quaternion[0] > 0.38) {
+          var act = {
+            gesture: "tilt",
+            action: "left"
+          }
+          socket.emit("action", act);
+          startTiltTimer();
+        }
+      });
+
+      sensor.addEventListener("error", () => {
+        console.log("ESTO EXPLOTA");
+      })
+      sensor.start();
+
+
+
     }
   }
 
@@ -211,6 +185,13 @@ function App() {
     }, 3000);
   }
 
+  function stoptTiltTimer() {
+    clearTimeout(timerRef.current);
+    setTimeRunning(false);
+    timerRef.current = null;
+    sensor.stop();
+  }
+
   /////////////////////
   //    FACEDOWN
   /////////////////////
@@ -219,8 +200,14 @@ function App() {
     if ('RelativeOrientationSensor' in window) {
       try {
         absolute.addEventListener('reading', () => {
-          if(absolute.quaternion[2] > 0){
-            console.log("El teléfono esta boca abajo")
+          if (absolute.quaternion[2] > 0) {
+            console.log("El teléfono esta boca abajo");
+            var act = {
+              gesture: "turn",
+              action: "down"
+            }
+
+            socket.emit("action", act);
             startfaceDownTimer();
           }
         });
@@ -241,6 +228,13 @@ function App() {
       absolute.start();
       console.log("SENSOR ACTIVADO");
     }, 4000);
+  }
+
+  function stopFaceDownTimer() {
+    clearTimeout(timerRef.current);
+    setTimeRunning(false);
+    timerRef.current = null;
+    absolute.stop();
   }
 
   ///////////////////
@@ -310,7 +304,7 @@ function App() {
       }
 
       {isLoggedIn && isPartner &&
-        <Home changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} titleVideo={titleVideo} voice={voice} disconnect={disconnect} />
+        <Home changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} disconnect={disconnect} />
       }
 
     </div>

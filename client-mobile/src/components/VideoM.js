@@ -17,7 +17,7 @@ export function VideoM(props) {
                 </div>
                 <div id="VideoContainer">
                     <div id="titleVideo">
-                        <h2 id="title">{props.titleVideo}</h2>
+                        {/* <h2 id="title">{props.titleVideo}</h2> */}
                     </div>
                     <div id="gestos">
                         <div className="descubreGesto">
@@ -33,8 +33,8 @@ export function VideoM(props) {
                         </div>
                     </div>
                     <div id="footer">
-                        <input type="button" value="&#8617;" class="menubutton" id="returnbutton" onClick={() => props.changeScreen("Recomendadas", props.lastScreen)} />
-                        <input type="button" value="&#8962;" class="menubutton" id="homeButton" onClick={() => props.changeScreen("Recomendadas", "Home")} />
+                        <input type="button" value="&#8617;" className="menubutton" id="returnbutton" onClick={() => props.changeScreen("Recomendadas", props.lastScreen)} />
+                        <input type="button" value="&#8962;" className="menubutton" id="homeButton" onClick={() => props.changeScreen("Recomendadas", "Home")} />
                     </div>
                 </div>
             </div>
