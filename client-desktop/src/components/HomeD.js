@@ -3,15 +3,21 @@ import { RecomendadasD } from "./RecomendadasD";
 import { FavoritasD } from './FavoritasD';
 import { DescubreD } from './DescubreD';
 import { VideoD } from "./VideoD";
+import logo from './images/logo.png';
+// import {MdOutlinePersonOutline} from "react-icons/md";
 
 export function Home(props) {
     return (
         <div>
-            <h1>Welcome, {props.userName}</h1>
-            <input type="button" id="signOut_button" onClick={props.disconnect} value="disconnect" />
-
-            {/* <input type="button" id="signOut_button" onClick={props.data} value="prueba" /> */}
-
+            <div id="homeHeader">
+                <div id="logoHeader">
+                    <img src={logo} alt="logo" />
+                </div>
+                <div id="userHeader">
+                    <h2>{props.userName}</h2>
+                    <input type="button" id="signOut_button" onClick={props.disconnect} value="disconnect" />
+                </div>
+            </div>
 
             {props.screen === "Recomendadas" &&
                 <RecomendadasD screen={props.screen} />
@@ -26,7 +32,7 @@ export function Home(props) {
             }
 
             {props.screen === "Video" &&
-                <VideoD screen={props.screen} dataVideo={props.dataVideo}/>
+                <VideoD screen={props.screen} dataVideo={props.dataVideo} />
             }
         </div>
     );

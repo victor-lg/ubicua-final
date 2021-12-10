@@ -29,7 +29,10 @@ const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const db = getDatabase(app);
 // This code loads the IFrame Player API code asynchronously.
-
+var tag = document.createElement('script');
+tag.src = "http://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -39,9 +42,9 @@ function App() {
   const [dataVideoPrev, setDataVideoPrev] = useState("");
   const [dataVideo, setDataVideo] = useState("");
   const [dataVideoNext, setDataVideoNext] = useState("");
-  const counter = useRef(-1);
-  const counterPrev = useRef(-1);
-  const counterNext = useRef(-1);
+  const counterPrev = useRef(0);
+  const counter = useRef(1);
+  const counterNext = useRef(2);
 
   /////////////////////
   //    LOG IN
@@ -131,7 +134,7 @@ function App() {
         let data = snapshot.val();
         console.log("prev ", counterPrev.current, data.title);
         setDataVideoPrev(data);
-    
+
       });
 
       const filmsRefRight = ref(db, "/films/" + counterNext.current);
@@ -160,7 +163,7 @@ function App() {
         let data = snapshot.val();
         console.log("current ", counter.current, data.title);
         setDataVideo(data);
-    
+
       });
 
       const filmsRefLeft = ref(db, "/films/" + counterPrev.current);
@@ -240,25 +243,19 @@ function App() {
         console.log("Swipe:", data.action);
 
 
-        // pausarVideo();
-
-
       } else if (data.gesture === "turn") {
-        console.log("MÓVIL BOCA ABAJO");
-        // pausarVideo();
+        console.log("mobile " + data.action);
+        if (data.action === "down") {
+          //pausar video
+
+        } else if (data.action === "up") {
+          //reaunudar video
+        }
       }
     });
 
 
   }, []);
-
-  ///////////////////
-  //  YOUTUBE VIEOS
-  ///////////////////
-
-  // This function creates an <iframe> (and YouTube player)
-  //    after the API code downloads.
-  
 
 
   /////////////////

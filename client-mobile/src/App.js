@@ -222,6 +222,14 @@ function App() {
 
             socket.emit("action", act);
             startfaceDownTimer();
+          }else{
+            var act = {
+              gesture: "turn",
+              action: "up"
+            }
+
+            socket.emit("action", act);
+            startfaceDownTimer();
           }
         });
         absolute.start();
