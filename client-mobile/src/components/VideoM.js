@@ -29,7 +29,7 @@ export function VideoM(props) {
                             <p>&#8592;</p>
                         </div>
                         <div className="videoGesto" id="centerVideo">
-                            <p>videito</p>
+                            <p onClick={props.pararVideo}>videito</p>
                         </div>
                         <div className="videoGesto" id="rightVideo">
                             <p>DERECHA</p>

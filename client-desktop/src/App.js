@@ -28,16 +28,20 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const db = getDatabase(app);
+// This code loads the IFrame Player API code asynchronously.
+
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isPartner, setPartner] = useState(false);
   const [userName, setUserName] = useState(null);
-  const [email, setEmail] = useState("");
   const [screen, setScreen] = useState("Descubre");
-  const [titleVideo, setTitleVideo] = useState("titulo de la peli");
+  const [dataVideoPrev, setDataVideoPrev] = useState("");
+  const [dataVideo, setDataVideo] = useState("");
+  const [dataVideoNext, setDataVideoNext] = useState("");
   const counter = useRef(-1);
-
+  const counterPrev = useRef(-1);
+  const counterNext = useRef(-1);
 
   /////////////////////
   //    LOG IN
@@ -62,8 +66,26 @@ function App() {
       }
       setLoggedIn(true);
       setUserName(user.displayName.replace(/ .*/, ''));
-      setEmail(user.email);
       socket.emit("registerDesktop", user.email);
+
+      var filmsReff = ref(db, "/films/0");
+      onValue(filmsReff, (snapshot) => {
+        let data = snapshot.val();
+        setDataVideoPrev(data);
+      });
+
+      filmsReff = ref(db, "/films/1");
+      onValue(filmsReff, (snapshot) => {
+        let data = snapshot.val();
+        setDataVideo(data);
+      });
+
+      filmsReff = ref(db, "/films/2");
+      onValue(filmsReff, (snapshot) => {
+        let data = snapshot.val();
+        setDataVideoNext(data);
+
+      });
 
     } catch (err) {
       console.error(err);
@@ -77,39 +99,86 @@ function App() {
     if (data === "right") {
       if (counter.current < 41) {
         counter.current += 1;
+        counterPrev.current = counter.current - 1;
+        if (counter.current === 41) {
+          counterNext.current = 0;
+        } else {
+          counterNext.current = counter.current + 1;
+        }
       } else {
         counter.current = 0;
+        counterPrev.current = 41;
+        counterNext.current = 1;
       }
       const filmsRef = ref(db, "/films/" + counter.current);
       onValue(filmsRef, (snapshot) => {
         let data = snapshot.val();
         console.log(counter.current, data.title);
-        setTitleVideo(data.title);
+        setDataVideo(data);
+
+        //se lo envio al movil
         var act = {
           gesture: "titlefilm",
           action: data.title
         }
-        socket.emit("action",act);
+        socket.emit("action", act);
 
-        //Sacar info de pelis
 
+      });
+
+      const filmsRefLeft = ref(db, "/films/" + counterPrev.current);
+      onValue(filmsRefLeft, (snapshot) => {
+        let data = snapshot.val();
+        console.log("prev ", counterPrev.current, data.title);
+        setDataVideoPrev(data);
+    
+      });
+
+      const filmsRefRight = ref(db, "/films/" + counterNext.current);
+      onValue(filmsRefRight, (snapshot) => {
+        let data = snapshot.val();
+        setDataVideoNext(data);
       });
 
     } else {
       if (counter.current > 0) {
         counter.current -= 1;
+        counterNext.current = counter.current + 1;
+
+        if (counter.current === 0) {
+          counterPrev.current = 41;
+        } else {
+          counterPrev.current = counter.current - 1;
+        }
       } else {
         counter.current = 41;
+        counterNext.current = 0;
+        counterPrev.current = 40;
       }
       const filmsRef = ref(db, "/films/" + counter.current);
       onValue(filmsRef, (snapshot) => {
         let data = snapshot.val();
-        console.log(counter.current, data.title);
-        setTitleVideo(data.title);
+        console.log("current ", counter.current, data.title);
+        setDataVideo(data);
+    
+      });
 
-        //Sacar info de pelis
+      const filmsRefLeft = ref(db, "/films/" + counterPrev.current);
+      onValue(filmsRefLeft, (snapshot) => {
+        let data = snapshot.val();
+        console.log("prev ", counterPrev.current, data.title);
+        setDataVideoPrev(data);
 
       });
+
+      const filmsRefRight = ref(db, "/films/" + counterNext.current);
+      onValue(filmsRefRight, (snapshot) => {
+        let data = snapshot.val();
+        setDataVideoNext(data);
+
+
+      });
+
     }
   }
 
@@ -170,22 +239,27 @@ function App() {
       } else if (data.gesture === "swipe") {
         console.log("Swipe:", data.action);
 
+
+        // pausarVideo();
+
+
       } else if (data.gesture === "turn") {
         console.log("MÓVIL BOCA ABAJO");
+        // pausarVideo();
       }
     });
 
 
   }, []);
 
+  ///////////////////
+  //  YOUTUBE VIEOS
+  ///////////////////
 
+  // This function creates an <iframe> (and YouTube player)
+  //    after the API code downloads.
+  
 
-  /////////////////
-  //  SEND MESSAGE
-  /////////////////
-  function sendMessage() {
-    socket.emit("mensaje", "hola");
-  }
 
   /////////////////
   //  SIGN OUT
@@ -214,7 +288,7 @@ function App() {
       }
 
       {isLoggedIn && isPartner &&
-        <Home sendMessage={sendMessage} userName={userName} screen={screen} disconnect={disconnect} />
+        <Home dataVideo={dataVideo} dataVideoPrev={dataVideoPrev} dataVideoNext={dataVideoNext} userName={userName} screen={screen} disconnect={disconnect} />
       }
     </div>
   );

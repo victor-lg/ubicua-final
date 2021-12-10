@@ -40,7 +40,7 @@ export function Home(props) {
       }
 
       {props.screen === "Video" &&
-        <VideoM changeScreen={props.changeScreen} lastScreen={props.lastScreen} userName={props.userName} titleVideo={props.titleVideo}  />
+        <VideoM pararVideo={props.pararVideo} changeScreen={props.changeScreen} lastScreen={props.lastScreen} userName={props.userName} titleVideo={props.titleVideo}  />
       }
     </div>
   );

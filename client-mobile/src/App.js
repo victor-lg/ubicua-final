@@ -358,6 +358,14 @@ function App() {
       })
   }
 
+  function pararVideo(){
+    var act = {
+      gesture: "swipe",
+      action: "pausa"
+    }
+    socket.emit("action", act);
+  }
+
 
 
   /////////////////////
@@ -375,7 +383,7 @@ function App() {
       }
 
       {isLoggedIn && isPartner &&
-        <Home changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} titleVideo={titleVideo} disconnect={disconnect} />
+        <Home pararVideo={pararVideo} changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} titleVideo={titleVideo} disconnect={disconnect} />
       }
 
     </div>

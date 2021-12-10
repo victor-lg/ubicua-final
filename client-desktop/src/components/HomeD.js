@@ -8,8 +8,8 @@ export function Home(props) {
     return (
         <div>
             <h1>Welcome, {props.userName}</h1>
-            <input type="button" value="&#129094;" id="msg_button" onClick={props.sendMessage} />
             <input type="button" id="signOut_button" onClick={props.disconnect} value="disconnect" />
+
             {/* <input type="button" id="signOut_button" onClick={props.data} value="prueba" /> */}
 
 
@@ -22,11 +22,11 @@ export function Home(props) {
             }
 
             {props.screen === "Descubre" &&
-                <DescubreD screen={props.screen} />
+                <DescubreD screen={props.screen} dataVideo={props.dataVideo} dataVideoPrev={props.dataVideoPrev} dataVideoNext={props.dataVideoNext} />
             }
 
             {props.screen === "Video" &&
-                <VideoD screen={props.screen} />
+                <VideoD screen={props.screen} dataVideo={props.dataVideo}/>
             }
         </div>
     );
