@@ -9,7 +9,7 @@ export function FavoritasM(props) {
         <div id="main">
             <div id="homeMain">
 
-                <div id="descubreContainer">
+                <div id="TodasContainer">
                     <div id="categoria">
                         <h1>Películas Favoritas</h1>
                     </div>

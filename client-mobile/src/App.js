@@ -6,6 +6,7 @@ import { getDatabase, ref, set, get } from "firebase/database";
 import { Home } from "./components/HomeM";
 import { Login } from './components/LoginM';
 import { NoPartner } from './components/NoPartnerM';
+import { Todas} from "./components/TodasM";
 import { BsFillMicFill, BsFillMicMuteFill } from "react-icons/bs";
 import io from "socket.io-client";
 const socketurl = "http://localhost:3500";
@@ -134,22 +135,33 @@ function App() {
       socket.emit("action", act);
     }
 
-    if (next === "Descubre") {
+    if (next === "Todas") {
       absolute.stop();
       tilt();
     } else if (next === "Video") {
       sensor.stop();
       faceDown();
       startup();
-    }
-    else {
+    } else {
       absolute.stop();
       sensor.stop();
-
     }
     setLastScreen(last);
     setScreen(next);
   }
+
+  ///////////////////
+  //  FAV FILM
+  ///////////////////
+
+  function favFilm(){
+    var act = {
+      gesture: "fav",
+      action: "fav"
+    }
+    socket.emit("action", act);
+  }
+
 
   /////////////////////
   //    TILT
@@ -187,14 +199,14 @@ function App() {
   }
 
   function startTiltTimer() {
-    console.log("SENSOR TILT PARADO");
+    // console.log("SENSOR TILT PARADO");
     sensor.stop();
     setTimeRunning(true);
     timerRef.current = setTimeout(() => {
       setTimeRunning(false);
       timerRef.current = null;
       sensor.start();
-      console.log("SENSOR TILT ACTIVADO");
+      // console.log("SENSOR TILT ACTIVADO");
     }, 3000);
   }
 
@@ -216,21 +228,22 @@ function App() {
           if (absolute.quaternion !== null) {
             coordZ = absolute.quaternion[2];
           }
-          if (coordZ > 0) {
+          if (coordZ < -0.2 && coordZ > -0.3) {
 
             var act = {
               gesture: "turn",
               action: "down"
             }
+            console.log("down");
 
             socket.emit("action", act);
             startfaceDownTimer();
-          }else{
+          }else if(coordZ < -0.3){
             var act = {
               gesture: "turn",
               action: "up"
             }
-
+            console.log("up");
             socket.emit("action", act);
             startfaceDownTimer();
           }
@@ -243,14 +256,14 @@ function App() {
   }
 
   function startfaceDownTimer() {
-    console.log("SENSOR FACEDOWN PARADO");
+    // console.log("SENSOR FACEDOWN PARADO");
     absolute.stop();
     setTimeRunning(true);
     timerRef.current = setTimeout(() => {
       setTimeRunning(false);
       timerRef.current = null;
       absolute.start();
-      console.log("SENSOR FACEDOWN ACTIVADO");
+      // console.log("SENSOR FACEDOWN ACTIVADO");
     }, 4000);
   }
 
@@ -308,10 +321,6 @@ function App() {
         }
       });
     }
-
-
-
-
 
   }
 
@@ -408,7 +417,7 @@ function App() {
       }
 
       {isLoggedIn && isPartner &&
-        <Home pararVideo={pararVideo} mic={mic} changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} titleVideo={titleVideo} disconnect={disconnect} />
+        <Home favFilm={favFilm} pararVideo={pararVideo} mic={mic} changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} titleVideo={titleVideo} disconnect={disconnect} />
       }
 
     </div>

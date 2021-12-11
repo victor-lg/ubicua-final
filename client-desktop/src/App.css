@@ -178,16 +178,16 @@ h2 {
 }
 
 
-/* --------------------DESCUBRE-------------------------- */
+/* --------------------Todas-------------------------- */
 
-.descubre {
+.Todas {
     font-family: "Open Sans", sans-serif;
     color: white;
     background: black;
     font-size: 25px;
 }
 
-.descubre h1 {
+.Todas h1 {
     text-align: center;
     color: white;
     margin: 30px 0px 60px 0px;
@@ -199,7 +199,7 @@ h2 {
     text-decoration: underline;
 }
 
-.descubre-contenedor {
+.Todas-contenedor {
 
     display: flex;
     margin-left: 15%;
@@ -208,23 +208,23 @@ h2 {
     justify-content: center;
 }
 
-.descubre-flecha-izq {
+.Todas-flecha-izq {
     padding: 0 10px;
     text-align: center;
     color: white;
     font-size: 50px;
 }
 
-.descubre-flecha-izq:hover {
+.Todas-flecha-izq:hover {
     cursor: pointer;
 }
 
-.descubre-poster-izq {
+.Todas-poster-izq {
     text-align: center;
     margin: 0 0 0 50px;
 }
 
-.descubre-poster-izq img {
+.Todas-poster-izq img {
     /* min-width: 200px; */
     min-height: 510px;
     /* max-width: 500px; */
@@ -233,16 +233,16 @@ h2 {
     box-shadow: 0 0 10px 10px #505050;
 }
 
-.descubre-poster-izq:hover {
+.Todas-poster-izq:hover {
     cursor: pointer;
 }
 
-.descubre-poster-central {
+.Todas-poster-central {
     text-align: center;
     margin: 0 45px;
 }
 
-.descubre-poster-central img {
+.Todas-poster-central img {
     /* min-width: 300px; */
     min-height: 620px;
     /* max-width: 600px; */
@@ -250,18 +250,18 @@ h2 {
     box-shadow: 0 0 10px 10px #505050;
 }
 
-.descubre-poster-central:hover {
+.Todas-poster-central:hover {
     cursor: pointer;
 }
 
-.descubre-poster-der {
+.Todas-poster-der {
     padding: 0;
     margin: 0 50px 0 0;
     border: 0;
     text-align: center;
 }
 
-.descubre-poster-der img {
+.Todas-poster-der img {
     /* min-width: 200px; */
     min-height: 510px;
     /* max-width: 500px; */
@@ -270,17 +270,17 @@ h2 {
     box-shadow: 0 0 10px 10px #505050;
 }
 
-.descubre-poster-der:hover {
+.Todas-poster-der:hover {
     cursor: pointer;
 }
 
-.descubre-flecha-der {
+.Todas-flecha-der {
     padding: 0 10px;
     text-align: center;
     color: white;
     font-size: 50px;
 }
 
-.descubre-flecha-der:hover {
+.Todas-flecha-der:hover {
     cursor: pointer;
 }

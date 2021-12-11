@@ -1,6 +1,5 @@
 import './App.css';
 import { useState, useEffect, useRef } from 'react';
-
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { getDatabase, ref, set, get, onValue } from "firebase/database";
@@ -28,23 +27,30 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 const db = getDatabase(app);
-// This code loads the IFrame Player API code asynchronously.
-var tag = document.createElement('script');
-tag.src = "http://www.youtube.com/iframe_api";
-var firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isPartner, setPartner] = useState(false);
   const [userName, setUserName] = useState(null);
-  const [screen, setScreen] = useState("Descubre");
+  const [screen, setScreen] = useState("Todas");
   const [dataVideoPrev, setDataVideoPrev] = useState("");
   const [dataVideo, setDataVideo] = useState("");
   const [dataVideoNext, setDataVideoNext] = useState("");
+
+  const [dataFavVideoPrev, setDataFavVideoPrev] = useState("");
+  const [dataFavVideo, setDataFavVideo] = useState("");
+  const [dataFavVideoNext, setDataFavVideoNext] = useState("");
+
+  const [pause, setPause] = useState(0);
   const counterPrev = useRef(0);
   const counter = useRef(1);
   const counterNext = useRef(2);
+
+  const totalfavs = useRef(0);
+  const counterFavPrev = useRef(-1);
+  const counterFav = useRef(-1);
+  const counterFavNext = useRef(-1);
+
 
   /////////////////////
   //    LOG IN
@@ -93,100 +99,13 @@ function App() {
       onValue(filmsReff, (snapshot) => {
         let data = snapshot.val();
         setDataVideoNext(data);
-
       });
 
     } catch (err) {
-      console.error(err);
+      console.log("[ERROR] " + error);
     }
   };
 
-  /////////////////////
-  //    OBTAIN FILM
-  /////////////////////
-  function obtainFilm(data) {
-    if (data === "right") {
-      if (counter.current < 41) {
-        counter.current += 1;
-        counterPrev.current = counter.current - 1;
-        if (counter.current === 41) {
-          counterNext.current = 0;
-        } else {
-          counterNext.current = counter.current + 1;
-        }
-      } else {
-        counter.current = 0;
-        counterPrev.current = 41;
-        counterNext.current = 1;
-      }
-      const filmsRef = ref(db, "/films/" + counter.current);
-      onValue(filmsRef, (snapshot) => {
-        let data = snapshot.val();
-        console.log(counter.current, data.title);
-        setDataVideo(data);
-
-        //se lo envio al movil
-        var act = {
-          gesture: "titlefilm",
-          action: dataVideo.title
-        }
-        socket.emit("action", act);
-      });
-
-      const filmsRefLeft = ref(db, "/films/" + counterPrev.current);
-      onValue(filmsRefLeft, (snapshot) => {
-        let data = snapshot.val();
-        console.log("prev ", counterPrev.current, data.title);
-        setDataVideoPrev(data);
-      });
-      const filmsRefRight = ref(db, "/films/" + counterNext.current);
-      onValue(filmsRefRight, (snapshot) => {
-        let data = snapshot.val();
-        setDataVideoNext(data);
-      });
-
-
-    } else {
-      if (counter.current > 0) {
-        counter.current -= 1;
-        counterNext.current = counter.current + 1;
-
-        if (counter.current === 0) {
-          counterPrev.current = 41;
-        } else {
-          counterPrev.current = counter.current - 1;
-        }
-      } else {
-        counter.current = 41;
-        counterNext.current = 0;
-        counterPrev.current = 40;
-      }
-      const filmsRef = ref(db, "/films/" + counter.current);
-      onValue(filmsRef, (snapshot) => {
-        let data = snapshot.val();
-        console.log("current ", counter.current, data.title);
-        setDataVideo(data);
-      });
-      const filmsRefLeft = ref(db, "/films/" + counterPrev.current);
-      onValue(filmsRefLeft, (snapshot) => {
-        let data = snapshot.val();
-        console.log("prev ", counterPrev.current, data.title);
-        setDataVideoPrev(data);
-      });
-      const filmsRefRight = ref(db, "/films/" + counterNext.current);
-      onValue(filmsRefRight, (snapshot) => {
-        let data = snapshot.val();
-        setDataVideoNext(data);
-      });
-
-    }
-  }
-
-  // function prueba(){
-  //   const userRef = ref(db, "/users/rhxaBY3acdfGAoj486fJ3GVmczL2");
-  //   const data = get(userRef);
-  //   console.log(data);
-  // }
 
 
   ////////////////
@@ -232,36 +151,192 @@ function App() {
         setScreen(data.action);
       } else if (data.gesture === "tilt") {
         console.log("Inclinacion hacia la", data.action);
-        obtainFilm(data.action);
+        if (screen === "Todas") {
+          obtainFilm(data.action);
+        } else {
+          obtainFavFilm();
+        }
       } else if (data.gesture === "voice") {
         console.log("Has dicho", data.action);
         if (data.action == "siguiente") {
           obtainFilm("right");
         } else if (data.action === "anterior") {
           obtainFilm("left");
-        } else if (data.action === "reproducir"){
+        } else if (data.action === "reproducir") {
           setScreen("Video");
-        } else if (data.action === "eliminar"){
+        } else if (data.action === "eliminar") {
           //eliminar de favoritos
         }
 
       } else if (data.gesture === "swipe") {
-        console.log("Swipe:", data.action);
+        // console.log("Swipe:", data.action);
 
 
       } else if (data.gesture === "turn") {
-        console.log("mobile " + data.action);
+        // console.log("mobile " + data.action);
         if (data.action === "down") {
           //pausar video
+          setPause(1);
 
         } else if (data.action === "up") {
           //reaunudar video
+          setPause(0);
         }
+      } else if (data.action === "fav") {
+        setfavFilm();
       }
     });
 
-
   }, []);
+
+
+  ///////////////////////
+  //    SET FAV FILM
+  ///////////////////////
+  function setfavFilm() {
+    totalfavs.current += 1;
+
+    //   const userRef = ref(db, "/favs/" + user.uid);
+    //   const snapshot = await get(userRef);
+
+    //   const data = snapshot.val();
+    //   console.log(data);
+
+    //   if (data) {
+    //   } else {
+    //     await set(ref(db, "favs/" + dataVideo.id), {
+    //       title: dataVideo.title,
+    //       poster: dataVideo.poster,
+    //       link: dataVideo.link,
+    //     });
+    //   }
+
+  }
+
+  ///////////////////////
+  //    OBTAIN FAV FILMS
+  ///////////////////////
+  function obtainFavFilm() {
+    if (counterFav.current < totalfavs.current) {
+      counterFav.current += 1;
+      counterFavPrev.current = counterFav.current - 1;
+      if (counterFav.current === totalfavs.current) {
+        counterFavNext.current = 0;
+      } else {
+        counterFavNext.current = counterFav.current + 1;
+      }
+    } else {
+      counterFavPrev.current = totalfavs.current;
+      counterFav.current = 0;
+      counterFavNext.current = 1;
+    }
+
+
+    const filmsRef = ref(db, "/favs/" + counterFav.current);
+    onValue(filmsRef, (snapshot) => {
+      let data = snapshot.val();
+      setDataFavVideo(data);
+
+      //se lo envio al movil
+      var act = {
+        gesture: "titlefilm",
+        action: data.title
+      }
+      socket.emit("action", act);
+    });
+
+    const filmsRefLeft = ref(db, "/favs/" + counterFavPrev.current);
+    onValue(filmsRefLeft, (snapshot) => {
+      let data = snapshot.val();
+      setDataFavVideoPrev(data);
+    });
+    const filmsRefRight = ref(db, "/favs/" + counterFavNext.current);
+    onValue(filmsRefRight, (snapshot) => {
+      let data = snapshot.val();
+      setDataFavVideoNext(data);
+    });
+
+
+  }
+
+  ///////////////////////
+  //    OBTAIN ALL FILMS
+  ///////////////////////
+  function obtainFilm(data) {
+    if (data === "right") {
+      if (counter.current < 41) {
+        counter.current += 1;
+        counterPrev.current = counter.current - 1;
+        if (counter.current === 41) {
+          counterNext.current = 0;
+        } else {
+          counterNext.current = counter.current + 1;
+        }
+      } else {
+        counterPrev.current = 41;
+        counter.current = 0;
+        counterNext.current = 1;
+      }
+      const filmsRef = ref(db, "/films/" + counter.current);
+      onValue(filmsRef, (snapshot) => {
+        let data = snapshot.val();
+        setDataVideo(data);
+
+        //se lo envio al movil
+        var act = {
+          gesture: "titlefilm",
+          action: data.title
+        }
+        socket.emit("action", act);
+      });
+
+      const filmsRefLeft = ref(db, "/films/" + counterPrev.current);
+      onValue(filmsRefLeft, (snapshot) => {
+        let data = snapshot.val();
+        setDataVideoPrev(data);
+      });
+      const filmsRefRight = ref(db, "/films/" + counterNext.current);
+      onValue(filmsRefRight, (snapshot) => {
+        let data = snapshot.val();
+        setDataVideoNext(data);
+      });
+
+
+    } else {
+      if (counter.current > 0) {
+        counter.current -= 1;
+        counterNext.current = counter.current + 1;
+
+        if (counter.current === 0) {
+          counterPrev.current = 41;
+        } else {
+          counterPrev.current = counter.current - 1;
+        }
+      } else {
+        counter.current = 41;
+        counterNext.current = 0;
+        counterPrev.current = 40;
+      }
+      const filmsRef = ref(db, "/films/" + counter.current);
+      onValue(filmsRef, (snapshot) => {
+        let data = snapshot.val();
+        console.log("current ", counter.current, data.title);
+        setDataVideo(data);
+      });
+      const filmsRefLeft = ref(db, "/films/" + counterPrev.current);
+      onValue(filmsRefLeft, (snapshot) => {
+        let data = snapshot.val();
+        console.log("prev ", counterPrev.current, data.title);
+        setDataVideoPrev(data);
+      });
+      const filmsRefRight = ref(db, "/films/" + counterNext.current);
+      onValue(filmsRefRight, (snapshot) => {
+        let data = snapshot.val();
+        setDataVideoNext(data);
+      });
+
+    }
+  }
 
 
   /////////////////
@@ -291,7 +366,8 @@ function App() {
       }
 
       {isLoggedIn && isPartner &&
-        <Home dataVideo={dataVideo} dataVideoPrev={dataVideoPrev} dataVideoNext={dataVideoNext} userName={userName} screen={screen} disconnect={disconnect} />
+        <Home dataVideo={dataVideo} dataFavVideo={dataFavVideo} dataFavVideoPrev={dataFavVideoPrev} dataFavVideoNext={dataFavVideoNext}
+          pause={pause} dataVideoPrev={dataVideoPrev} dataVideoNext={dataVideoNext} userName={userName} screen={screen} disconnect={disconnect} />
       }
     </div>
   );

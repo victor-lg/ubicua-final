@@ -1,20 +1,14 @@
 import React from "react";
-import {MdArrowBackIosNew, MdArrowForwardIos} from "react-icons/md";
-
-function doSomething() {
-    console.log("test");
-}
+import {AiFillDislike, AiFillLike} from "react-icons/ai";
 
 export function RecomendadasD(props) {
     return (
-        <div className="descubre">
+        <div className="Todas">
             <h1>Películas recomendadas</h1>
-            <div className="descubre-contenedor">
-                <div className="descubre-flecha-izq" onClick={doSomething}><MdArrowBackIosNew/></div>
-                <div className="descubre-poster-izq" onClick={doSomething}><img src="" alt=""/></div>
-                <div className="descubre-poster-central" onClick={doSomething}><img src="" alt=""/></div>
-                <div className="descubre-poster-der" onClick={doSomething}><img src="" alt=""/></div>
-                <div className="descubre-flecha-der" onClick={doSomething}><MdArrowForwardIos/></div>
+            <div className="Todas-contenedor">
+                <div className="Todas-flecha-izq"><AiFillDislike /></div>
+                <div className="Todas-poster-central"><img src={props.dataVideo.poster} alt="" /></div>
+                <div className="Todas-flecha-der"><AiFillLike /></div>
             </div>
         </div>
     );

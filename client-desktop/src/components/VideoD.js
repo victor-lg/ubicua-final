@@ -1,9 +1,25 @@
 import React from "react";
-
-
+import { useEffect, useRef } from 'react';
 
 
 export function VideoD(props) {
+
+    const videoState = useRef(1); //    playing = 0  |  pausa = 1
+
+    var player = null;
+
+    useEffect(() => {
+        if (videoState.current === 0 && player !== null) {
+            player.pauseVideo();
+            console.log("video en pausa");
+            videoState.current = 1;
+
+        } else if (videoState.current === 1 && player !== null) {
+            player.playVideo();
+            console.log("video reproduciendo");
+            videoState.current = 0;
+        }
+    }, [props.pause]);
 
     function loadVideo() {
         (function loadYoutubeIFrameApiScript() {
@@ -16,10 +32,7 @@ export function VideoD(props) {
             tag.onload = setupPlayer;
         })();
 
-        let player = null;
-
         function setupPlayer() {
-            //window.YT.ready(function () {
                 player = new window.YT.Player("player", {
                     height: "720",
                     width: "1280",
@@ -33,21 +46,14 @@ export function VideoD(props) {
                         'showinfo': 0,
                         'cc_load_policy': 0
                     },
-                    events: {
-                        'onReady': onPlayerReady,
-                        //onStateChange: onPlayerStateChange
-                    }
                 });
-            //});
-        }
-        function onPlayerReady() {
-            console.log("play");
-            player.playVideo();
-        }
-
-        function onPlayerPause() {
-            console.log("pausado");
-            player.pauseVideo();
+                
+                document.getElementById('resume').onclick = function() {
+                    player.playVideo();
+                };
+                document.getElementById('pause').onclick = function() {
+                    player.pauseVideo();
+                };
         }
 
         function onPlayerStateChange(event) {
@@ -68,9 +74,11 @@ export function VideoD(props) {
 
     return (
 
-        <div className="descubre" id="Video">
+        <div className="Todas" id="Video">
             <h1> {props.dataVideo.title}</h1>
             <div id="player"></div>
+            <a href="#" id="pause">Pause</a>
+            <a href="#" id="resume">Resume</a>
             {/* <iframe id="iframe" width="1280" height="720" src={props.dataVideo.link} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> */}
         </div>
     );

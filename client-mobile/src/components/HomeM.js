@@ -1,7 +1,7 @@
 import React from "react";
 import { RecomendadasM } from "./RecomendadasM";
 import { FavoritasM } from './FavoritasM';
-import { DescubreM } from './DescubreM';
+import { TodasM } from './TodasM';
 import { VideoM } from './VideoM';
 import logo from './images/logo.png';
 import { BsPersonCircle } from "react-icons/bs";
@@ -26,7 +26,7 @@ export function Home(props) {
       {props.screen === "Home" &&
         <div id="homeMain">
           <div id="homeContainer">
-            <input type="button" value="Descubre" className="screen_button" onClick={() => props.changeScreen("Home", "Descubre")} />
+            <input type="button" value="Todas" className="screen_button" onClick={() => props.changeScreen("Home", "Todas")} />
             <input type="button" value="Favoritas" className="screen_button" onClick={() => props.changeScreen("Home", "Favoritas")} />
             <input type="button" value="Recomendadas" className="screen_button" onClick={() => props.changeScreen("Home", "Recomendadas")} />
           </div>
@@ -46,8 +46,8 @@ export function Home(props) {
         <FavoritasM changeScreen={props.changeScreen} mic={props.mic} userName={props.userName} voice={props.voice} disconnect={props.disconnect} />
       }
 
-      {props.screen === "Descubre" &&
-        <DescubreM changeScreen={props.changeScreen} userName={props.userName} disconnect={props.disconnect} />
+      {props.screen === "Todas" &&
+        <TodasM favFilm={props.favFilm} changeScreen={props.changeScreen} userName={props.userName} disconnect={props.disconnect} />
       }
 
       {props.screen === "Video" &&

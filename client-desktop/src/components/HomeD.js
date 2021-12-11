@@ -1,7 +1,7 @@
 import React from "react";
 import { RecomendadasD } from "./RecomendadasD";
 import { FavoritasD } from './FavoritasD';
-import { DescubreD } from './DescubreD';
+import { TodasD } from './TodasD';
 import { VideoD } from "./VideoD";
 import logo from './images/logo.png';
 import {BsPersonCircle} from "react-icons/bs";
@@ -22,19 +22,19 @@ export function Home(props) {
             </div>
 
             {props.screen === "Recomendadas" &&
-                <RecomendadasD screen={props.screen} />
+                <RecomendadasD screen={props.screen} dataVideo={props.dataVideo}/>
             }
 
             {props.screen === "Favoritas" &&
-                <FavoritasD screen={props.screen} />
+                <FavoritasD screen={props.screen} dataFavVideo={props.dataFavVideo} dataFavVideoPrev={props.dataFavVideoPrev} dataFavVideoNext={props.dataFavVideonext}/>
             }
 
-            {props.screen === "Descubre" &&
-                <DescubreD screen={props.screen} dataVideo={props.dataVideo} dataVideoPrev={props.dataVideoPrev} dataVideoNext={props.dataVideoNext} />
+            {props.screen === "Todas" &&
+                <TodasD screen={props.screen} dataVideo={props.dataVideo} dataVideoPrev={props.dataVideoPrev} dataVideoNext={props.dataVideoNext} />
             }
 
             {props.screen === "Video" &&
-                <VideoD screen={props.screen} dataVideo={props.dataVideo} />
+                <VideoD screen={props.screen} pause={props.pause} dataVideo={props.dataVideo} />
             }
         </div>
     );

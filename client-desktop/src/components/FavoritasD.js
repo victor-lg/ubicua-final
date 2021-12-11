@@ -1,21 +1,17 @@
 import React from "react";
-import {MdArrowBackIosNew, MdArrowForwardIos} from "react-icons/md";
+import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 
-
-function doSomething() {
-    console.log("test");
-}
 
 export function FavoritasD(props) {
     return (
-        <div className="descubre">
+        <div className="Todas">
             <h1>Películas favoritas</h1>
-            <div className="descubre-contenedor">
-                <div className="descubre-flecha-izq" onClick={doSomething}><MdArrowBackIosNew/></div>
-                <div className="descubre-poster-izq" onClick={doSomething}><img src="" alt=""/></div>
-                <div className="descubre-poster-central" onClick={doSomething}><img src="" alt=""/></div>
-                <div className="descubre-poster-der" onClick={doSomething}><img src="" alt=""/></div>
-                <div className="descubre-flecha-der" onClick={doSomething}><MdArrowForwardIos/></div>
+            <div className="Todas-contenedor">
+                <div className="Todas-flecha-izq" ><MdArrowBackIosNew /></div>
+                <div className="Todas-poster-izq" ><img src={props.dataFavVideo.poster} /></div>
+                <div className="Todas-poster-central" ><img src={props.dataFavVideoPrev.poster} /></div>
+                <div className="Todas-poster-der" ><img src={props.dataFavVideonext.poster} /></div>
+                <div className="Todas-flecha-der" ><MdArrowForwardIos /></div>
             </div>
         </div>
     );
