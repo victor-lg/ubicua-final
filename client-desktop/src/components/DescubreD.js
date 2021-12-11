@@ -1,8 +1,5 @@
 import React from "react";
 import {MdArrowBackIosNew, MdArrowForwardIos, } from "react-icons/md";
-import iron1 from "./images/IronMan(2008).jpeg";
-import iron2 from "./images/IronMan2(2010).jpeg";
-import iron3 from "./images/IronMan3(2013).jpeg";
 
 function doSomething() {
    

@@ -6,6 +6,7 @@ import { getDatabase, ref, set, get } from "firebase/database";
 import { Home } from "./components/HomeM";
 import { Login } from './components/LoginM';
 import { NoPartner } from './components/NoPartnerM';
+import { BsFillMicFill, BsFillMicMuteFill } from "react-icons/bs";
 import io from "socket.io-client";
 const socketurl = "http://localhost:3500";
 const socket = io(socketurl);
@@ -42,7 +43,9 @@ function App() {
   const [userName, setUserName] = useState(null);
   const [screen, setScreen] = useState("Home");
   const [lastScreen, setLastScreen] = useState("Home");
-  const [titleVideo, setTitleVideo] = useState("titulo de la peli");
+  const [titleVideo, setTitleVideo] = useState("Iron Man");
+  const [mic, setMic] = useState(<BsFillMicMuteFill/>);
+  const micState = useRef(0);
   const [timeRunning, setTimeRunning] = useState(false);
   const timerRef = useRef();
 
@@ -332,8 +335,20 @@ function App() {
 
 
   function voice() {
-    recognition.start();
-    console.log("habla");
+    if(micState.current === 0){
+      recognition.start();
+      setMic(<BsFillMicFill/>);
+      console.log("[Microfono activado]");
+      micState.current = 1;
+
+    } else if(micState.current === 1){
+      recognition.stop();
+      setMic(<BsFillMicMuteFill/>);
+      console.log("[Microfono desactivado]");
+      micState.current = 0;
+
+    }
+
   }
 
   recognition.onresult = function (event) {
@@ -344,6 +359,8 @@ function App() {
     socket.emit("action", act);
     console.log('Has dicho: ' + event.results[0][0].transcript);
     recognition.stop();
+    setMic(<BsFillMicMuteFill/>);
+    console.log("[Microfono desactivado]");
   }
 
   recognition.onnomatch = function (event) {
@@ -391,7 +408,7 @@ function App() {
       }
 
       {isLoggedIn && isPartner &&
-        <Home pararVideo={pararVideo} changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} titleVideo={titleVideo} disconnect={disconnect} />
+        <Home pararVideo={pararVideo} mic={mic} changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} titleVideo={titleVideo} disconnect={disconnect} />
       }
 
     </div>

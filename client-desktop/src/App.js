@@ -81,6 +81,12 @@ function App() {
       onValue(filmsReff, (snapshot) => {
         let data = snapshot.val();
         setDataVideo(data);
+        //se lo envio al movil
+        var act = {
+          gesture: "titlefilm",
+          action: data.title
+        }
+        socket.emit("action", act);
       });
 
       filmsReff = ref(db, "/films/2");
@@ -122,11 +128,9 @@ function App() {
         //se lo envio al movil
         var act = {
           gesture: "titlefilm",
-          action: data.title
+          action: dataVideo.title
         }
         socket.emit("action", act);
-
-
       });
 
       const filmsRefLeft = ref(db, "/films/" + counterPrev.current);
@@ -134,14 +138,13 @@ function App() {
         let data = snapshot.val();
         console.log("prev ", counterPrev.current, data.title);
         setDataVideoPrev(data);
-
       });
-
       const filmsRefRight = ref(db, "/films/" + counterNext.current);
       onValue(filmsRefRight, (snapshot) => {
         let data = snapshot.val();
         setDataVideoNext(data);
       });
+
 
     } else {
       if (counter.current > 0) {
@@ -163,23 +166,17 @@ function App() {
         let data = snapshot.val();
         console.log("current ", counter.current, data.title);
         setDataVideo(data);
-
       });
-
       const filmsRefLeft = ref(db, "/films/" + counterPrev.current);
       onValue(filmsRefLeft, (snapshot) => {
         let data = snapshot.val();
         console.log("prev ", counterPrev.current, data.title);
         setDataVideoPrev(data);
-
       });
-
       const filmsRefRight = ref(db, "/films/" + counterNext.current);
       onValue(filmsRefRight, (snapshot) => {
         let data = snapshot.val();
         setDataVideoNext(data);
-
-
       });
 
     }
@@ -237,7 +234,16 @@ function App() {
         console.log("Inclinacion hacia la", data.action);
         obtainFilm(data.action);
       } else if (data.gesture === "voice") {
-        console.log("has dicho", data.action);
+        console.log("Has dicho", data.action);
+        if (data.action == "siguiente") {
+          obtainFilm("right");
+        } else if (data.action === "anterior") {
+          obtainFilm("left");
+        } else if (data.action === "reproducir"){
+          setScreen("Video");
+        } else if (data.action === "eliminar"){
+          //eliminar de favoritos
+        }
 
       } else if (data.gesture === "swipe") {
         console.log("Swipe:", data.action);
@@ -281,7 +287,7 @@ function App() {
       }
 
       {isLoggedIn && !isPartner &&
-        <NoPartner userName={userName} />
+        <NoPartner userName={userName} disconnect={disconnect} />
       }
 
       {isLoggedIn && isPartner &&

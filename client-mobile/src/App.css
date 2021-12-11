@@ -4,7 +4,7 @@ body {
     padding: 0;
     margin: 0;
     text-decoration: none;
-    background-color: rgba(0, 0, 0, 0.705);
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .App {
@@ -110,10 +110,31 @@ body {
         font-family: "Roboto";
     }
 
+    /* ----------------------NO PARTNER---------------------- */
+
+    #containerNoPartner {
+        display: flex;
+        justify-content: center;
+        height: 73vh;
+        align-items: center;
+        width: 95%;
+        margin-left: 2.5%;
+    }
+
+
+    #noPartner {
+        border: 1px solid white;
+        padding: 40px 20px 40px 20px;
+        font-size: 1em;
+        text-decoration: none;
+    }
+
+
+
 
     /* -------------------------HOME------------------------------ */
     #homeHeader {
-        /* border: 1px solid red; */
+        border-bottom: 2px solid white;
         display: flex;
         flex-direction: row;
         background-color: black;
@@ -123,7 +144,6 @@ body {
     }
 
     #logoHeader {
-        /* border: 1px solid green; */
         flex: 0 0 65%;
         display: flex;
         flex-direction: column;
@@ -133,34 +153,34 @@ body {
     #logoHeader>img {
         width: 200px;
         height: auto;
-        /* border: 1px solid white; */
         align-self: flex-start;
     }
 
     #userHeader {
-        border: 1px solid white;
-        border-radius: 6px;
+        border-left: 2px solid white;
         flex: 0 0 35%;
     }
 
     h2 {
-        font-size: 0.9em;
+        font-size: 1.1em;
         color: white;
     }
 
     #signOut_button {
-        padding: 3px;
-        border-radius: 8px;
-    }
-
-    #signOut_button:hover {
-        background-color: #47bada;
-        cursor: pointer;
+        flex: 0 0 20%;
+        padding: 5px;
+        border-radius: 10px;
+        border: 2px solid white;
+        background-color: transparent;
+        color: white;
+        font-weight: 600;
+        box-shadow: 0 0 1px 1px #505050;
+        font-size: 0.7em;
+        margin-top: -5px;
     }
 
 
     #homeContainer {
-        /* border: 1px solid red; */
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -171,23 +191,21 @@ body {
 
     .screen_button {
         padding: 30px 15px 30px 15px;
-        background-color: #ccd0da;
         width: 80%;
         border-radius: 10px;
         font-size: 1.3em;
-        border: 5px solid black;
         margin-bottom: 10%;
-    }
-
-    .screen_button:hover {
-        background-color: #47bada;
-        cursor: pointer;
+        border-radius: 10px;
+        border: 2px solid white;
+        background-color: transparent;
+        color: white;
+        font-weight: 600;
+        box-shadow: 4px 4px 5px 5px #505050;
     }
 
 
     /* --------------------DESCUBRE-------------------------- */
     #descubreContainer {
-        /* border: 1px solid red; */
         width: 100%;
         display: flex;
         flex-direction: row;
@@ -226,16 +244,6 @@ body {
         text-align: center;
     }
 
-
-    .screen_button {
-        padding: 30px 15px 30px 15px;
-        background-color: #ccd0da;
-        width: 80%;
-        border-radius: 10px;
-        font-size: 1.3em;
-        border: 1px solid black;
-    }
-
     #footer {
         width: 101%;
         height: 8vh;
@@ -252,11 +260,54 @@ body {
     .menubutton {
         padding: 0px 28px;
         width: fit-content;
-        font-size: 2.6em;
+
         color: white;
         background-color: transparent;
         border: 0;
     }
+
+    #homeButton {
+        font-size: 1.9em;
+    }
+
+    #returnbutton {
+        font-size: 2.2em;
+        margin-top: 7px;
+    }
+
+    /* --------------------FAVORITAS-------------------------- */
+
+
+    #gestosFav {
+        width: 100%;
+        display: flex;
+        height: 65vh;
+        color: white;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    .voiceIcon {
+        border-radius: 20px;
+        text-align: center;
+        font-size: 3.5em;
+        border: 2px solid white;
+        padding: 20px 20px 11px 20px;
+    }
+
+
+    .voiceInfo {
+        padding: 20px;
+        text-align: center;
+        border-radius: 10px;
+        font-size: 1.2em;
+        border: 1px solid white;
+        align-items: center;
+        width: 70%;
+    }
+
+ 
 
 
     /* --------------------VIDEO-------------------------- */

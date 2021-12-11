@@ -4,6 +4,7 @@ import { FavoritasD } from './FavoritasD';
 import { DescubreD } from './DescubreD';
 import { VideoD } from "./VideoD";
 import logo from './images/logo.png';
+import {BsPersonCircle} from "react-icons/bs";
 // import {MdOutlinePersonOutline} from "react-icons/md";
 
 export function Home(props) {
@@ -14,8 +15,9 @@ export function Home(props) {
                     <img src={logo} alt="logo" />
                 </div>
                 <div id="userHeader">
+                    <div id="iconUser"><BsPersonCircle /></div>
                     <h2>{props.userName}</h2>
-                    <input type="button" id="signOut_button" onClick={props.disconnect} value="disconnect" />
+                    <input type="button" id="signOut_button" onClick={props.disconnect} value="Disconnect" />
                 </div>
             </div>
 
