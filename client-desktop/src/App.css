@@ -178,7 +178,7 @@ h2 {
 }
 
 
-/* --------------------Todas-------------------------- */
+/* --------------------TODAS-------------------------- */
 
 .Todas {
     font-family: "Open Sans", sans-serif;
@@ -283,4 +283,25 @@ h2 {
 
 .Todas-flecha-der:hover {
     cursor: pointer;
+}
+
+
+
+/* --------------------TODAS-------------------------- */
+
+.Todas-dislike-izq {
+    padding: 0 10px;
+    text-align: center;
+    color: white;
+    font-size: 160px;
+    margin: 0px 90px;
+}
+
+
+.Todas-like-der {
+    padding: 0 10px;
+    text-align: center;
+    color: white;
+    font-size: 160px;
+    margin: 0px 90px;
 }

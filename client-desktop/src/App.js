@@ -102,7 +102,7 @@ function App() {
       });
 
     } catch (err) {
-      console.log("[ERROR] " + error);
+      console.log("[ERROR] " + err);
     }
   };
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { RecomendadasM } from "./RecomendadasM";
+import { PersonalizarM } from "./PersonalizarM";
 import { FavoritasM } from './FavoritasM';
 import { TodasM } from './TodasM';
 import { VideoM } from './VideoM';
@@ -26,20 +26,20 @@ export function Home(props) {
       {props.screen === "Home" &&
         <div id="homeMain">
           <div id="homeContainer">
-            <input type="button" value="Todas" className="screen_button" onClick={() => props.changeScreen("Home", "Todas")} />
-            <input type="button" value="Favoritas" className="screen_button" onClick={() => props.changeScreen("Home", "Favoritas")} />
-            <input type="button" value="Recomendadas" className="screen_button" onClick={() => props.changeScreen("Home", "Recomendadas")} />
+            <input type="button" value="Todas las peliculas" className="screen_button" onClick={() => props.changeScreen("Home", "Todas")} />
+            <input type="button" value="Peliculas favoritas" className="screen_button" onClick={() => props.changeScreen("Home", "Favoritas")} />
+            <input type="button" value="Personalizar tus gustos" className="screen_button" onClick={() => props.changeScreen("Home", "Personalizar")} />
           </div>
           <div id="footer">
-            <div className="menubutton" id="homeButton" onClick={() => props.changeScreen("Recomendadas", "Home")}><AiFillHome /></div>
-            <div className="menubutton" id="returnbutton" onClick={() => props.changeScreen("Recomendadas", props.lastScreen)}> <MdOutlineKeyboardReturn /></div>
+            <div className="menubutton" id="homeButton" onClick={() => props.changeScreen("Personalizar", "Home")}><AiFillHome /></div>
+            <div className="menubutton" id="returnbutton" onClick={() => props.changeScreen("Personalizar", props.lastScreen)}> <MdOutlineKeyboardReturn /></div>
           </div>
         </div>
 
       }
 
-      {props.screen === "Recomendadas" &&
-        <RecomendadasM changeScreen={props.changeScreen} userName={props.userName} disconnect={props.disconnect} />
+      {props.screen === "Personalizar" &&
+        <PersonalizarM changeScreen={props.changeScreen} userName={props.userName} disconnect={props.disconnect} />
       }
 
       {props.screen === "Favoritas" &&

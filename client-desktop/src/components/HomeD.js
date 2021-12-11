@@ -1,5 +1,5 @@
 import React from "react";
-import { RecomendadasD } from "./RecomendadasD";
+import { PersonalizarD } from "./PersonalizarD";
 import { FavoritasD } from './FavoritasD';
 import { TodasD } from './TodasD';
 import { VideoD } from "./VideoD";
@@ -21,8 +21,8 @@ export function Home(props) {
                 </div>
             </div>
 
-            {props.screen === "Recomendadas" &&
-                <RecomendadasD screen={props.screen} dataVideo={props.dataVideo}/>
+            {props.screen === "Personalizar" &&
+                <PersonalizarD screen={props.screen} dataVideo={props.dataVideo}/>
             }
 
             {props.screen === "Favoritas" &&
