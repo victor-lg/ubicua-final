@@ -5,7 +5,52 @@ import { MdOutlineKeyboardReturn } from "react-icons/md";
 import { useEffect, useRef } from "react";
 
 export function VideoM(props) {
+    /*Variables para el control táctil*/
+    let start_x = 0;
+    let end_x = 0;
+    let start_time = 0;
+    const SPACE_THRESHOLD = 100;
+    const TIME_THRESHOLD = 200;
+    const SPAECNOTMOVE = 50;
+    var gesture;
 
+
+
+
+    useEffect(() => {
+            gesture = document.getElementsByClassName('gestosVideo')[0];
+
+            gesture.addEventListener("touchstart", function (e) {
+                e.preventDefault();
+                start_x = e.targetTouches[0].screenX;
+                start_time = e.timeStamp;
+                console.log(start_x);
+            }, { passive: false });
+
+            gesture.addEventListener("touchmove", function (e) {
+                e.preventDefault();
+                // console.log("changedTouches[0].identifier = " + e.changedTouches[0].identifier);
+                end_x = e.changedTouches[0].screenX;
+            }, { passive: false });
+
+            gesture.addEventListener("touchend", function (e) {
+              e.preventDefault();
+              end_x = e.timeStamp;
+            
+              if (((end_x - start_time) < TIME_THRESHOLD) && ((end_x - start_x) > SPACE_THRESHOLD)) {
+                var touchobj = e.changedTouches[0];
+                console.log("derecha");
+              }
+              if (((end_x - start_time) > TIME_THRESHOLD && ((end_x - start_x) < SPAECNOTMOVE))) {
+                var touchobj = e.changedTouches[0];
+                if (touchobj.target.className === 'gestosVideo') {
+                  console.log("mantener");
+                }
+              }
+            });
+
+        
+    }, [])
 
     return (
         <div id="main">
