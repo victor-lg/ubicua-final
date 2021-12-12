@@ -13,9 +13,9 @@ export function TodasM(props) {
                         <h1>Todas las peliculas</h1>
                     </div>
                     <div className="todasgestos">
-                        <div className="todasGesto" id="upTodas">
+                        {/* <div className="todasGesto" id="upTodas">
                             <p>ARRIBA<br></br>&#8593;</p>
-                        </div>
+                        </div> */}
                         <div className="todasGesto" id="leftTodas">
                             <p>Película anterior<br></br>↺</p>
                         </div>

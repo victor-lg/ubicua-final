@@ -57,19 +57,26 @@ body {
     align-items: center;
 }
 
+#mainLogIn h1{
+    font-size: 3em;
+}
+
 #logoLogIn>img {
-    width: 600px;
+    width: 1000px;
     height: auto;
     /* border: 1px solid white; */
     align-self: flex-start;
+    margin-top: 70px;
+    margin-bottom: -10px;
 }
 
 .google-btn {
-    width: 220px;
-    height: 42px;
+    margin-top: 45px;
+    width: 550px;
+    height: 125px;
     background-color: #4285f4;
     border-radius: 2px;
-    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .25);
+    box-shadow: 0 3px 4px 0 rgb(0 0 0 / 25%);
     cursor: pointer;
 }
 
@@ -77,25 +84,26 @@ body {
     position: absolute;
     margin-top: 1px;
     margin-left: 1px;
-    width: 40px;
-    height: 40px;
+    width: 125px;
+    height: 125px;
     border-radius: 2px;
     background-color: #fff;
 }
 
 .google-icon {
     position: absolute;
-    margin-top: 10px;
-    margin-left: -10px;
-    width: 22px;
-    height: 22px;
+    margin-top: 20px;
+    margin-left: -40px;
+    width: 83px;
 }
 
 .btn-text {
     float: right;
     margin: 11px 11px 0 0;
     color: #fff;
-    font-size: 17px;
+    font-size: 40px;
+    margin-top: 37px;
+    margin-right: 35px;
     letter-spacing: 0.5px;
     font-family: "Roboto";
 }

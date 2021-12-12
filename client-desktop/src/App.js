@@ -43,7 +43,6 @@ function App() {
   const [dataFavVideo, setDataFavVideo] = useState("");
   const [dataFavVideoNext, setDataFavVideoNext] = useState("");
 
-  const [pause, setPause] = useState(0);
   const counterPrev = useRef(0);
   const counter = useRef(1);
   const counterNext = useRef(2);
@@ -161,9 +160,9 @@ function App() {
       } else if (data.gesture === "voice") {
         console.log("Has dicho", data.action);
         if (data.action == "siguiente") {
-          obtainFilm("right");
+          obtainFavFilm("right");
         } else if (data.action === "anterior") {
-          obtainFilm("left");
+          obtainFavFilm("left");
         } else if (data.action === "reproducir") {
           setScreen("Video");
         } else if (data.action === "eliminar") {
@@ -226,7 +225,7 @@ function App() {
   ///////////////////////
   //    OBTAIN FAV FILMS
   ///////////////////////
-  function obtainFavFilm() {
+  function obtainFavFilm(data) {
     if (counterFav.current < totalfavs.current) {
       counterFav.current += 1;
       counterFavPrev.current = counterFav.current - 1;
@@ -240,7 +239,6 @@ function App() {
       counterFav.current = 0;
       counterFavNext.current = 1;
     }
-
 
     const filmsRef = ref(db, "/favs/" + counterFav.current);
     onValue(filmsRef, (snapshot) => {
@@ -332,19 +330,28 @@ function App() {
         let data = snapshot.val();
         console.log("current ", counter.current, data.title);
         setDataVideo(data);
+
+        //se lo envio al movil
+        var act = {
+          gesture: "titlefilm",
+          action: data.title
+        }
+        socket.emit("action", act);
       });
+
+
       const filmsRefLeft = ref(db, "/films/" + counterPrev.current);
       onValue(filmsRefLeft, (snapshot) => {
         let data = snapshot.val();
         console.log("prev ", counterPrev.current, data.title);
         setDataVideoPrev(data);
       });
+
       const filmsRefRight = ref(db, "/films/" + counterNext.current);
       onValue(filmsRefRight, (snapshot) => {
         let data = snapshot.val();
         setDataVideoNext(data);
       });
-
     }
   }
 

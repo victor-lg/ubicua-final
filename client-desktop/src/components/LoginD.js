@@ -7,7 +7,7 @@ export function Login(props) {
             <div id="logoLogIn">
                 <img src={logo} alt="logo"/>
             </div>
-            <h1>ESTAS EN DESKTOP</h1>
+            <h1>Bienvenido a la version web<br></br>Para entrar inicie sesión con su cuenta de Google</h1>
 
             <div className="google-btn">
                 <div className="google-icon-wrapper">

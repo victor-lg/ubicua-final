@@ -53,15 +53,6 @@ function App() {
   const [timeRunning, setTimeRunning] = useState(false);
   const timerRef = useRef();
 
-  /*Variables para el control táctil*/
-  let start_x = useRef(0);
-  let end_x = useRef(0);
-  let start_time = useRef(0);
-  const SPACE_THRESHOLD = useRef(100);
-  const TIME_THRESHOLD = useRef(200);
-
-
-
   /////////////////////
   //    LOG IN
   /////////////////////
@@ -103,6 +94,7 @@ function App() {
     ////////////////
     socket.on("newUser", function () {
       setPartner(true);
+      setScreen("Home");
     });
     socket.on("oldUser", function () {
       setPartner(true);
@@ -136,16 +128,17 @@ function App() {
         action: next
       }
       socket.emit("action", act);
-    }
-
-    if (next === "Todas") {
       absolute.stop();
-      tilt();
-    } else if (next === "Video") {
       sensor.stop();
+    }
+    if (next === "Todas") {
+      tilt();
+      absolute.stop();
+    } else if (next === "Video") {
       faceDown();
-      startup();
-      setVol(<IoMdVolumeOff/>);
+      setVol(<IoMdVolumeOff />);
+      sensor.stop();
+
     } else {
       absolute.stop();
       sensor.stop();
@@ -238,7 +231,6 @@ function App() {
               gesture: "turn",
               action: "down"
             }
-            console.log("down");
 
             socket.emit("action", act);
             startfaceDownTimer();
@@ -247,7 +239,7 @@ function App() {
               gesture: "turn",
               action: "up"
             }
-            console.log("up");
+
             socket.emit("action", act);
             startfaceDownTimer();
           }
@@ -278,55 +270,6 @@ function App() {
   //   absolute.stop();
   // }
 
-  /////////////////////
-  //    SWIPE
-  /////////////////////
-
-  //Gestos
-  let startx = 0;
-  let endx = 0;
-  let starttime = 0;
-  const TIMETHRESHOLD = 200;
-  const SPAECTHRESHOLD = 100;
-  const SPAECNOTMOVE = 50;
-
-  function startup() {
-    var gesture = document.getElementsByClassName('gestosVideo')[0];
-
-
-    if (gesture) {
-      gesture.addEventListener("touchstart", function (e) {
-        e.preventDefault();
-        startx = e.targetTouches[0].screenX;
-        starttime = e.timeStamp;
-        console.log("TOCA CON EL DEDO");
-      }, { passive: false });
-
-      gesture.addEventListener("touchmove", function (e) {
-        e.preventDefault();
-        endx = e.changedTouches[0].screenX;
-      }, { passive: false });
-
-      gesture.addEventListener("touchend", function (e) {
-        e.preventDefault();
-        endx = e.timeStamp;
-
-        if (((endx - starttime) < TIME_THRESHOLD) && ((endx - startx) > SPAECTHRESHOLD)) {
-          var touchobj = e.changedTouches[0];
-          if (touchobj.target.className === 'gestosVideo') {
-            console.log("derecha");
-          }
-        }
-        if (((endx - starttime) > TIME_THRESHOLD && ((endx - startx) < SPAECNOTMOVE))) {
-          var touchobj = e.changedTouches[0];
-          if (touchobj.target.className === 'gestosVideo') {
-            console.log("mantener");
-          }
-        }
-      });
-    }
-
-  }
 
   ///////////////////
   //  SPEECH API
@@ -388,14 +331,14 @@ function App() {
   function changeVolume(data) {
     if (data === "change") {
       if (volState.current === 0) {
-        setVol(<IoMdVolumeHigh/>);
+        setVol(<IoMdVolumeHigh />);
         var act = {
           gesture: "volume",
           action: "unmute"
         }
         volState.current = 1;
       } else {
-        setVol(<IoMdVolumeOff/>);
+        setVol(<IoMdVolumeOff />);
         var act = {
           gesture: "volume",
           action: "mute"

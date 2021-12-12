@@ -60,55 +60,64 @@ body {
     }
 
 
-    /* -------------------------LOG IN------------------------------ */
-    #mainLogIn {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+  /* -------------------------LOG IN------------------------------ */
+  #mainLogIn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-    #logoLogIn>img {
-        width: 300px;
-        height: auto;
-        /* border: 1px solid white; */
-        align-self: flex-start;
-    }
+#logoLogIn>img {
+    width: 400px;
+    height: auto;
+    /* border: 1px solid white; */
+    align-self: flex-start;
+    margin-top: 40px;
+    margin-bottom: -10px;
+}
 
-    .google-btn {
-        width: 220px;
-        height: 42px;
-        background-color: #4285f4;
-        border-radius: 2px;
-        box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .25);
-        cursor: pointer;
-    }
+#mainLogIn h1 {
+    font-size: 1.6em;
+    text-decoration: none;
+}
 
-    .google-icon-wrapper {
-        position: absolute;
-        margin-top: 1px;
-        margin-left: 1px;
-        width: 40px;
-        height: 40px;
-        border-radius: 2px;
-        background-color: #fff;
-    }
+.google-btn {
+    width: 251px;
+    height: 64px;
+    background-color: #4285f4;
+    border-radius: 2px;
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .25);
+    cursor: pointer;
+    margin-top: 40px;
+}
 
-    .google-icon {
-        position: absolute;
-        margin-top: 10px;
-        margin-left: -10px;
-        width: 22px;
-        height: 22px;
-    }
+.google-icon-wrapper {
+    position: absolute;
+    margin-top: 1px;
+    margin-left: 1px;
+    width: 64px;
+    height: 64px;
+    border-radius: 2px;
+    background-color: #fff;
+}
 
-    .btn-text {
-        float: right;
-        margin: 11px 11px 0 0;
-        color: #fff;
-        font-size: 17px;
-        letter-spacing: 0.5px;
-        font-family: "Roboto";
-    }
+.google-icon {
+    position: absolute;
+    margin-top: 15px;
+    margin-left: -15px;
+    width: 34px;
+}
+
+.btn-text {
+    float: right;
+    margin: 11px 11px 0 0;
+    color: #fff;
+    font-size: 18px;
+    margin-top: 20px;
+    letter-spacing: 0.5px;
+    font-family: "Roboto";
+}
+
 
     /* ----------------------NO PARTNER---------------------- */
 
@@ -249,7 +258,7 @@ body {
 
     .todasGesto p {
         border: 1px solid white;
-        padding: 15px;
+        padding: 15px 5px;
         border-radius: 15px;
         width: fit-content;
         text-align: center;
