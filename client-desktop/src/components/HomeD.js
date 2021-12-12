@@ -4,7 +4,7 @@ import { FavoritasD } from './FavoritasD';
 import { TodasD } from './TodasD';
 import { VideoD } from "./VideoD";
 import logo from './images/logo.png';
-import {BsPersonCircle} from "react-icons/bs";
+import { BsPersonCircle } from "react-icons/bs";
 // import {MdOutlinePersonOutline} from "react-icons/md";
 
 export function Home(props) {
@@ -22,11 +22,11 @@ export function Home(props) {
             </div>
 
             {props.screen === "Personalizar" &&
-                <PersonalizarD screen={props.screen} dataVideo={props.dataVideo}/>
+                <PersonalizarD screen={props.screen} dataVideo={props.dataVideo} />
             }
 
             {props.screen === "Favoritas" &&
-                <FavoritasD screen={props.screen} dataFavVideo={props.dataFavVideo} dataFavVideoPrev={props.dataFavVideoPrev} dataFavVideoNext={props.dataFavVideonext}/>
+                <FavoritasD screen={props.screen} dataFavVideo={props.dataFavVideo} dataFavVideoPrev={props.dataFavVideoPrev} dataFavVideoNext={props.dataFavVideonext} />
             }
 
             {props.screen === "Todas" &&
@@ -34,8 +34,7 @@ export function Home(props) {
             }
 
             {props.screen === "Video" &&
-                <VideoD screen={props.screen} pause={props.pause} dataVideo={props.dataVideo} />
-            }
+                <VideoD screen={props.screen} dataVideo={props.dataVideo} socket={props.socket} />}
         </div>
     );
 }

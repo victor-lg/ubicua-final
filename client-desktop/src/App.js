@@ -172,17 +172,18 @@ function App() {
         // console.log("Swipe:", data.action);
 
 
-      } else if (data.gesture === "turn") {
-        // console.log("mobile " + data.action);
-        if (data.action === "down") {
-          //pausar video
-          setPause(1);
+      }
+      // else if (data.gesture === "turn") {
+      //   // console.log("mobile " + data.action);
+      //   if (data.action === "down") {
+      //     //pausar video
+      //     setPause(1);
 
-        } else if (data.action === "up") {
-          //reaunudar video
-          setPause(0);
-        }
-      } else if (data.action === "fav") {
+      //   } else if (data.action === "up") {
+      //     //reaunudar video
+      //     setPause(0);
+      //   }
+      else if (data.action === "fav") {
         setfavFilm();
       }
     });
@@ -367,7 +368,7 @@ function App() {
 
       {isLoggedIn && isPartner &&
         <Home dataVideo={dataVideo} dataFavVideo={dataFavVideo} dataFavVideoPrev={dataFavVideoPrev} dataFavVideoNext={dataFavVideoNext}
-          pause={pause} dataVideoPrev={dataVideoPrev} dataVideoNext={dataVideoNext} userName={userName} screen={screen} disconnect={disconnect} />
+          socket={socket} dataVideoPrev={dataVideoPrev} dataVideoNext={dataVideoNext} userName={userName} screen={screen} disconnect={disconnect} />
       }
     </div>
   );
