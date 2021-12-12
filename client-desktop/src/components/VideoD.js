@@ -1,10 +1,12 @@
 import React from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
+import { IoMdVolumeHigh, IoMdVolumeOff } from "react-icons/io";
 
 var controller = false;
 
 export function VideoD(props) {
     var player;
+    const [volIcon, setVolIcon] = useState(<IoMdVolumeOff />);
 
     useEffect(() => {
         if (controller) {
@@ -28,13 +30,28 @@ export function VideoD(props) {
                 if (data.action === "down" && player.pauseVideo && player !== undefined) {
                     //pausar video
                     player.pauseVideo();
-                    // console.log(pause.current);
                 } else if (data.action === "up" && player.playVideo && player !== undefined) {
                     //reaunudar video
                     player.playVideo();
 
-                    // console.log(pause.current);
                 }
+            } else if (data.gesture === "volume") {
+                if (data.action === "mute" && player !== undefined) {
+                    player.mute();
+                    // document.getElementById("mute").innerHTML = {muted};
+                    // setVolIcon(<IoMdVolumeOff />);
+                } else if (data.action === "unmute" && player !== undefined) {
+                    player.unMute();
+                    // document.getElementById("mute").innerHTML = {unmuted};
+                    // setVolIcon(<IoMdVolumeHigh />);
+                } else {
+                    if (player !== undefined) {
+                        player.setVolume(data.action);
+                        console.log(data.action);
+                        document.getElementById("volume").innerHTML = data.action;
+                    }
+                }
+
             }
         })
     }, []);
@@ -69,6 +86,8 @@ export function VideoD(props) {
 
             <h1> {props.dataVideo.title}</h1>
             <div id="player"></div>
+            <div id="mute">{props.volIcon}</div>
+            <div id="volume">50</div>
             {/* <iframe id="iframe" width="1280" height="720" src={props.dataVideo.link} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> */}
         </div>
     );

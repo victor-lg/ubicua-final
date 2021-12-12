@@ -1,10 +1,12 @@
 import React from "react";
 import "../App.css";
-import logo from './images/logo.png';
 import { AiFillHome } from "react-icons/ai";
 import { MdOutlineKeyboardReturn } from "react-icons/md";
+import { useEffect, useRef } from "react";
 
 export function VideoM(props) {
+
+
     return (
         <div id="main">
             <div id="homeMain">
@@ -14,8 +16,8 @@ export function VideoM(props) {
                     </div>
                     <div className="gestosVideo">
                         <div className="videoGesto" id="upVideo">
-                            <p>ARRIBA</p>
-                            <p>&#8593;</p>
+                            <p id="volIcon" onClick={() => props.changeVolume("change")}>{props.vol}</p>
+                            <input type="range" id="volume" onInput={() => props.changeVolume("data")} min="0" max="100" step="1"></input>
                         </div>
                         <div className="videoGesto" id="leftVideo">
                             <p>IZQUIERDA</p>

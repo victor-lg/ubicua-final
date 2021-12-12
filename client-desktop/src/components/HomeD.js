@@ -34,7 +34,7 @@ export function Home(props) {
             }
 
             {props.screen === "Video" &&
-                <VideoD screen={props.screen} dataVideo={props.dataVideo} socket={props.socket} />}
+                <VideoD screen={props.screen} volIcon={props.volIcon} dataVideo={props.dataVideo} socket={props.socket} />}
         </div>
     );
 }

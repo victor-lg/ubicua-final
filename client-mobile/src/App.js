@@ -6,8 +6,9 @@ import { getDatabase, ref, set, get } from "firebase/database";
 import { Home } from "./components/HomeM";
 import { Login } from './components/LoginM';
 import { NoPartner } from './components/NoPartnerM';
-import { Todas} from "./components/TodasM";
 import { BsFillMicFill, BsFillMicMuteFill } from "react-icons/bs";
+import { IoMdVolumeOff, IoMdVolumeHigh } from "react-icons/io";
+
 import io from "socket.io-client";
 const socketurl = "http://localhost:3500";
 const socket = io(socketurl);
@@ -45,8 +46,10 @@ function App() {
   const [screen, setScreen] = useState("Home");
   const [lastScreen, setLastScreen] = useState("Home");
   const [titleVideo, setTitleVideo] = useState("Iron Man");
-  const [mic, setMic] = useState(<BsFillMicMuteFill/>);
+  const [mic, setMic] = useState(<BsFillMicMuteFill />);
+  const [vol, setVol] = useState(null);
   const micState = useRef(0);
+  const volState = useRef(0);
   const [timeRunning, setTimeRunning] = useState(false);
   const timerRef = useRef();
 
@@ -142,6 +145,7 @@ function App() {
       sensor.stop();
       faceDown();
       startup();
+      setVol(<IoMdVolumeOff/>);
     } else {
       absolute.stop();
       sensor.stop();
@@ -154,7 +158,7 @@ function App() {
   //  FAV FILM
   ///////////////////
 
-  function favFilm(){
+  function favFilm() {
     var act = {
       gesture: "fav",
       action: "fav"
@@ -238,7 +242,7 @@ function App() {
 
             socket.emit("action", act);
             startfaceDownTimer();
-          }else if(coordZ < -0.3){
+          } else if (coordZ < -0.3) {
             var act = {
               gesture: "turn",
               action: "up"
@@ -344,15 +348,15 @@ function App() {
 
 
   function voice() {
-    if(micState.current === 0){
+    if (micState.current === 0) {
       recognition.start();
-      setMic(<BsFillMicFill/>);
+      setMic(<BsFillMicFill />);
       console.log("[Microfono activado]");
       micState.current = 1;
 
-    } else if(micState.current === 1){
+    } else if (micState.current === 1) {
       recognition.stop();
-      setMic(<BsFillMicMuteFill/>);
+      setMic(<BsFillMicMuteFill />);
       console.log("[Microfono desactivado]");
       micState.current = 0;
 
@@ -368,13 +372,44 @@ function App() {
     socket.emit("action", act);
     console.log('Has dicho: ' + event.results[0][0].transcript);
     recognition.stop();
-    setMic(<BsFillMicMuteFill/>);
+    setMic(<BsFillMicMuteFill />);
     console.log("[Microfono desactivado]");
   }
 
   recognition.onnomatch = function (event) {
     console.log("Palabra no reconocida");
     recognition.stop();
+  }
+
+
+  ///////////////////
+  //  CHANGE VOLUME
+  ///////////////////
+  function changeVolume(data) {
+    if (data === "change") {
+      if (volState.current === 0) {
+        setVol(<IoMdVolumeHigh/>);
+        var act = {
+          gesture: "volume",
+          action: "unmute"
+        }
+        volState.current = 1;
+      } else {
+        setVol(<IoMdVolumeOff/>);
+        var act = {
+          gesture: "volume",
+          action: "mute"
+        }
+        volState.current = 0;
+      }
+    } else {
+      var volume = document.getElementById("volume").value;
+      var act = {
+        gesture: "volume",
+        action: volume
+      }
+    }
+    socket.emit("action", act);
   }
 
 
@@ -392,7 +427,7 @@ function App() {
       })
   }
 
-  function pararVideo(){
+  function pararVideo() {
     var act = {
       gesture: "swipe",
       action: "pausa"
@@ -417,7 +452,7 @@ function App() {
       }
 
       {isLoggedIn && isPartner &&
-        <Home favFilm={favFilm} pararVideo={pararVideo} mic={mic} changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} titleVideo={titleVideo} disconnect={disconnect} />
+        <Home favFilm={favFilm} pararVideo={pararVideo} changeVolume={changeVolume} mic={mic} vol={vol} changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} titleVideo={titleVideo} disconnect={disconnect} />
       }
 
     </div>

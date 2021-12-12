@@ -6,6 +6,7 @@ import { getDatabase, ref, set, get, onValue } from "firebase/database";
 import { Home } from "./components/HomeD";
 import { Login } from './components/LoginD';
 import { NoPartner } from './components/NoPartnerD';
+import { IoMdVolumeHigh, IoMdVolumeOff } from "react-icons/io";
 import io from "socket.io-client";
 const socketurl = "http://localhost:3500";
 const socket = io(socketurl);
@@ -36,6 +37,7 @@ function App() {
   const [dataVideoPrev, setDataVideoPrev] = useState("");
   const [dataVideo, setDataVideo] = useState("");
   const [dataVideoNext, setDataVideoNext] = useState("");
+  const [volIcon, setVolIcon] = useState(<IoMdVolumeOff />);
 
   const [dataFavVideoPrev, setDataFavVideoPrev] = useState("");
   const [dataFavVideo, setDataFavVideo] = useState("");
@@ -183,8 +185,15 @@ function App() {
       //     //reaunudar video
       //     setPause(0);
       //   }
-      else if (data.action === "fav") {
+      else if (data.gesture === "fav") {
         setfavFilm();
+      } else if (data.gesture === "volume") {
+
+        if (data.action === "mute") {
+          setVolIcon(<IoMdVolumeOff />);
+        } else if (data.action === "unmute") {
+          setVolIcon(<IoMdVolumeHigh />);
+        }
       }
     });
 
@@ -368,7 +377,7 @@ function App() {
 
       {isLoggedIn && isPartner &&
         <Home dataVideo={dataVideo} dataFavVideo={dataFavVideo} dataFavVideoPrev={dataFavVideoPrev} dataFavVideoNext={dataFavVideoNext}
-          socket={socket} dataVideoPrev={dataVideoPrev} dataVideoNext={dataVideoNext} userName={userName} screen={screen} disconnect={disconnect} />
+          socket={socket} volIcon={volIcon} dataVideoPrev={dataVideoPrev} dataVideoNext={dataVideoNext} userName={userName} screen={screen} disconnect={disconnect} />
       }
     </div>
   );
