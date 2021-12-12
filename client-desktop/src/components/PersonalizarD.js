@@ -7,7 +7,7 @@ export function PersonalizarD(props) {
             <h1>Personalizar tus gustos</h1>
             <div className="Todas-contenedor">
                 <div className="Todas-dislike-izq"><AiFillDislike/></div>
-                <div className="Todas-poster-central"><img src={props.dataVideo.poster}/></div>
+                <div className="Todas-poster-central"><img src={props.dataRateVideo.poster}/></div>
                 <div className="Todas-like-der"><AiFillLike/></div>
             </div>
         </div>

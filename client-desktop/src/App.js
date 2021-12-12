@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect, useRef } from 'react';
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { getDatabase, ref, set, get, onValue } from "firebase/database";
+import { getDatabase, ref, set, get, onValue, update, push, child } from "firebase/database";
 import { Home } from "./components/HomeD";
 import { Login } from './components/LoginD';
 import { NoPartner } from './components/NoPartnerD';
@@ -22,6 +22,7 @@ const firebaseConfig = {
   messagingSenderId: "867399764463",
   appId: "1:867399764463:web:0f9a2c3987e397857d4e1a",
   databaseURL: "https://ubicua-final-bd-default-rtdb.europe-west1.firebasedatabase.app/"
+  // databaseURL: "https://fir-100405352-default-rtdb.europe-west1.firebasedatabase.app/"
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -43,6 +44,10 @@ function App() {
   const [dataFavVideo, setDataFavVideo] = useState("");
   const [dataFavVideoNext, setDataFavVideoNext] = useState("");
 
+  const [dataRateVideo, setDataRateVideo] = useState("");
+  const genre = useRef("");
+  const userUid = useRef("");
+
   const counterPrev = useRef(0);
   const counter = useRef(1);
   const counterNext = useRef(2);
@@ -53,6 +58,9 @@ function App() {
   const counterFavNext = useRef(-1);
 
 
+
+
+
   /////////////////////
   //    LOG IN
   /////////////////////
@@ -60,6 +68,7 @@ function App() {
     try {
       const res = await signInWithPopup(auth, googleProvider);
       const user = res.user;
+      userUid.current = user.uid;
 
       const userRef = ref(db, "/users/" + user.uid);
       const snapshot = await get(userRef);
@@ -68,14 +77,31 @@ function App() {
       console.log(data);
 
       if (data) {
+
+        
+        /////////////////////
+        //    Esto actualiza el valor displayName de 1 dentro de /users
+        /////////////////////
+        const postData = {
+          displayName : "test"
+        };
+        const newPostKey = push(child(ref(db), 'user')).key;
+        const updates = {};
+        updates['/users/' + 1] = postData;
+        update(ref(db),updates);
+        
+        
       } else {
         await set(ref(db, "users/" + user.uid), {
           username: user.displayName,
-          email: user.email
+          email: user.email,
+          favFilms: [],
+          favGenres: [] 
         });
       }
       setLoggedIn(true);
       setUserName(user.displayName.replace(/ .*/, ''));
+    
       socket.emit("registerDesktop", user.email);
 
       var filmsReff = ref(db, "/films/0");
@@ -100,6 +126,15 @@ function App() {
       onValue(filmsReff, (snapshot) => {
         let data = snapshot.val();
         setDataVideoNext(data);
+        genre.current = data.genre;
+      });
+
+
+      var randomFilm = Math.floor(Math.random() * 42);
+      const filmsRef = ref(db, "/films/" + randomFilm);
+      onValue(filmsRef, (snapshot) => {
+        let data = snapshot.val();
+        setDataRateVideo(data);
       });
 
     } catch (err) {
@@ -119,6 +154,7 @@ function App() {
     ////////////////
     socket.on("newUser", function () {
       setPartner(true);
+      setScreen("Todas");
     });
 
 
@@ -148,8 +184,10 @@ function App() {
     socket.on("doAction", function (data) {
 
       if (data.gesture === "touch") {
-        console.log(data.action);
         setScreen(data.action);
+        if (data.action === "Video") {
+          setVolIcon(<IoMdVolumeOff />);
+        }
       } else if (data.gesture === "tilt") {
         console.log("Inclinacion hacia la", data.action);
         if (screen === "Todas") {
@@ -169,22 +207,7 @@ function App() {
           //eliminar de favoritos
         }
 
-      } else if (data.gesture === "swipe") {
-        // console.log("Swipe:", data.action);
-
-
-      }
-      // else if (data.gesture === "turn") {
-      //   // console.log("mobile " + data.action);
-      //   if (data.action === "down") {
-      //     //pausar video
-      //     setPause(1);
-
-      //   } else if (data.action === "up") {
-      //     //reaunudar video
-      //     setPause(0);
-      //   }
-      else if (data.gesture === "fav") {
+      } else if (data.gesture === "fav") {
         setfavFilm();
       } else if (data.gesture === "volume") {
 
@@ -193,11 +216,12 @@ function App() {
         } else if (data.action === "unmute") {
           setVolIcon(<IoMdVolumeHigh />);
         }
+      } else if (data.gesture === "rate") {
+        obtainRateFilm(data.action);
       }
     });
 
   }, []);
-
 
   ///////////////////////
   //    SET FAV FILM
@@ -222,6 +246,50 @@ function App() {
 
   }
 
+
+  ///////////////////////
+  //    OBTAIN RATE FILMS
+  ///////////////////////
+  function obtainRateFilm(gesture) {
+
+    //añadir a la db el genre.current
+
+      // const userRef = ref(db, "/users/" + userUid.current);
+      // const snapshot = get(userRef);
+
+      // const data = snapshot.val();
+      // console.log(data);
+
+      // set(ref(db, "users/" + userUid.current), {
+      //   username: "pepe"
+      // });
+
+
+
+
+    if (gesture === "right"){
+      console.log("me gusta:",  genre.current);
+    }else{
+      console.log("no me gusta:", genre.current);
+    }
+
+    var randomFilm = Math.floor(Math.random() * 42);
+    const filmsRef = ref(db, "/films/" + randomFilm);
+    onValue(filmsRef, (snapshot) => {
+      let data = snapshot.val();
+      setDataRateVideo(data);
+      genre.current = data.genre;
+      //se lo envio al movil
+      var act = {
+        gesture: "titlefilm",
+        action: data.title
+      }
+      socket.emit("action", act);
+    });
+
+  }
+
+
   ///////////////////////
   //    OBTAIN FAV FILMS
   ///////////////////////
@@ -240,29 +308,31 @@ function App() {
       counterFavNext.current = 1;
     }
 
-    const filmsRef = ref(db, "/favs/" + counterFav.current);
-    onValue(filmsRef, (snapshot) => {
-      let data = snapshot.val();
-      setDataFavVideo(data);
+        //añadir a la db la pelicula actual
+        
+    // const filmsRef = ref(db, "/favs/" + counterFav.current);
+    // onValue(filmsRef, (snapshot) => {
+    //   let data = snapshot.val();
+    //   setDataFavVideo(data);
 
-      //se lo envio al movil
-      var act = {
-        gesture: "titlefilm",
-        action: data.title
-      }
-      socket.emit("action", act);
-    });
+    //   //se lo envio al movil
+    //   var act = {
+    //     gesture: "titlefilm",
+    //     action: data.title
+    //   }
+    //   socket.emit("action", act);
+    // });
 
-    const filmsRefLeft = ref(db, "/favs/" + counterFavPrev.current);
-    onValue(filmsRefLeft, (snapshot) => {
-      let data = snapshot.val();
-      setDataFavVideoPrev(data);
-    });
-    const filmsRefRight = ref(db, "/favs/" + counterFavNext.current);
-    onValue(filmsRefRight, (snapshot) => {
-      let data = snapshot.val();
-      setDataFavVideoNext(data);
-    });
+    // const filmsRefLeft = ref(db, "/favs/" + counterFavPrev.current);
+    // onValue(filmsRefLeft, (snapshot) => {
+    //   let data = snapshot.val();
+    //   setDataFavVideoPrev(data);
+    // });
+    // const filmsRefRight = ref(db, "/favs/" + counterFavNext.current);
+    // onValue(filmsRefRight, (snapshot) => {
+    //   let data = snapshot.val();
+    //   setDataFavVideoNext(data);
+    // });
 
 
   }
@@ -384,7 +454,7 @@ function App() {
 
       {isLoggedIn && isPartner &&
         <Home dataVideo={dataVideo} dataFavVideo={dataFavVideo} dataFavVideoPrev={dataFavVideoPrev} dataFavVideoNext={dataFavVideoNext}
-          socket={socket} volIcon={volIcon} dataVideoPrev={dataVideoPrev} dataVideoNext={dataVideoNext} userName={userName} screen={screen} disconnect={disconnect} />
+         socket={socket} dataRateVideo={dataRateVideo} volIcon={volIcon} dataVideoPrev={dataVideoPrev} dataVideoNext={dataVideoNext} userName={userName} screen={screen} disconnect={disconnect} />
       }
     </div>
   );

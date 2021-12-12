@@ -6,7 +6,6 @@ var controller = false;
 
 export function VideoD(props) {
     var player;
-    const [volIcon, setVolIcon] = useState(<IoMdVolumeOff />);
 
     useEffect(() => {
         if (controller) {
@@ -26,24 +25,19 @@ export function VideoD(props) {
         controller = true;
         props.socket.on("doAction", (data, e) => {
             if (data.gesture === "turn") {
-                console.log("mobile " + data.action);
-                if (data.action === "down" && player.pauseVideo && player !== undefined) {
+                if (data.action === "down" && player !== undefined && player.pauseVideo) {
                     //pausar video
                     player.pauseVideo();
-                } else if (data.action === "up" && player.playVideo && player !== undefined) {
+                } else if (data.action === "up" && player !== undefined && player.playVideo) {
                     //reaunudar video
                     player.playVideo();
-
                 }
             } else if (data.gesture === "volume") {
                 if (data.action === "mute" && player !== undefined) {
                     player.mute();
-                    // document.getElementById("mute").innerHTML = {muted};
-                    // setVolIcon(<IoMdVolumeOff />);
                 } else if (data.action === "unmute" && player !== undefined) {
                     player.unMute();
-                    // document.getElementById("mute").innerHTML = {unmuted};
-                    // setVolIcon(<IoMdVolumeHigh />);
+
                 } else {
                     if (player !== undefined) {
                         player.setVolume(data.action);
@@ -52,8 +46,22 @@ export function VideoD(props) {
                     }
                 }
 
+            } else if (data.gesture === "swipe") {
+                if (data.action === "down" && player !== undefined) {
+                    player.seekTo(0, true);
+                } else if (data.action === "right" && player !== undefined) {
+                    var nowTime = player.getCurrentTime();
+                    nowTime = nowTime + 30;
+                    player.seekTo(nowTime, true);
+                    console.log("act:", nowTime, "desp;", nowTime + 30);
+                } else if (data.action === "left" && player !== undefined) {
+                    var nowTime = player.getCurrentTime();
+                    nowTime = nowTime - 10;
+                    player.seekTo(nowTime, true);
+                    console.log("act:", nowTime, "desp;", nowTime - 10);
+                }
             }
-        })
+        });
     }, []);
 
 

@@ -24,6 +24,7 @@ const firebaseConfig = {
   messagingSenderId: "867399764463",
   appId: "1:867399764463:web:0f9a2c3987e397857d4e1a",
   databaseURL: "https://ubicua-final-bd-default-rtdb.europe-west1.firebasedatabase.app/"
+  // databaseURL: "https://fir-100405352-default-rtdb.europe-west1.firebasedatabase.app/"
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -52,6 +53,7 @@ function App() {
   const volState = useRef(0);
   const [timeRunning, setTimeRunning] = useState(false);
   const timerRef = useRef();
+  const nowScreen = useRef("Todas");
 
   /////////////////////
   //    LOG IN
@@ -60,6 +62,7 @@ function App() {
     try {
       const res = await signInWithPopup(auth, googleProvider);
       const user = res.user;
+      
       const userRef = ref(db, `/users/${user.uid}`);
       const snapshot = await get(userRef);
 
@@ -69,7 +72,9 @@ function App() {
       } else {
         await set(ref(db, "users/" + user.uid), {
           username: user.displayName,
-          email: user.email
+          email: user.email,
+          favFilms: [],
+          favGenres: [] 
         });
       }
       setLoggedIn(true);
@@ -132,13 +137,19 @@ function App() {
       sensor.stop();
     }
     if (next === "Todas") {
+      nowScreen.current = "Todas";
+      setScreen("Todas");
       tilt();
       absolute.stop();
     } else if (next === "Video") {
-      faceDown();
       setVol(<IoMdVolumeOff />);
+      faceDown();
       sensor.stop();
-
+    } else if (next === "Personalizar") {
+      nowScreen.current = "Personalizar";
+      sensor.stop();
+      tilt();
+      absolute.stop();
     } else {
       absolute.stop();
       sensor.stop();
@@ -172,17 +183,35 @@ function App() {
         }
 
         if (coordX < -0.08) {
-          var act = {
-            gesture: "tilt",
-            action: "right"
+          console.log("inclinacion a izquierda");
+          if (nowScreen.current === "Personalizar") {
+            var act = {
+              gesture: "rate",
+              action: "left"
+            }
+          } else {
+            var act = {
+              gesture: "tilt",
+              action: "left"
+            }
           }
+
           socket.emit("action", act);
           startTiltTimer();
         }
         if (coordX > 0.38) {
-          var act = {
-            gesture: "tilt",
-            action: "left"
+          console.log("inclinacion a derecha");
+          if (nowScreen.current === "Personalizar") {
+
+            var act = {
+              gesture: "rate",
+              action: "right"
+            }
+          } else {
+            var act = {
+              gesture: "tilt",
+              action: "right"
+            }
           }
           socket.emit("action", act);
           startTiltTimer();
@@ -194,7 +223,6 @@ function App() {
       sensor.start();
     }
   }
-
   function startTiltTimer() {
     // console.log("SENSOR TILT PARADO");
     sensor.stop();
@@ -395,7 +423,7 @@ function App() {
       }
 
       {isLoggedIn && isPartner &&
-        <Home favFilm={favFilm} pararVideo={pararVideo} changeVolume={changeVolume} mic={mic} vol={vol} changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} titleVideo={titleVideo} disconnect={disconnect} />
+        <Home favFilm={favFilm} socket={socket} pararVideo={pararVideo} changeVolume={changeVolume} mic={mic} vol={vol} changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} titleVideo={titleVideo} disconnect={disconnect} />
       }
 
     </div>
