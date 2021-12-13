@@ -84,7 +84,7 @@ function App() {
           username: user.displayName,
           email: user.email,
           favFilms: [""],
-          //favGenres: ["action": 0, "romantic": 0, "animation": 0, "terror": 0]
+          favGenres: {"action": 0, "romantic": 0, "animation": 0, "terror": 0, "musical": 0}
         });
       } else {
         totalfavs.current = data.favFilms.length;
@@ -413,17 +413,22 @@ function App() {
     //   username: "pepe"
     // });
 
-
+    let genreSelected = genre.current;
+    let newGenreValue = 0;
     if (gesture === "right") {
       console.log("me gusta:", genre.current);
-      /*
-      let newValue = data.genre.current.value += 1;
-      let genreRef = ref(db, "users/" + user.uid + "/favGenres/");
-      update(genreRef, {[genre.current]:newValue});
-      */
+      //console.log("generoBD:", userData.current.favGenres[genreSelected]);
+      newGenreValue = userData.current.favGenres[genreSelected] += 1;
+      
+      
     } else {
       console.log("no me gusta:", genre.current);
+      //console.log("generoBD:", userData.current.favGenres[genreSelected]);
+      newGenreValue = userData.current.favGenres[genreSelected] -= 1;
     }
+
+    let genreRef = ref(db, "users/" + userUid.current + "/favGenres/");
+    update(genreRef, {[genre.current]:newGenreValue});
 
     var randomFilm = Math.floor(Math.random() * 42);
     const filmsRef = ref(db, "/films/" + randomFilm);
