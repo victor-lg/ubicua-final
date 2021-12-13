@@ -176,23 +176,22 @@ function App() {
   /////////////////////
   function tilt() {
     if ('RelativeOrientationSensor' in window) {
-      // console.log(sensor.quaternion);
       sensor.addEventListener('reading', (coordX) => {
         if (sensor.quaternion !== null) {
           coordX = sensor.quaternion[0];
         }
 
         if (coordX < -0.08) {
-          console.log("inclinacion a izquierda");
+          console.log("inclinacion a derecha");
           if (nowScreen.current === "Personalizar") {
             var act = {
               gesture: "rate",
-              action: "left"
+              action: "right"
             }
           } else {
             var act = {
               gesture: "tilt",
-              action: "left"
+              action: "right"
             }
           }
 
@@ -200,17 +199,17 @@ function App() {
           startTiltTimer();
         }
         if (coordX > 0.38) {
-          console.log("inclinacion a derecha");
+          console.log("inclinacion a izquierda");
           if (nowScreen.current === "Personalizar") {
 
             var act = {
               gesture: "rate",
-              action: "right"
+              action: "left"
             }
           } else {
             var act = {
               gesture: "tilt",
-              action: "right"
+              action: "left"
             }
           }
           socket.emit("action", act);
@@ -224,23 +223,14 @@ function App() {
     }
   }
   function startTiltTimer() {
-    // console.log("SENSOR TILT PARADO");
     sensor.stop();
     setTimeRunning(true);
     timerRef.current = setTimeout(() => {
       setTimeRunning(false);
       timerRef.current = null;
       sensor.start();
-      // console.log("SENSOR TILT ACTIVADO");
     }, 3000);
   }
-
-  // function stoptTiltTimer() {
-  //   clearTimeout(timerRef.current);
-  //   setTimeRunning(false);
-  //   timerRef.current = null;
-  //   sensor.stop();
-  // }
 
   /////////////////////
   //    FACEDOWN
@@ -280,23 +270,14 @@ function App() {
   }
 
   function startfaceDownTimer() {
-    // console.log("SENSOR FACEDOWN PARADO");
     absolute.stop();
     setTimeRunning(true);
     timerRef.current = setTimeout(() => {
       setTimeRunning(false);
       timerRef.current = null;
       absolute.start();
-      // console.log("SENSOR FACEDOWN ACTIVADO");
     }, 4000);
   }
-
-  // function stopFaceDownTimer() {
-  //   clearTimeout(timerRef.current);
-  //   setTimeRunning(false);
-  //   timerRef.current = null;
-  //   absolute.stop();
-  // }
 
 
   ///////////////////
@@ -330,9 +311,7 @@ function App() {
       setMic(<BsFillMicMuteFill />);
       console.log("[Microfono desactivado]");
       micState.current = 0;
-
     }
-
   }
 
   recognition.onresult = function (event) {

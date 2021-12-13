@@ -35,9 +35,10 @@ export function VideoD(props) {
             } else if (data.gesture === "volume") {
                 if (data.action === "mute" && player !== undefined) {
                     player.mute();
+                    player.playVideo();
                 } else if (data.action === "unmute" && player !== undefined) {
                     player.unMute();
-
+                    player.playVideo();
                 } else {
                     if (player !== undefined) {
                         player.setVolume(data.action);

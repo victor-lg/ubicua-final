@@ -14,8 +14,9 @@ export function PersonalizarM(props) {
                         <h1>Personalizar tus gustos</h1>
                     </div>
                     <div className="todasgestos">
-                        <div className="todasGesto" id="upTodas">
-                            <p>ARRIBA<br></br>&#8593;</p>
+                    <div className="todasGesto" id="upTodas">
+                            <p id="noBorder">Inclina el movil para votar la pelicula<br></br> </p>
+                            <img id="gif" src="https://cdn.dribbble.com/users/574071/screenshots/6062038/arrowstilt.gif" alt="description of gif" /> 
                         </div>
                         <div className="todasGesto" id="leftTodas">
                             <p>No me gusta<br></br><AiFillDislike/></p>

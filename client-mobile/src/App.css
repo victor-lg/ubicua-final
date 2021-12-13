@@ -4,7 +4,7 @@ body {
     padding: 0;
     margin: 0;
     text-decoration: none;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: black
 }
 
 .App {
@@ -60,64 +60,63 @@ body {
     }
 
 
-  /* -------------------------LOG IN------------------------------ */
-  #mainLogIn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+    /* -------------------------LOG IN------------------------------ */
+    #mainLogIn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-#logoLogIn>img {
-    width: 400px;
-    height: auto;
-    /* border: 1px solid white; */
-    align-self: flex-start;
-    margin-top: 40px;
-    margin-bottom: -10px;
-}
+    #logoLogIn>img {
+        width: 400px;
+        height: auto;
+        /* border: 1px solid white; */
+        align-self: flex-start;
+        margin-top: 40px;
+        margin-bottom: -10px;
+    }
 
-#mainLogIn h1 {
-    font-size: 1.6em;
-    text-decoration: none;
-}
+    #mainLogIn h1 {
+        font-size: 1.6em;
+        text-decoration: none;
+    }
 
-.google-btn {
-    width: 251px;
-    height: 64px;
-    background-color: #4285f4;
-    border-radius: 2px;
-    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .25);
-    cursor: pointer;
-    margin-top: 40px;
-}
+    .google-btn {
+        width: 251px;
+        height: 64px;
+        background-color: #4285f4;
+        border-radius: 2px;
+        box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .25);
+        cursor: pointer;
+        margin-top: 40px;
+    }
 
-.google-icon-wrapper {
-    position: absolute;
-    margin-top: 1px;
-    margin-left: 1px;
-    width: 64px;
-    height: 64px;
-    border-radius: 2px;
-    background-color: #fff;
-}
+    .google-icon-wrapper {
+        position: absolute;
+        margin-top: 1px;
+        margin-left: 1px;
+        width: 64px;
+        height: 64px;
+        border-radius: 2px;
+        background-color: #fff;
+    }
 
-.google-icon {
-    position: absolute;
-    margin-top: 15px;
-    margin-left: -15px;
-    width: 34px;
-}
+    .google-icon {
+        position: absolute;
+        margin-top: 15px;
+        margin-left: -15px;
+        width: 34px;
+    }
 
-.btn-text {
-    float: right;
-    margin: 11px 11px 0 0;
-    color: #fff;
-    font-size: 18px;
-    margin-top: 20px;
-    letter-spacing: 0.5px;
-    font-family: "Roboto";
-}
-
+    .btn-text {
+        float: right;
+        margin: 11px 11px 0 0;
+        color: #fff;
+        font-size: 18px;
+        margin-top: 20px;
+        letter-spacing: 0.5px;
+        font-family: "Roboto";
+    }
 
     /* ----------------------NO PARTNER---------------------- */
 
@@ -157,6 +156,7 @@ body {
         display: flex;
         flex-direction: column;
         justify-content: center;
+
     }
 
     #logoHeader>img {
@@ -175,7 +175,7 @@ body {
         color: white;
     }
 
-    #signOut_button {
+    #signOut_button8{
         flex: 0 0 20%;
         padding: 5px;
         border-radius: 10px;
@@ -184,7 +184,7 @@ body {
         color: white;
         font-weight: 600;
         box-shadow: 0 0 1px 1px #505050;
-        font-size: 0.7em;
+        font-size: 8em;
         margin-top: -5px;
     }
 
@@ -214,6 +214,14 @@ body {
 
 
     /* --------------------TODAS-------------------------- */
+    
+    #gif{
+        width: 100px;
+        margin-right: -40px;
+    }
+    
+    
+    
     #TodasContainer {
         width: 100%;
         display: flex;
@@ -267,10 +275,13 @@ body {
     #upTodas {
         flex: 1 0 100%;
         width: 20px;
+        margin-top: -70px;
+        margin-bottom: 40px;
     }
 
     #leftTodas {
         flex: 0 0 35%;
+        color: rgba(255, 255, 255, 0.8);
     }
 
     #centerTodas {
@@ -279,6 +290,7 @@ body {
 
     #rightTodas {
         flex: 0 0 35%;
+        color: rgba(255, 255, 255, 0.8);
     }
 
     #downTodas {
@@ -317,6 +329,12 @@ body {
         margin-top: 7px;
     }
 
+    #noBorder{
+        border:0;
+        font-size: 0.9em;
+        margin-right: -5px;
+    }
+
     /* --------------------FAVORITAS-------------------------- */
 
 
@@ -352,9 +370,8 @@ body {
 
 
 
-    /* --------------------VIDEO-------------------------- */
-    #videoContainer {
-        /* border: 1px solid red; */
+     /* --------------------VIDEO-------------------------- */
+     #videoContainer {
         width: 100%;
         display: flex;
         flex-direction: row;
@@ -380,12 +397,12 @@ body {
     .gestosVideo {
         width: 100%;
         display: flex;
-        border: 1px solid red;
-        height: 65vh;
+        height: 55vh;
         color: white;
         flex-wrap: wrap;
         align-items: center;
         justify-content: center;
+        margin-top: 20px;
     }
 
     #upVideo {
@@ -399,6 +416,16 @@ body {
 
     #centerVideo {
         flex: 0 0 33%;
+        border: 1px solid white;
+    }
+
+    .gestosVideo p{
+        font-size: 0.9em;
+    }
+
+    #centerVideo p{
+        font-size: 0.8em;
+        padding: 5px;
     }
 
     #rightVideo {
@@ -410,9 +437,10 @@ body {
     }
 
     #volIcon {
-        font-size: 1.8em;
+        font-size: 2em;
         margin-bottom: 8px;
         margin-top: 10px;
+        color: white;
     }
 
     input[type='range']:focus {

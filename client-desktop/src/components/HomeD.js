@@ -16,13 +16,13 @@ export function Home(props) {
                 </div>
                 <div id="userHeader">
                     <div id="iconUser"><BsPersonCircle /></div>
-                    <h2>{props.userName}</h2>
+                    <h2>{props.userheader}</h2>
                     <input type="button" id="signOut_button" onClick={props.disconnect} value="Disconnect" />
                 </div>
             </div>
 
             {props.screen === "Personalizar" &&
-                <PersonalizarD screen={props.screen}  dataRateVideo={props.dataRateVideo} />
+                <PersonalizarD screen={props.screen} dataRateVideo={props.dataRateVideo} />
             }
 
             {props.screen === "Favoritas" &&

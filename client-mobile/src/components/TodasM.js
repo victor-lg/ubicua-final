@@ -13,9 +13,10 @@ export function TodasM(props) {
                         <h1>Todas las peliculas</h1>
                     </div>
                     <div className="todasgestos">
-                        {/* <div className="todasGesto" id="upTodas">
-                            <p>ARRIBA<br></br>&#8593;</p>
-                        </div> */}
+                        <div className="todasGesto" id="upTodas">
+                            <p id="noBorder">Inclina el movil para pasar de pelicula<br></br> </p>
+                            <img id="gif" src="https://cdn.dribbble.com/users/574071/screenshots/6062038/arrowstilt.gif" alt="description of gif" /> 
+                        </div>
                         <div className="todasGesto" id="leftTodas">
                             <p>Película anterior<br></br>↺</p>
                         </div>

@@ -2,7 +2,7 @@ import './App.css';
 import { useState, useEffect, useRef } from 'react';
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { getDatabase, ref, set, get, onValue, update, push, child } from "firebase/database";
+import { getDatabase, ref, set, get, onValue, update, push, child, remove } from "firebase/database";
 import { Home } from "./components/HomeD";
 import { Login } from './components/LoginD';
 import { NoPartner } from './components/NoPartnerD';
@@ -45,8 +45,13 @@ function App() {
   const [dataFavVideoNext, setDataFavVideoNext] = useState("");
 
   const [dataRateVideo, setDataRateVideo] = useState("");
+
+  const username = useRef("");
+  const userheader = useRef("");
+  const email = useRef("");
   const genre = useRef("");
   const userUid = useRef("");
+  const userData = useRef("");
 
   const counterPrev = useRef(0);
   const counter = useRef(1);
@@ -56,8 +61,6 @@ function App() {
   const counterFavPrev = useRef(-1);
   const counterFav = useRef(-1);
   const counterFavNext = useRef(-1);
-
-
 
 
 
@@ -76,32 +79,25 @@ function App() {
       const data = snapshot.val();
       console.log(data);
 
-      if (data) {
-
-        
-        /////////////////////
-        //    Esto actualiza el valor displayName de 1 dentro de /users
-        /////////////////////
-        const postData = {
-          displayName : "test"
-        };
-        const newPostKey = push(child(ref(db), 'user')).key;
-        const updates = {};
-        updates['/users/' + 1] = postData;
-        update(ref(db),updates);
-        
-        
-      } else {
+      if (!data) {
         await set(ref(db, "users/" + user.uid), {
           username: user.displayName,
           email: user.email,
-          favFilms: [],
-          favGenres: [] 
+          favFilms: [""],
+          //favGenres: ["action": 0, "romantic": 0, "animation": 0, "terror": 0]
         });
+      } else {
+        totalfavs.current = data.favFilms.length;
+        console.log("hay un total de favs: " + totalfavs.current);
       }
+
+      userData.current = data;
       setLoggedIn(true);
-      setUserName(user.displayName.replace(/ .*/, ''));
-    
+
+      username.current = user.displayName;
+      userheader.current = user.displayName.replace(/ .*/, '');
+      email.current = user.email;
+
       socket.emit("registerDesktop", user.email);
 
       var filmsReff = ref(db, "/films/0");
@@ -184,6 +180,9 @@ function App() {
     socket.on("doAction", function (data) {
 
       if (data.gesture === "touch") {
+        if (data.action === "Favoritas") {
+          obtainFavFilm("new");
+        }
         setScreen(data.action);
         if (data.action === "Video") {
           setVolIcon(<IoMdVolumeOff />);
@@ -198,13 +197,15 @@ function App() {
       } else if (data.gesture === "voice") {
         console.log("Has dicho", data.action);
         if (data.action == "siguiente") {
+          console.log("siguiente");
           obtainFavFilm("right");
         } else if (data.action === "anterior") {
+          console.log("anterior");
           obtainFavFilm("left");
         } else if (data.action === "reproducir") {
           setScreen("Video");
         } else if (data.action === "eliminar") {
-          //eliminar de favoritos
+          deletefavFilm();
         }
 
       } else if (data.gesture === "fav") {
@@ -227,25 +228,173 @@ function App() {
   //    SET FAV FILM
   ///////////////////////
   function setfavFilm() {
-    totalfavs.current += 1;
+    var updateFavFilms = [];
+    if (totalfavs.current > 0) {
 
-    //   const userRef = ref(db, "/favs/" + user.uid);
-    //   const snapshot = await get(userRef);
+      var userRefCurrentUsers = ref(db, "/users/" + userUid.current);
+      onValue(userRefCurrentUsers, (snapshot) => {
+        const data = snapshot.val();
+        updateFavFilms = data.favFilms;
+        if (!updateFavFilms.includes(counter.current)) {
+          updateFavFilms.push(counter.current);
+          totalfavs.current += 1;
+        } else {
+          console.log("Esta película ya está en tu lista de favoritas");
+        }
+        const postData = {
+          username: username.current,
+          email: email.current,
+          favFilms: updateFavFilms
+          // favGenres: userData.current.favGenres
+        };
 
-    //   const data = snapshot.val();
-    //   console.log(data);
+        const updates = {};
+        updates['/users/' + userUid.current] = postData;
+        update(ref(db), updates);
 
-    //   if (data) {
-    //   } else {
-    //     await set(ref(db, "favs/" + dataVideo.id), {
-    //       title: dataVideo.title,
-    //       poster: dataVideo.poster,
-    //       link: dataVideo.link,
-    //     });
-    //   }
+      });
 
+
+    } else {
+
+      var userRefCurrentUsers = ref(db, "/users/" + userUid.current);
+      updateFavFilms.push(counter.current);
+      totalfavs.current = 1;
+      const postData = {
+        username: username.current,
+        email: email.current,
+        favFilms: updateFavFilms
+        // favGenres: userData.current.favGenres
+      };
+
+      const updates = {};
+      updates['/users/' + userUid.current] = postData;
+      update(ref(db), updates);
+    }
   }
 
+  ///////////////////////
+  //    DELETE FAV FILM
+  ///////////////////////
+  function deletefavFilm() {
+
+    // var dataFavVideos = [];
+    // const updates = {};
+    // const filmsRef = ref(db, "/users/" + userUid.current);
+    // onValue(filmsRef, (snapshot) => {
+    //   let data = snapshot.val();
+    //   dataFavVideos = data.favFilms;
+    //   dataFavVideos.splice(counterFav.current, 1);
+    // });
+
+    if (totalfavs.current === 1) {
+      set(ref(db, "users/" + userUid.current), {
+        username: username.current,
+        email: email.current,
+        favFilms: [""]
+      })
+      totalfavs.current -= 1;
+
+    } else {
+      const deleteRef = ref(db, "/users/" + userUid.current + "/favFilms/" + counterFav.current);
+      remove(deleteRef);
+      totalfavs.current -= 1;
+    }
+
+    // console.log("DATOS A BORRAR"+ dataFavVideos);
+    // var postData;
+    // if (totalfavs.current === 0) {
+
+      // const postData = {
+      //   username: username.current,
+      //   email: email.current,
+      //   favFilms: [""]
+      //   //favGenres: userData.current.favGenres
+      // }; 
+
+
+      // } else {
+      //   //delete(db, "/users/" + userUid.current + "/" + counterFav.current)
+      //   postData = {
+      //     username: username.current,
+      //     email: email.current,
+      //     favFilms: dataFavVideos
+      //     //favGenres: userData.current.favGenres
+      //   };
+      // }
+
+      // updates['/users/' + userUid.current] = postData;
+      // update(ref(db), updates);
+    // }
+
+    obtainFavFilm("new");
+  }
+
+  ///////////////////////
+  //    OBTAIN FAV FILMS
+  ///////////////////////
+  function obtainFavFilm(data) {
+    console.log("total de pelis: " + totalfavs.current);
+
+    if (totalfavs.current > 0) {
+      var dataFavVideos = [];
+      var index;
+      var favFilmsRef;
+
+      if (data === "new") {
+        counterFav.current = 0;
+      } else if (data === "left") {
+        if (counterFav.current > 0) {
+          counterFav.current -= 1;
+          if (counterFav.current === 0) {
+            counterFav.current = totalfavs.current - 1;
+          }
+        }
+
+      } else {
+        if (counterFav.current < totalfavs.current - 1) {
+          counterFav.current += 1;
+          if (counterFav.current === totalfavs.current) {
+            counterFav.current = 0;
+          }
+        }
+      }
+
+      const filmsRef = ref(db, "/users/" + userUid.current);
+      onValue(filmsRef, (snapshot) => {
+        let data = snapshot.val();
+        for (var i = 0; i < data.favFilms.length; i++) {
+          if (data.favFilms[i] === parseInt(data.favFilms[i], 10)) {
+            dataFavVideos.push(data.favFilms[i]);
+          }
+        }
+
+        // console.log(dataFavVideos);
+        index = dataFavVideos[counterFav.current];
+        favFilmsRef = ref(db, "/films/" + index);
+        onValue(favFilmsRef, (snapshot) => {
+          var dataVideo = snapshot.val();
+
+          setDataFavVideo(dataVideo);
+
+          //se lo envio al movil
+          var act = {
+            gesture: "titlefilm",
+            action: dataVideo.title
+          }
+          socket.emit("action", act);
+        });
+      });
+
+    } else {
+      var noFilm = {
+        title: "No hay ninguna pelicula en favoritos",
+        poster: ""
+      }
+      setDataFavVideo(noFilm);
+    }
+
+  }
 
   ///////////////////////
   //    OBTAIN RATE FILMS
@@ -254,22 +403,25 @@ function App() {
 
     //añadir a la db el genre.current
 
-      // const userRef = ref(db, "/users/" + userUid.current);
-      // const snapshot = get(userRef);
+    // const userRef = ref(db, "/users/" + userUid.current);
+    // const snapshot = get(userRef);
 
-      // const data = snapshot.val();
-      // console.log(data);
+    // const data = snapshot.val();
+    // console.log(data);
 
-      // set(ref(db, "users/" + userUid.current), {
-      //   username: "pepe"
-      // });
-
-
+    // set(ref(db, "users/" + userUid.current), {
+    //   username: "pepe"
+    // });
 
 
-    if (gesture === "right"){
-      console.log("me gusta:",  genre.current);
-    }else{
+    if (gesture === "right") {
+      console.log("me gusta:", genre.current);
+      /*
+      let newValue = data.genre.current.value += 1;
+      let genreRef = ref(db, "users/" + user.uid + "/favGenres/");
+      update(genreRef, {[genre.current]:newValue});
+      */
+    } else {
       console.log("no me gusta:", genre.current);
     }
 
@@ -291,56 +443,10 @@ function App() {
 
 
   ///////////////////////
-  //    OBTAIN FAV FILMS
-  ///////////////////////
-  function obtainFavFilm(data) {
-    if (counterFav.current < totalfavs.current) {
-      counterFav.current += 1;
-      counterFavPrev.current = counterFav.current - 1;
-      if (counterFav.current === totalfavs.current) {
-        counterFavNext.current = 0;
-      } else {
-        counterFavNext.current = counterFav.current + 1;
-      }
-    } else {
-      counterFavPrev.current = totalfavs.current;
-      counterFav.current = 0;
-      counterFavNext.current = 1;
-    }
-
-        //añadir a la db la pelicula actual
-        
-    // const filmsRef = ref(db, "/favs/" + counterFav.current);
-    // onValue(filmsRef, (snapshot) => {
-    //   let data = snapshot.val();
-    //   setDataFavVideo(data);
-
-    //   //se lo envio al movil
-    //   var act = {
-    //     gesture: "titlefilm",
-    //     action: data.title
-    //   }
-    //   socket.emit("action", act);
-    // });
-
-    // const filmsRefLeft = ref(db, "/favs/" + counterFavPrev.current);
-    // onValue(filmsRefLeft, (snapshot) => {
-    //   let data = snapshot.val();
-    //   setDataFavVideoPrev(data);
-    // });
-    // const filmsRefRight = ref(db, "/favs/" + counterFavNext.current);
-    // onValue(filmsRefRight, (snapshot) => {
-    //   let data = snapshot.val();
-    //   setDataFavVideoNext(data);
-    // });
-
-
-  }
-
-  ///////////////////////
   //    OBTAIN ALL FILMS
   ///////////////////////
   function obtainFilm(data) {
+
     if (data === "right") {
       if (counter.current < 41) {
         counter.current += 1;
@@ -409,7 +515,6 @@ function App() {
         socket.emit("action", act);
       });
 
-
       const filmsRefLeft = ref(db, "/films/" + counterPrev.current);
       onValue(filmsRefLeft, (snapshot) => {
         let data = snapshot.val();
@@ -449,12 +554,12 @@ function App() {
       }
 
       {isLoggedIn && !isPartner &&
-        <NoPartner userName={userName} disconnect={disconnect} />
+        <NoPartner userheader={userheader.current} disconnect={disconnect} />
       }
 
       {isLoggedIn && isPartner &&
         <Home dataVideo={dataVideo} dataFavVideo={dataFavVideo} dataFavVideoPrev={dataFavVideoPrev} dataFavVideoNext={dataFavVideoNext}
-         socket={socket} dataRateVideo={dataRateVideo} volIcon={volIcon} dataVideoPrev={dataVideoPrev} dataVideoNext={dataVideoNext} userName={userName} screen={screen} disconnect={disconnect} />
+          socket={socket} dataRateVideo={dataRateVideo} volIcon={volIcon} dataVideoPrev={dataVideoPrev} dataVideoNext={dataVideoNext} userheader={userheader.current} screen={screen} disconnect={disconnect} />
       }
     </div>
   );

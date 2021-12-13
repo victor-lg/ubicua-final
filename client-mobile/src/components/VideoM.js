@@ -79,18 +79,23 @@ export function VideoM(props) {
                     <div id="titleVideo">
                         <h2 id="title">{props.titleVideo}</h2>
                     </div>
+                    <div className="videoGesto" id="upVideo">
+                        <p id="volIcon" onClick={() => props.changeVolume("change")}>{props.vol}</p>
+                        <input type="range" id="volume" onInput={() => props.changeVolume("data")} min="0" max="100" step="1"></input>
+                    </div>
+
                     <div className="gestosVideo">
                         <div className="videoGesto" id="leftVideo">
                             <p>RETROCEDER</p>
                             <p>&#8592; 10 seg</p>
                         </div>
                         <div className="videoGesto" id="centerVideo">
-                            <p>Desliza</p>
-                            <p>dale la vuelta</p>
+                            <p>Desliza para realizar una accion</p>
+                            <p>Dale la vuelta para parar el video</p>
                         </div>
                         <div className="videoGesto" id="rightVideo">
                             <p>AVANZAR</p>
-                            <p>30 seg&#8594;</p>
+                            <p>30 seg &#8594;</p>
                         </div>
                         <div className="videoGesto" id="downVideo">
                             <p>REINICIAR</p>
@@ -98,11 +103,7 @@ export function VideoM(props) {
                         </div>
                     </div>
                     
-                    <div className="videoGesto" id="upVideo">
-                        <p id="volIcon" onClick={() => props.changeVolume("change")}>{props.vol}</p>
-                        <input type="range" id="volume" onInput={() => props.changeVolume("data")} min="0" max="100" step="1"></input>
-                    </div>
-
+                  
                     <div id="footer">
                         <div className="menubutton" id="homeButton" onClick={() => props.changeScreen("Video", "Home")}><AiFillHome /></div>
                         <div className="menubutton" id="returnbutton" onClick={() => props.changeScreen("Video", props.lastScreen)}> <MdOutlineKeyboardReturn /></div>

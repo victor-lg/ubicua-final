@@ -11,7 +11,7 @@ export function NoPartner(props) {
                 </div>
                 <div id="userHeader">
                     <div id="iconUser"><BsPersonCircle/></div>
-                    <h2>{props.userName}</h2>
+                    <h2>{props.userheader}</h2>
                     <input type="button" id="signOut_button" onClick={props.disconnect} value="Disconnect" />
                 </div>
             </div>

@@ -6,11 +6,12 @@ export function FavoritasD(props) {
     return (
         <div className="Todas">
             <h1>Películas favoritas</h1>
+            <h1>{props.dataFavVideo.title}</h1>
             <div className="Todas-contenedor">
                 <div className="Todas-flecha-izq" ><MdArrowBackIosNew /></div>
-                <div className="Todas-poster-izq" ><img src={props.dataFavVideo.poster} /></div>
-                <div className="Todas-poster-central" ><img src={props.dataFavVideoPrev.poster} /></div>
-                <div className="Todas-poster-der" ><img src={props.dataFavVideoNext.poster} /></div>
+                {/* <div className="Todas-poster-izq" ><img src={props.dataFavVideo.poster} /></div> */}
+                <div className="Todas-poster-central" ><img src={props.dataFavVideo.poster} /></div>
+                {/* <div className="Todas-poster-der" ><img src={props.dataFavVideoNext.poster} /></div> */}
                 <div className="Todas-flecha-der" ><MdArrowForwardIos /></div>
             </div>
         </div>
