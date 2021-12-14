@@ -9,9 +9,7 @@ export function FavoritasD(props) {
             <h1>{props.dataFavVideo.title}</h1>
             <div className="Todas-contenedor">
                 <div className="Todas-flecha-izq" ><MdArrowBackIosNew /></div>
-                {/* <div className="Todas-poster-izq" ><img src={props.dataFavVideo.poster} /></div> */}
                 <div className="Todas-poster-central" ><img src={props.dataFavVideo.poster} /></div>
-                {/* <div className="Todas-poster-der" ><img src={props.dataFavVideoNext.poster} /></div> */}
                 <div className="Todas-flecha-der" ><MdArrowForwardIos /></div>
             </div>
         </div>

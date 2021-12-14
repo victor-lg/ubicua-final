@@ -26,7 +26,7 @@ export function Home(props) {
             }
 
             {props.screen === "Favoritas" &&
-                <FavoritasD screen={props.screen} dataFavVideo={props.dataFavVideo} dataFavVideoPrev={props.dataFavVideoPrev} dataFavVideoNext={props.dataFavVideonext} />
+                <FavoritasD screen={props.screen} dataFavVideo={props.dataFavVideo} />
             }
 
             {props.screen === "Todas" &&

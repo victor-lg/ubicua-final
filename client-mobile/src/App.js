@@ -24,7 +24,6 @@ const firebaseConfig = {
   messagingSenderId: "867399764463",
   appId: "1:867399764463:web:0f9a2c3987e397857d4e1a",
   databaseURL: "https://ubicua-final-bd-default-rtdb.europe-west1.firebasedatabase.app/"
-  // databaseURL: "https://fir-100405352-default-rtdb.europe-west1.firebasedatabase.app/"
 };
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -62,19 +61,17 @@ function App() {
     try {
       const res = await signInWithPopup(auth, googleProvider);
       const user = res.user;
-      
+
       const userRef = ref(db, `/users/${user.uid}`);
       const snapshot = await get(userRef);
 
       const data = snapshot.val();
-      if (data) {
-
-      } else {
+      if (!data) {
         await set(ref(db, "users/" + user.uid), {
           username: user.displayName,
           email: user.email,
-          favFilms: [],
-          favGenres: [] 
+          favFilms: [""],
+          favGenres: { "action": 0, "romantic": 0, "animation": 0, "terror": 0, "musical": 0 }
         });
       }
       setLoggedIn(true);
