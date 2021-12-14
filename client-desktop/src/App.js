@@ -59,6 +59,7 @@ function App() {
   const counterFav = useRef(0);
   const idFav = useRef(0);
 
+  const topGenre = useRef("");
 
 
 
@@ -75,7 +76,8 @@ function App() {
       const snapshot = await get(userRef);
 
       const data = snapshot.val();
-      console.log(data);
+
+      
 
       if (!data) {
         var newUser = {
@@ -86,6 +88,9 @@ function App() {
         };
         allGenres.current = newUser.favGenres;
         await set(ref(db, "users/" + user.uid), newUser);
+        snapshot = await get(userRef);
+        data = snapshot.val();
+
       } else {
         if (data.favFilms[0] !== "") {
           totalfavs.current = data.favFilms.length;
@@ -94,6 +99,10 @@ function App() {
 
       userData.current = data;
       setLoggedIn(true);
+
+
+      obtainTopGenre();
+      
 
       username.current = user.displayName;
       userheader.current = user.displayName.replace(/ .*/, '');
@@ -106,6 +115,7 @@ function App() {
       onValue(filmsRef, (snapshot) => {
         let data = snapshot.val();
         setDataRateVideo(data);
+        genre.current = data.genre;
       });
 
     } catch (err) {
@@ -362,36 +372,58 @@ function App() {
   ///////////////////////
   //    OBTAIN RATE FILMS
   ///////////////////////
+  function obtainTopGenre () {
+    let topList = [];
+    let newObj;
+    newObj = {genre: 'action', value: userData.current.favGenres.action};
+      topList.push(newObj)
+      newObj = {genre: 'romantic', value: userData.current.favGenres.romantic};
+      topList.push(newObj)
+      newObj = {genre: 'animation', value: userData.current.favGenres.animation};
+      topList.push(newObj)
+      newObj = {genre: 'terror', value: userData.current.favGenres.terror};
+      topList.push(newObj)
+      newObj = {genre: 'musical', value: userData.current.favGenres.musical};
+      topList.push(newObj)
+      topList.sort((a, b) => parseInt(b.value) - parseInt(a.value));
+      topGenre.current = topList[0].genre;
+  }
+
   function obtainRateFilm(gesture) {
 
-    //añadir a la db el genre.current
-
-    // const userRef = ref(db, "/users/" + userUid.current);
-    // const snapshot = get(userRef);
-
-    // const data = snapshot.val();
-    // console.log(data);
-
-    // set(ref(db, "users/" + userUid.current), {
-    //   username: "pepe"
-    // });
 
     let genreSelected = genre.current;
     let newGenreValue = 0;
+    //console.log(genre.current);
+    //console.log(genreSelected);
+    //console.log(newGenreValue);
+    //console.log(allGenres.current);
+    //console.log("action", userData.current.favGenres.action);
+    //console.log("romantic", userData.current.favGenres.romantic);
+    //console.log("animation", userData.current.favGenres.animation);
+    //console.log("terror", userData.current.favGenres.terror);
+    //console.log("musical", userData.current.favGenres.musical);
+    //console.log(userData.current.favGenres);
+    //console.log(userData.current.favGenres[genreSelected]);
+    //console.log(allGenres.current.action);
+
+
     if (gesture === "right") {
       console.log("me gusta:", genre.current);
-      //console.log("generoBD:", userData.current.favGenres[genreSelected]);
-      newGenreValue = allGenres.current[genreSelected] += 1;
+      //newGenreValue = allGenres.current[genreSelected] += 1;
+      newGenreValue = userData.current.favGenres[genreSelected] += 1;
 
 
     } else {
       console.log("no me gusta:", genre.current);
-      //console.log("generoBD:", userData.current.favGenres[genreSelected]);
-      newGenreValue = allGenres.current[genreSelected] -= 1;
+      //newGenreValue = allGenres.current[genreSelected] -= 1;
+      newGenreValue = userData.current.favGenres[genreSelected] -= 1;
     }
 
     let genreRef = ref(db, "users/" + userUid.current + "/favGenres/");
-    update(genreRef, { [genre.current]: newGenreValue });
+    update(genreRef, {[genre.current]:newGenreValue});
+
+    obtainTopGenre();
 
     var randomFilm = Math.floor(Math.random() * 42);
     const filmsRef = ref(db, "/films/" + randomFilm);
@@ -502,7 +534,7 @@ function App() {
       }
 
       {isLoggedIn && isPartner &&
-        <Home dataVideo={dataVideo} dataFavVideo={dataFavVideo} dataVideoPrev={dataVideoPrev} dataVideoNext={dataVideoNext} socket={socket} dataRateVideo={dataRateVideo} volIcon={volIcon} userheader={userheader.current} screen={screen} disconnect={disconnect} />
+        <Home dataVideo={dataVideo} dataFavVideo={dataFavVideo} dataVideoPrev={dataVideoPrev} dataVideoNext={dataVideoNext} socket={socket} dataRateVideo={dataRateVideo} volIcon={volIcon} userheader={userheader.current} screen={screen} disconnect={disconnect} topGenre={topGenre.current} />
       }
     </div>
   );

@@ -22,7 +22,7 @@ export function Home(props) {
             </div>
 
             {props.screen === "Personalizar" &&
-                <PersonalizarD screen={props.screen} dataRateVideo={props.dataRateVideo} />
+                <PersonalizarD screen={props.screen} dataRateVideo={props.dataRateVideo} topGenre={props.topGenre}/>
             }
 
             {props.screen === "Favoritas" &&
