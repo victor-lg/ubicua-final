@@ -39,7 +39,6 @@ function App() {
   const [volIcon, setVolIcon] = useState(<IoMdVolumeOff />);
 
   const [dataFavVideo, setDataFavVideo] = useState("");
-
   const [dataRateVideo, setDataRateVideo] = useState("");
 
   const username = useRef("");
@@ -75,8 +74,6 @@ function App() {
       let snapshot = await get(userRef);
 
       let data = snapshot.val();
-
-
 
       if (!data) {
         var newUser = {
@@ -126,26 +123,18 @@ function App() {
   ////////////////
   useEffect(() => {
 
-    ////////////////
-    //  REGISTER
-    ////////////////
-    socket.on("newUser", function () {
-      setPartner(true);
-      setScreen("Todas");
-    });
 
 
     ////////////////
     //  GET PARTNER
     ////////////////
+    socket.on("newUser", function () {
+      setPartner(true);
+      setScreen("Todas");
+    });
     socket.on("oldUser", function () {
       setPartner(true);
     });
-    socket.on("mensaje2", function (data) {
-      alert(data);
-      setPartner(true);
-    });
-
 
     ///////////////////////////////
     //  GET DISCONNECTED PARTNER
@@ -169,12 +158,14 @@ function App() {
           obtainFilm("new");
         }
         setScreen(data.action);
+
       } else if (data.gesture === "tilt") {
         if (screen === "Todas") {
           obtainFilm(data.action);
         } else {
           obtainFavFilm();
         }
+
       } else if (data.gesture === "voice") {
         console.log("Palabra registrada: ", data.action);
         if (data.action === "siguiente") {
@@ -216,7 +207,7 @@ function App() {
       get(userRefCurrentUsers).then(snapshot => {
         var data = snapshot.val();
         updateFavFilms = data.favFilms;
-        
+
         if (updateFavFilms.includes(counter.current) === false) {
           updateFavFilms.push(counter.current);
           totalfavs.current += 1;
@@ -265,7 +256,7 @@ function App() {
         let data = snapshot.val();
 
         dataFavVideos = data.favFilms;
-        
+
         for (var i = 0; i < dataFavVideos.length; i++) {
           if (dataFavVideos[i] === idFav.current) {
             console.log("encontrada");
@@ -287,7 +278,7 @@ function App() {
 
         totalfavs.current -= 1;
       });
-      
+
       obtainFavFilm("right");
     }
   }
@@ -296,8 +287,6 @@ function App() {
   //    OBTAIN FAV FILMS
   ///////////////////////
   const obtainFavFilm = async (data) => {
-    
-
     if (totalfavs.current > 0) {
       var dataFavVideos = [];
       var index;
@@ -325,11 +314,6 @@ function App() {
       const filmsRef = ref(db, "/users/" + userUid.current);
       await get(filmsRef).then(snapshot => {
         let data = snapshot.val();
-        // for (var i = 0; i < totalfavs.current; i++) {
-        //   if (data.favFilms[i] === parseInt(data.favFilms[i], 10)) {
-        //     dataFavVideos.push(data.favFilms[i]);
-        //   }
-        // }
         dataFavVideos = data.favFilms;
         console.log("todas las favs", dataFavVideos);
 
@@ -362,7 +346,7 @@ function App() {
   }
 
   ///////////////////////
-  //    OBTAIN RATE FILMS
+  //    OBTAIN TOP GENRE
   ///////////////////////
   function obtainTopGenre() {
     let topList = [];
@@ -381,9 +365,10 @@ function App() {
     topGenre.current = topList[0].genre;
   }
 
+  ///////////////////////
+  //    OBTAIN RATE FILMS
+  ///////////////////////
   function obtainRateFilm(gesture) {
-
-
     let genreSelected = genre.current;
     let newGenreValue = 0;
 
@@ -392,8 +377,6 @@ function App() {
       console.log("me gusta:", genre.current);
       //newGenreValue = allGenres.current[genreSelected] += 1;
       newGenreValue = userData.current.favGenres[genreSelected] += 1;
-
-
     } else {
       console.log("no me gusta:", genre.current);
       //newGenreValue = allGenres.current[genreSelected] -= 1;
@@ -502,6 +485,10 @@ function App() {
   }
 
 
+
+  /////////////////////
+  //    RETURN
+  /////////////////////
   return (
     <div className="App">
 

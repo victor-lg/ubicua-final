@@ -14,7 +14,6 @@ const io = require("socket.io")(server, {
 });
 
 io.on("connection", function (socket) {
-  // console.log("new connection" + socket.id)
   var role;
   var userID;
   var email;
@@ -84,7 +83,6 @@ io.on("connection", function (socket) {
 
   //Actions
   socket.on("action", function (data) {
-    // console.log("Accion:",data);
     for (var i = 0; i < connections.length; i++) {
       if (role === "Mobile") {
         if (connections[i].email === email) {

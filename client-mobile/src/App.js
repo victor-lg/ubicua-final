@@ -118,15 +118,15 @@ function App() {
       }
     });
 
+    ///////////////////////////////
+    // SHAKE
+    //////////////////////////////
     let lastX = 0;
     let lastY = 0;
     let lastZ = 0;
-
     let lastTime = new Date();
-
     let shaking = false;
     let timer = null;
-
     const options = {
       threshold: 15
     };
@@ -134,30 +134,30 @@ function App() {
     if ('Accelerometer' in window) {
       try {
         const acc = new window.Accelerometer({ frequency: 60 });
-        acc.addEventListener("reading", function(){
+        acc.addEventListener("reading", function () {
           const deltaX = Math.abs(lastX - acc.x);
           const deltaY = Math.abs(lastY - acc.y);
           const deltaZ = Math.abs(lastZ - acc.z);
-          if ( ((deltaX > options.threshold) && (deltaY > options.threshold)) ||
-               ((deltaX > options.threshold) && (deltaZ > options.threshold)) ||
-               ((deltaY > options.threshold) && (deltaZ > options.threshold))
-                ) {
+          if (((deltaX > options.threshold) && (deltaY > options.threshold)) ||
+            ((deltaX > options.threshold) && (deltaZ > options.threshold)) ||
+            ((deltaY > options.threshold) && (deltaZ > options.threshold))
+          ) {
             if (!shaking) {
-                console.log('shake');
-                shaking = true;
-                auth.signOut().then(() => {
-                  setLoggedIn(false);
-                  socket.disconnect();
-                  window.location.reload();
+              console.log('shake');
+              shaking = true;
+              auth.signOut().then(() => {
+                setLoggedIn(false);
+                socket.disconnect();
+                window.location.reload();
+              })
+                .catch((error) => {
+                  console.log("[ERROR] " + error);
                 })
-                  .catch((error) => {
-                    console.log("[ERROR] " + error);
-                  })
-                if (timer) {
-                  clearTimeout(timer);
-                  timer = null;
-                }
+              if (timer) {
+                clearTimeout(timer);
+                timer = null;
               }
+            }
           } else {
             if (shaking) {
               shaking = false;
@@ -216,7 +216,6 @@ function App() {
   ///////////////////
   //  FAV FILM
   ///////////////////
-
   function favFilm() {
     var act = {
       gesture: "fav",
@@ -290,7 +289,6 @@ function App() {
   /////////////////////
   //    FACEDOWN
   /////////////////////
-
   function faceDown() {
     if ('RelativeOrientationSensor' in window) {
       try {
@@ -343,7 +341,7 @@ function App() {
   let recognition = new SpeechRecognition();
   let recognitionList = new SpeechGrammarList();
 
-  let moods = ["elminar", "siguiente", "anterior", "reproducir"];
+  let moods = ["elIminar", "siguiente", "anterior", "reproducir"];
   let grammar = '#JSGF V1.0; grammar moods; public <moods> = ' + Object.keys(moods).join(' | ') + ';';
 
   recognitionList.addFromString(grammar, 1);
@@ -432,16 +430,6 @@ function App() {
       })
   }
 
-  function pararVideo() {
-    var act = {
-      gesture: "swipe",
-      action: "pausa"
-    }
-    socket.emit("action", act);
-  }
-
-
-
   /////////////////////
   //    RETURN
   /////////////////////
@@ -457,13 +445,10 @@ function App() {
       }
 
       {isLoggedIn && isPartner &&
-        <Home favFilm={favFilm} socket={socket} pararVideo={pararVideo} changeVolume={changeVolume} mic={mic} vol={vol} changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} titleVideo={titleVideo} disconnect={disconnect} />
+        <Home favFilm={favFilm} socket={socket} changeVolume={changeVolume} mic={mic} vol={vol} changeScreen={changeScreen} screen={screen} lastScreen={lastScreen} userName={userName} voice={voice} titleVideo={titleVideo} disconnect={disconnect} />
       }
 
     </div>
   );
 }
-
-
-
 export default App;

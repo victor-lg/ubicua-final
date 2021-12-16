@@ -93,11 +93,12 @@ export function VideoD(props) {
 
         <div className="descubre" id="Video">
 
-            <h1> {props.dataVideo.title}</h1>
+            <h1 id="title"> {props.dataVideo.title}</h1>
             <div id="player"></div>
-            <div id="mute">{props.volIcon}</div>
-            <div id="volume">50</div>
-            {/* <iframe id="iframe" width="1280" height="720" src={props.dataVideo.link} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> */}
+            <div id="sound">
+                <div id="mute">{props.volIcon}</div>
+                <div id="volume">50</div>
+            </div>
         </div>
     );
 }

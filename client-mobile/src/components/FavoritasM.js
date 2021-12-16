@@ -15,7 +15,7 @@ export function FavoritasM(props) {
                     </div>
                     <div id="gestosFav">
                         <div className="voiceIcon" onClick={props.voice}>{props.mic}</div>
-                        <div className="voiceInfo">Pulsa el microfono y prueba a decir palabras como:<br></br> <b> reproducir, siguiente, <br></br>anterior, eliminar,...</b></div>
+                        <div className="voiceInfo">Pulsa el microfono y prueba a decir palabras como:<br></br> <b> reproducir, siguiente, <br></br>anterior, eliminar.</b></div>
                     </div>
                     <div id="footer">
                         <div className="menubutton" id="homeButton" onClick={() => props.changeScreen("Favoritas", "Home")}><AiFillHome /></div>
