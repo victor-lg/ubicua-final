@@ -57,7 +57,7 @@ body {
     align-items: center;
 }
 
-#mainLogIn h1{
+#mainLogIn h1 {
     font-size: 3em;
 }
 
@@ -317,11 +317,23 @@ h2 {
 
 /* --------------------VIDEO-------------------------- */
 
-
-#volume{
+#title {
     font-size: 4em;
 }
 
-#mute{
+#sound {
+    position: absolute;
+    display: flex;
+    right: 154px;
+    top: 950px;
+}
+
+#volume {
     font-size: 4em;
+    flex: 0 0 50%;
+}
+
+#mute {
+    font-size: 4em;
+    flex: 0 0 50%;
 }
