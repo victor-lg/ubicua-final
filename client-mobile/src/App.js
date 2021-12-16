@@ -118,6 +118,64 @@ function App() {
       }
     });
 
+    let lastX = 0;
+    let lastY = 0;
+    let lastZ = 0;
+
+    let lastTime = new Date();
+
+    let shaking = false;
+    let timer = null;
+
+    const options = {
+      threshold: 15
+    };
+
+    if ('Accelerometer' in window) {
+      try {
+        const acc = new window.Accelerometer({ frequency: 60 });
+        acc.addEventListener("reading", function(){
+          const deltaX = Math.abs(lastX - acc.x);
+          const deltaY = Math.abs(lastY - acc.y);
+          const deltaZ = Math.abs(lastZ - acc.z);
+          if ( ((deltaX > options.threshold) && (deltaY > options.threshold)) ||
+               ((deltaX > options.threshold) && (deltaZ > options.threshold)) ||
+               ((deltaY > options.threshold) && (deltaZ > options.threshold))
+                ) {
+            if (!shaking) {
+                console.log('shake');
+                shaking = true;
+                auth.signOut().then(() => {
+                  setLoggedIn(false);
+                  socket.disconnect();
+                  window.location.reload();
+                })
+                  .catch((error) => {
+                    console.log("[ERROR] " + error);
+                  })
+                if (timer) {
+                  clearTimeout(timer);
+                  timer = null;
+                }
+              }
+          } else {
+            if (shaking) {
+              shaking = false;
+              timer = setTimeout(() => {
+                console.log("stop");
+              }, 500);
+            }
+          }
+          lastX = acc.x;
+          lastY = acc.y;
+          lastZ = acc.z;
+        })
+        acc.start();
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
   }, []);
 
   ///////////////////
@@ -285,7 +343,7 @@ function App() {
   let recognition = new SpeechRecognition();
   let recognitionList = new SpeechGrammarList();
 
-  let moods = ["uno", "dos", "tres"];
+  let moods = ["elminar", "siguiente", "anterior", "reproducir"];
   let grammar = '#JSGF V1.0; grammar moods; public <moods> = ' + Object.keys(moods).join(' | ') + ';';
 
   recognitionList.addFromString(grammar, 1);

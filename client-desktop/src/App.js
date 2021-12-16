@@ -32,7 +32,6 @@ const db = getDatabase(app);
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isPartner, setPartner] = useState(false);
-  const [userName, setUserName] = useState(null);
   const [screen, setScreen] = useState("Todas");
   const [dataVideoPrev, setDataVideoPrev] = useState("");
   const [dataVideo, setDataVideo] = useState("");
@@ -73,11 +72,11 @@ function App() {
       userUid.current = user.uid;
 
       const userRef = ref(db, "/users/" + user.uid);
-      const snapshot = await get(userRef);
+      let snapshot = await get(userRef);
 
-      const data = snapshot.val();
+      let data = snapshot.val();
 
-      
+
 
       if (!data) {
         var newUser = {
@@ -90,7 +89,6 @@ function App() {
         await set(ref(db, "users/" + user.uid), newUser);
         snapshot = await get(userRef);
         data = snapshot.val();
-
       } else {
         if (data.favFilms[0] !== "") {
           totalfavs.current = data.favFilms.length;
@@ -100,9 +98,7 @@ function App() {
       userData.current = data;
       setLoggedIn(true);
 
-
       obtainTopGenre();
-      
 
       username.current = user.displayName;
       userheader.current = user.displayName.replace(/ .*/, '');
@@ -174,14 +170,13 @@ function App() {
         }
         setScreen(data.action);
       } else if (data.gesture === "tilt") {
-        console.log("Inclinacion hacia la", data.action);
         if (screen === "Todas") {
           obtainFilm(data.action);
         } else {
           obtainFavFilm();
         }
       } else if (data.gesture === "voice") {
-        console.log("Has dicho", data.action);
+        console.log("Palabra registrada: ", data.action);
         if (data.action === "siguiente") {
           obtainFavFilm("right");
         } else if (data.action === "anterior") {
@@ -216,13 +211,12 @@ function App() {
     console.log("entra al setfavFilm")
     if (totalfavs.current > 0) {
 
-      var userRefCurrentUsers = ref(db, "/users/" + userUid.current);
-      onValue(userRefCurrentUsers, (snapshot) => {
-        const data = snapshot.val();
-        console.log(data.favFilms);
+      const userRefCurrentUsers = ref(db, "/users/" + userUid.current);
+
+      get(userRefCurrentUsers).then(snapshot => {
+        var data = snapshot.val();
         updateFavFilms = data.favFilms;
-        console.log("-----------------------------");
-        console.log(updateFavFilms);
+        
         if (updateFavFilms.includes(counter.current) === false) {
           updateFavFilms.push(counter.current);
           totalfavs.current += 1;
@@ -231,15 +225,13 @@ function App() {
           username: username.current,
           email: email.current,
           favFilms: updateFavFilms,
-          favGenres: allGenres.current
+          favGenres: userData.current.favGenres
         };
 
         const updates = {};
         updates['/users/' + userUid.current] = postData;
         update(ref(db), updates);
-
       });
-
     } else {
 
       var userRefCurrentUsers = ref(db, "/users/" + userUid.current);
@@ -249,7 +241,7 @@ function App() {
         username: username.current,
         email: email.current,
         favFilms: updateFavFilms,
-        favGenres: allGenres.current
+        favGenres: userData.current.favGenres
       };
       //console.log(updateFavFilms);
       const updates = {};
@@ -262,7 +254,6 @@ function App() {
   //    DELETE FAV FILM
   ///////////////////////
   function deletefavFilm() {
-    console.log("entra al deletefavFilm")
     if (totalfavs.current === 1) {
       console.log("No se puede eliminar la ultima pelicula");
     } else {
@@ -270,42 +261,42 @@ function App() {
       var index;
 
       const filmsRef = ref(db, "/users/" + userUid.current);
-      onValue(filmsRef, (snapshot) => {
+      get(filmsRef).then(snapshot => {
         let data = snapshot.val();
-        //for (var i = 0; i < totalfavs.current; i++) {
 
-          dataFavVideos= data.favFilms;
-
-          console.log("-------------");
-          console.log(dataFavVideos);
-          // }
-        //// }
-        console.log("todas las peliculas a eliminar", dataFavVideos);
-
+        dataFavVideos = data.favFilms;
+        
         for (var i = 0; i < dataFavVideos.length; i++) {
           if (dataFavVideos[i] === idFav.current) {
             console.log("encontrada");
             index = i;
           }
         }
-        console.log("pelicula a eliminar", index);
-        // console.log("pelicula a eliminar", index);
-        // const deleteRef = ref(db, "/users/" + userUid.current + "/favFilms/" + counterFav.current);
-        // remove(deleteRef);
-        // totalfavs.current -= 1;
-      });
-      const deleteRef = ref(db, "/users/" + userUid.current + "/favFilms/" + index);
-      remove(deleteRef);
-      totalfavs.current -= 1;
 
-      obtainFavFilm("new");
+        dataFavVideos.splice(index, 1);
+        const postData = {
+          username: username.current,
+          email: email.current,
+          favFilms: dataFavVideos,
+          favGenres: userData.current.favGenres
+        };
+
+        const updates = {};
+        updates['/users/' + userUid.current] = postData;
+        update(ref(db), updates);
+
+        totalfavs.current -= 1;
+      });
+      
+      obtainFavFilm("right");
     }
   }
 
   ///////////////////////
   //    OBTAIN FAV FILMS
   ///////////////////////
-  function obtainFavFilm(data) {
+  const obtainFavFilm = async (data) => {
+    
 
     if (totalfavs.current > 0) {
       var dataFavVideos = [];
@@ -332,20 +323,21 @@ function App() {
       }
 
       const filmsRef = ref(db, "/users/" + userUid.current);
-      onValue(filmsRef, (snapshot) => {
+      await get(filmsRef).then(snapshot => {
         let data = snapshot.val();
-        for (var i = 0; i < totalfavs.current; i++) {
-          if (data.favFilms[i] === parseInt(data.favFilms[i], 10)) {
-            dataFavVideos.push(data.favFilms[i]);
-          }
-        }
-        console.log("todas las favs",dataFavVideos);
+        // for (var i = 0; i < totalfavs.current; i++) {
+        //   if (data.favFilms[i] === parseInt(data.favFilms[i], 10)) {
+        //     dataFavVideos.push(data.favFilms[i]);
+        //   }
+        // }
+        dataFavVideos = data.favFilms;
+        console.log("todas las favs", dataFavVideos);
 
         index = dataFavVideos[counterFav.current];
         favFilmsRef = ref(db, "/films/" + index);
-        onValue(favFilmsRef, (snapshot) => {
-          var dataVideo = snapshot.val();
 
+        get(favFilmsRef).then(snapshot => {
+          var dataVideo = snapshot.val();
           setDataFavVideo(dataVideo);
           setDataVideo(dataVideo);
           idFav.current = index;
@@ -372,21 +364,21 @@ function App() {
   ///////////////////////
   //    OBTAIN RATE FILMS
   ///////////////////////
-  function obtainTopGenre () {
+  function obtainTopGenre() {
     let topList = [];
     let newObj;
-    newObj = {genre: 'action', value: userData.current.favGenres.action};
-      topList.push(newObj)
-      newObj = {genre: 'romantic', value: userData.current.favGenres.romantic};
-      topList.push(newObj)
-      newObj = {genre: 'animation', value: userData.current.favGenres.animation};
-      topList.push(newObj)
-      newObj = {genre: 'terror', value: userData.current.favGenres.terror};
-      topList.push(newObj)
-      newObj = {genre: 'musical', value: userData.current.favGenres.musical};
-      topList.push(newObj)
-      topList.sort((a, b) => parseInt(b.value) - parseInt(a.value));
-      topGenre.current = topList[0].genre;
+    newObj = { genre: 'action', value: userData.current.favGenres.action };
+    topList.push(newObj)
+    newObj = { genre: 'romantic', value: userData.current.favGenres.romantic };
+    topList.push(newObj)
+    newObj = { genre: 'animation', value: userData.current.favGenres.animation };
+    topList.push(newObj)
+    newObj = { genre: 'terror', value: userData.current.favGenres.terror };
+    topList.push(newObj)
+    newObj = { genre: 'musical', value: userData.current.favGenres.musical };
+    topList.push(newObj)
+    topList.sort((a, b) => parseInt(b.value) - parseInt(a.value));
+    topGenre.current = topList[0].genre;
   }
 
   function obtainRateFilm(gesture) {
@@ -394,18 +386,6 @@ function App() {
 
     let genreSelected = genre.current;
     let newGenreValue = 0;
-    //console.log(genre.current);
-    //console.log(genreSelected);
-    //console.log(newGenreValue);
-    //console.log(allGenres.current);
-    //console.log("action", userData.current.favGenres.action);
-    //console.log("romantic", userData.current.favGenres.romantic);
-    //console.log("animation", userData.current.favGenres.animation);
-    //console.log("terror", userData.current.favGenres.terror);
-    //console.log("musical", userData.current.favGenres.musical);
-    //console.log(userData.current.favGenres);
-    //console.log(userData.current.favGenres[genreSelected]);
-    //console.log(allGenres.current.action);
 
 
     if (gesture === "right") {
@@ -421,13 +401,13 @@ function App() {
     }
 
     let genreRef = ref(db, "users/" + userUid.current + "/favGenres/");
-    update(genreRef, {[genre.current]:newGenreValue});
+    update(genreRef, { [genre.current]: newGenreValue });
 
     obtainTopGenre();
 
     var randomFilm = Math.floor(Math.random() * 42);
     const filmsRef = ref(db, "/films/" + randomFilm);
-    onValue(filmsRef, (snapshot) => {
+    get(filmsRef).then(snapshot => {
       let data = snapshot.val();
       setDataRateVideo(data);
       genre.current = data.genre;
@@ -481,7 +461,7 @@ function App() {
       }
     }
     const filmsRef = ref(db, "/films/" + counter.current);
-    onValue(filmsRef, (snapshot) => {
+    get(filmsRef).then(snapshot => {
       let data = snapshot.val();
       setDataVideo(data);
 
@@ -494,13 +474,13 @@ function App() {
     });
 
     const filmsRefLeft = ref(db, "/films/" + counterPrev.current);
-    onValue(filmsRefLeft, (snapshot) => {
+    get(filmsRefLeft).then(snapshot => {
       let data = snapshot.val();
       setDataVideoPrev(data);
     });
 
     const filmsRefRight = ref(db, "/films/" + counterNext.current);
-    onValue(filmsRefRight, (snapshot) => {
+    get(filmsRefRight).then(snapshot => {
       let data = snapshot.val();
       setDataVideoNext(data);
     });
